@@ -1,0 +1,14 @@
+const SINGLETON_SERVICE = Object.freeze({
+    MEDIATOR: 'MEDIATOR',
+    DATA_CONTEXT: 'DATA_CONTEXT',
+    EXPRESS: 'EXPRESS',
+    CONFIGURATION: 'CONFIGURATION',
+    LOGGER: 'LOGGER',
+    ERROR_HANDLER: 'ERROR_HANDLER',
+    VALIDATION: 'VALIDATION',
+    TOKEN: 'TOKEN',
+});
+
+export type SingletonServiceUnion = typeof SINGLETON_SERVICE[keyof typeof SINGLETON_SERVICE];
+
+export default SINGLETON_SERVICE;

@@ -1,0 +1,22 @@
+{
+    "name": "@lindeneg/funkallero-core",
+    "private": true,
+    "description": "Funkallero core interfaces, enums and types",
+    "version": "0.0.0",
+    "repository": "git@github.com:lindeneg/funkallero.git",
+    "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero-core",
+    "author": "Christian Lindeneg",
+    "license": "MIT",
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/types/index.d.ts",
+    "scripts": {
+        "build": "yarn run build:js && yarn run build:types",
+        "build:js": "rollup -c",
+        "build:types": "tsc --project ./tsconfig-types.json",
+        "lint": "prettier \"src/**\" --ignore-unknown --write"
+    },
+    "devDependencies": {
+        "@types/express": "4.17.17"
+    }
+}

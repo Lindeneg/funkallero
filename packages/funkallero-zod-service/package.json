@@ -1,0 +1,28 @@
+{
+    "name": "@lindeneg/funkallero-zod-service",
+    "private": true,
+    "description": "Default implementation of Funkallero validation interface using zod",
+    "version": "0.0.0",
+    "repository": "git@github.com:lindeneg/funkallero.git",
+    "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero-zod-service",
+    "author": "Christian Lindeneg",
+    "license": "MIT",
+    "main": "./dist/esm/index.mjs",
+    "module": "./dist/esm/index.mjs",
+    "types": "./dist/types/index.d.ts",
+    "scripts": {
+        "build": "yarn run build:js && yarn run build:types",
+        "build:js": "rollup -c",
+        "build:types": "tsc --project ./tsconfig-types.json",
+        "lint": "prettier \"src/**\" --ignore-unknown --write"
+    },
+    "dependencies": {
+        "@lindeneg/funkallero-core": "0.0.0"
+    },
+    "devDependencies": {
+        "zod": "3.21.4"
+    },
+    "peerDependencies": {
+        "zod": ">=3.21.4"
+    }
+}

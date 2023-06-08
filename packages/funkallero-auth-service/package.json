@@ -1,0 +1,28 @@
+{
+    "name": "@lindeneg/funkallero-auth-service",
+    "private": true,
+    "description": "Default implementations of Funkallero auth service interfaces",
+    "version": "0.0.0",
+    "repository": "git@github.com:lindeneg/funkallero.git",
+    "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero-auth-service",
+    "author": "Christian Lindeneg",
+    "license": "MIT",
+    "main": "./dist/esm/index.mjs",
+    "module": "./dist/esm/index.mjs",
+    "types": "./dist/types/index.d.ts",
+    "scripts": {
+        "build": "yarn run build:js && yarn run build:types",
+        "build:js": "rollup -c",
+        "build:types": "tsc --project ./tsconfig-types.json",
+        "lint": "prettier \"src/**\" --ignore-unknown --write"
+    },
+    "devDependencies": {
+        "@types/bcryptjs": "2.4.2",
+        "@types/jsonwebtoken": "9.0.0"
+    },
+    "dependencies": {
+        "@lindeneg/funkallero-core": "0.0.0",
+        "bcryptjs": "2.4.2",
+        "jsonwebtoken": "9.0.0"
+    }
+}
