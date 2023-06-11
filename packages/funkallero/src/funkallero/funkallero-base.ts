@@ -7,16 +7,13 @@ import {
     HttpException,
     type IFunkalleroBase,
     type ILoggerService,
-    type IExpressService,
     type IControllerService,
     type IAuthorizationService,
-    type IConfigurationService,
     type IFunkalleroPartialConfiguration,
     type Constructor,
     type ControllerFn,
     type IRoute,
     type Request,
-    type IExpressErrorhandlerService,
     type Validation,
 } from '@lindeneg/funkallero-core';
 import devLogger from '../dev-logger';
@@ -63,10 +60,10 @@ abstract class FunkalleroBase implements IFunkalleroBase {
 
     protected async ensureRequiredServicesRegistered() {
         await Promise.all([
-            this.ensureConfigurationRegistered(),
-            this.ensureLoggerRegistered(),
-            this.ensureExpressRegistered(),
-            this.ensureErrorHandlerRegistered(),
+            this.ensureRegisteredSingletonService(SERVICE.CONFIGURATION, BaseConfigurationService),
+            this.ensureRegisteredSingletonService(SERVICE.LOGGER, BaseLoggerService),
+            this.ensureRegisteredSingletonService(SERVICE.EXPRESS, BaseExpressService),
+            this.ensureRegisteredSingletonService(SERVICE.ERROR_HANDLER, BaseRequestErrorHandlerService),
         ]);
     }
 
@@ -84,42 +81,12 @@ abstract class FunkalleroBase implements IFunkalleroBase {
         devLogger('configuration service', config);
     }
 
-    private async ensureExpressRegistered() {
-        const ExpressService = getUninstantiatedSingleton(SERVICE.EXPRESS) as Constructor<IExpressService> | undefined;
+    private async ensureRegisteredSingletonService(serviceKey: string, BaseService: Constructor<any>) {
+        const Service = getUninstantiatedSingleton(serviceKey);
 
-        if (!ExpressService) {
-            devLogger('using default express service');
-            serviceContainer.registerSingletonService(SERVICE.EXPRESS, BaseExpressService);
-        }
-    }
-
-    private ensureErrorHandlerRegistered() {
-        const RequestErrorHandlerService = getUninstantiatedSingleton(SERVICE.ERROR_HANDLER) as
-            | Constructor<IExpressErrorhandlerService>
-            | undefined;
-
-        if (!RequestErrorHandlerService) {
-            devLogger('using default request error handler service');
-            serviceContainer.registerSingletonService(SERVICE.ERROR_HANDLER, BaseRequestErrorHandlerService);
-        }
-    }
-
-    private async ensureLoggerRegistered() {
-        const LoggerService = getUninstantiatedSingleton(SERVICE.LOGGER) as Constructor<ILoggerService> | undefined;
-
-        if (!LoggerService) {
-            devLogger('using default logger service');
-            serviceContainer.registerSingletonService(SERVICE.LOGGER, BaseLoggerService);
-        }
-    }
-
-    private async ensureConfigurationRegistered() {
-        const ConfigurationService = getUninstantiatedSingleton(SERVICE.CONFIGURATION) as
-            | Constructor<IConfigurationService>
-            | undefined;
-
-        if (!ConfigurationService) {
-            serviceContainer.registerSingletonService(SERVICE.CONFIGURATION, BaseConfigurationService);
+        if (!Service) {
+            devLogger(`using default ${serviceKey} service`);
+            serviceContainer.registerSingletonService(serviceKey, BaseService);
         }
     }
 
