@@ -66,6 +66,13 @@ The core service are as such:
 -   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-service.ts#L4-L8)
 -   [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-express-service.ts)
 
+###### IExpressErrorHandlerService
+
+-   Optional
+-   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-error-handler-service.ts#L8-L10)
+-   [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-error-handler-service.ts)
+
+
 ###### IConfigurationService
 
 -   Optional
