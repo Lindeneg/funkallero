@@ -2,9 +2,9 @@
 
 ### Description
 
-Funkallero is a prototype for a 'mini-framework' to create web API's built on top of [express](https://expressjs.com/).
+Funkallero is an opinionated framework to create web API's built on top of [express](https://expressjs.com/).
 
-It's all just a bit of fun.. and I had loads of that! It's still work in progress and thus the functionality is limited.
+It's all just a bit of fun.. and I had loads of that! It's still work in progress and thus the functionality is limited. As of now, nothing has been published.
 
 It enforces the use of a mediator service to proxy communication between API and application layers in a type-safe manner and enforces the use of dependency-injection to inject services into other services.
 
