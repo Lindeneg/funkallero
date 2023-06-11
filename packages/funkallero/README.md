@@ -47,43 +47,14 @@ A `MediatorService` and `DataContextService` must always be registered as single
 
 The core service are as such:
 
-###### IMediatorService
-
--   Required (_but base class can be extended_)
--   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/mediator-service.ts#L77-L79)
--   [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-mediator-service.ts#L12-L45)
--   [Consumer Example Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/mediator-service.ts)
-
-###### IDataContextService
-
--   Required
--   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/data-context-service.ts#L3)
--   [Consumer Example Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/data-context-service.ts)
-
-###### IExpressService
-
--   Optional
--   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-service.ts#L4-L8)
--   [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-express-service.ts)
-
-###### IExpressErrorHandlerService
-
--   Optional
--   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-error-handler-service.ts#L8-L10)
--   [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-error-handler-service.ts)
-
-
-###### IConfigurationService
-
--   Optional
--   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/configuration-service.ts#L15-L21)
--   [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-configuration-service.ts)
-
-###### ILogger
-
--   Optional
--   [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/logger-service.ts#L18-L23)
--   [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-logger-service.ts)
+| Name                        | Required | Context                                                                                                                                                                                                                                                                                                                                                                                                     |
+| --------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IMediatorService            | Yes      | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/mediator-service.ts#L77-L79), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-mediator-service.ts#L12-L45), [Consumer Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/mediator-service.ts) |
+| IDataContextService         | Yes      | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/data-context-service.ts#L3), [Consumer Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/data-context-service.ts)                                                                                                                                          |
+| IExpressService             | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-service.ts#L4-L8), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-express-service.ts)                                                                                                                                            |
+| IExpressErrorHandlerService | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-error-handler-service.ts#L8-L10), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-error-handler-service.ts)                                                                                                                       |
+| IConfigurationService       | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/configuration-service.ts#L15-L21), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-configuration-service.ts)                                                                                                                              |
+| ILoggerService              | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/logger-service.ts#L18-L23), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-logger-service.ts)                                                                                                                                            |
 
 ### Application Layer
 
