@@ -1,30 +1,27 @@
-import ScopedService from './scoped-service';
+import type { RouterOptions } from 'express';
 import type { HttpMethodUnion } from '../enums/http-method';
 import type IBaseService from './base-service';
 import type { Response } from '../types';
+import ScopedService from './scoped-service';
 
 export type ControllerFn = (...args: any[]) => Promise<void>;
 
 export interface IControllerSettings {
     authPolicy?: string | string[];
+    options?: RouterOptions;
 }
 
 export interface IRoute {
     method: HttpMethodUnion;
-    route: string;
+    path: string;
     handlerKey: string;
     authorizationPolicy: string[];
+    routerOptions: RouterOptions;
 }
 
-export interface IControllerService extends IBaseService {
-    baseRoute: string;
-    routes: IRoute[];
-}
+export interface IControllerService extends IBaseService {}
 
 abstract class ControllerService extends ScopedService implements IControllerService {
-    public readonly baseRoute: string;
-    public readonly routes: IRoute[];
-
     protected readonly response: Response;
 }
 

@@ -5,6 +5,7 @@ export { default as BaseExpressService } from './service/base-express-service';
 export { default as MediatorAction } from './mediator-action';
 export { default as LOG_LEVEL_COLOR } from './enums/log-level-color';
 export { controller, httpGet, httpPost, httpPut, httpPatch, httpDelete } from './decorators/controller';
+export { body, query, params, headers } from './decorators/inject-arg';
 export {
     SERVICE,
     SERVICE_TYPE,

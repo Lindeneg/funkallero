@@ -1,4 +1,5 @@
-import type { Constructor, IBaseService, Injection } from '@lindeneg/funkallero-core';
+import 'reflect-metadata';
+import { META_DATA, type Constructor, type IBaseService, type IServiceInjection } from '@lindeneg/funkallero-core';
 import devLogger from '../dev-logger';
 
 const baseInjectionRegex = /^Base[a-zA-Z]+Service|Action$/;
@@ -15,7 +16,7 @@ abstract class DependencyInjection implements IDependencyInjection {
         return this.filterServiceKeys(injections);
     }
 
-    protected filterServiceKeys(injections: Injection[]): Injection[] {
+    protected filterServiceKeys(injections: IServiceInjection[]): IServiceInjection[] {
         const seen: string[] = [];
 
         return injections.filter((injection) => {
@@ -28,7 +29,8 @@ abstract class DependencyInjection implements IDependencyInjection {
     }
 
     private getBaseServiceInjection(Service: Constructor<IBaseService>) {
-        const keys = Service.prototype.injection ? Object.keys(Service.prototype.injection) : [];
+        const serviceInjections = Reflect.getMetadata(META_DATA.SERVICE_INJECTION, Service);
+        const keys = serviceInjections ? Object.keys(serviceInjections) : [];
         for (const key of keys) {
             if (baseInjectionRegex.test(key)) {
                 const baseInjections = this.getSpecificInjections(Service, key);
@@ -42,8 +44,9 @@ abstract class DependencyInjection implements IDependencyInjection {
     }
 
     private getSpecificInjections(Service: Constructor<IBaseService>, name?: string) {
-        const key = name ? name : Service.name;
-        const specificInjections = Service.prototype.injection ? Service.prototype.injection[key] : [];
+        const key = name || Service.name;
+        const serviceInjections = Reflect.getMetadata(META_DATA.SERVICE_INJECTION, Service);
+        const specificInjections = serviceInjections ? serviceInjections[key] : [];
 
         return specificInjections || [];
     }

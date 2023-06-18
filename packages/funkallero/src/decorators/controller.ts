@@ -1,4 +1,7 @@
+import 'reflect-metadata';
+import type { RouterOptions } from 'express';
 import {
+    META_DATA,
     HTTP_METHOD,
     type HttpMethodUnion,
     type IControllerService,
@@ -10,57 +13,60 @@ import controllerContainer from '../container/controller-container';
 
 const createRoute = (
     method: HttpMethodUnion,
-    route: string,
+    path: string,
     handlerKey: string,
-    authorizationPolicy: string[]
+    authorizationPolicy: string[],
+    routerOptions: RouterOptions = {}
 ): IRoute => ({
     method,
-    route,
+    path,
     handlerKey,
     authorizationPolicy,
+    routerOptions,
 });
 
-const routeDecoratorFactory = (route: string, { authPolicy }: IControllerSettings, method: HttpMethodUnion) => {
+const routeDecoratorFactory = (route: string, opts: IControllerSettings, method: HttpMethodUnion) => {
     return function (target: any, key: string, _: PropertyDescriptor) {
-        if (!Array.isArray(target.routes)) {
-            target.routes = [];
+        if (!Reflect.hasMetadata(META_DATA.CONTROLLER_ROUTES, target)) {
+            Reflect.defineMetadata(META_DATA.CONTROLLER_ROUTES, [], target);
         }
 
+        const routes = Reflect.getMetadata(META_DATA.CONTROLLER_ROUTES, target);
         let authPolicies: string[] = [];
 
-        if (typeof authPolicy === 'string') {
-            authPolicies = [authPolicy];
-        } else if (Array.isArray(authPolicy)) {
-            authPolicies = authPolicy;
+        if (typeof opts.authPolicy === 'string') {
+            authPolicies = [opts.authPolicy];
+        } else if (Array.isArray(opts.authPolicy)) {
+            authPolicies = opts.authPolicy;
         }
 
-        target.routes.push(createRoute(method, route, key, authPolicies));
+        routes.push(createRoute(method, route, key, authPolicies, opts.options));
     };
 };
 
-export function controller<T extends Constructor<IControllerService>>(baseRoute: string) {
+export function controller<T extends Constructor<IControllerService>>(basePath = '') {
     return function (target: T) {
-        target.prototype.baseRoute = baseRoute;
+        Reflect.defineMetadata(META_DATA.CONTROLLER_PATH, basePath, target);
         controllerContainer.register(target);
     };
 }
 
-export function httpGet(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.GET);
+export function httpGet(route = '', opts: IControllerSettings = {}) {
+    return routeDecoratorFactory(route, opts, HTTP_METHOD.GET);
 }
 
-export function httpPost(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.POST);
+export function httpPost(route = '', opts: IControllerSettings = {}) {
+    return routeDecoratorFactory(route, opts, HTTP_METHOD.POST);
 }
 
-export function httpPut(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.PUT);
+export function httpPut(route = '', opts: IControllerSettings = {}) {
+    return routeDecoratorFactory(route, opts, HTTP_METHOD.PUT);
 }
 
-export function httpPatch(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.PATCH);
+export function httpPatch(route = '', opts: IControllerSettings = {}) {
+    return routeDecoratorFactory(route, opts, HTTP_METHOD.PATCH);
 }
 
-export function httpDelete(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.DELETE);
+export function httpDelete(route = '', opts: IControllerSettings = {}) {
+    return routeDecoratorFactory(route, opts, HTTP_METHOD.DELETE);
 }

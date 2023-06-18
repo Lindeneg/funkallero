@@ -8,11 +8,17 @@ export interface IDomain<TId = string> {
     id: TId;
 }
 
-export interface Injection {
+export interface IServiceInjection {
     serviceKey: string;
     instanceMember: string;
 }
 
-export type InjectionContext = Record<string, Injection[]>;
+export type ServiceInjectionContext = Record<string, IServiceInjection[]>;
+
+export interface IArgumentInjection<TSchema = any> {
+    index: number;
+    schema: TSchema | null;
+    properties: string[];
+}
 
 export type Promisify<T> = T | Promise<T>;

@@ -3,8 +3,10 @@ export { default as SERVICE_TYPE, type ServiceTypeUnion } from './enums/service-
 export { default as LOG_LEVEL, type LogLevelUnion } from './enums/log-level';
 export { default as HTTP_METHOD, type HttpMethodUnion } from './enums/http-method';
 export { default as ACTION_RESULT, type ActionResultUnion } from './enums/action-result';
+export { default as META_DATA, type MetaDataUnion } from './enums/meta-data';
+export { default as INJECTABLE_ARG, type InjectableArgUnion } from './enums/injectable-arg';
 export { default as injectService } from './decorators/inject-service';
-export { default as validateDecoratorFactory } from './decorators/validate-decorator-factory';
+export { default as injectArgFactory } from './decorators/inject-arg-factory';
 export {
     default as isServiceType,
     isKnownScopedServiceType,
@@ -65,4 +67,13 @@ export type {
 export type { default as IFunkalleroBase } from './core/funkallero-base';
 export type { SingletonServiceResult, ScopedServiceResult } from './core/known-service';
 export type { PublicServiceRegister, PublicServiceGetter } from './core/public-service';
-export type { Request, Response, Constructor, IDomain, Injection, InjectionContext, Promisify } from './types';
+export type {
+    Request,
+    Response,
+    Constructor,
+    IDomain,
+    IArgumentInjection,
+    IServiceInjection,
+    ServiceInjectionContext,
+    Promisify,
+} from './types';
