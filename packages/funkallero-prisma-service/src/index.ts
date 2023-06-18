@@ -21,16 +21,12 @@ class BasePrismaDataContextService<TClient extends PrismaClient>
     @injectService(SERVICE.LOGGER)
     private readonly logger: ILoggerService;
 
-    private readonly client: TClient;
+    public readonly client: TClient;
 
     constructor(Client: Constructor<TClient>) {
         super();
 
         this.client = new Client();
-    }
-
-    public getClient() {
-        return this.client;
     }
 
     public async exec<TAction extends PrismaCallback<TClient, any>>(
