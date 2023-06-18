@@ -1,16 +1,11 @@
 import type { z } from 'zod';
-import {
-    SingletonService,
-    type IValidationService,
-    type ValidateReturn,
-    type Request,
-} from '@lindeneg/funkallero-core';
+import { SingletonService, type IValidationService, type ValidateReturn } from '@lindeneg/funkallero-core';
 
 export type Validated<TZod extends z.ZodType<any, any, any>> = z.infer<TZod>;
 
 class BaseZodValidationService extends SingletonService implements IValidationService {
-    public validate(payload: Request, property: string, validation: z.Schema): ValidateReturn {
-        const result = validation.safeParse(payload[property]);
+    public validate(payload: any, validation: z.Schema): ValidateReturn {
+        const result = validation.safeParse(payload);
 
         if (result.success) {
             return {

@@ -38,7 +38,6 @@ export type { default as IBaseService } from './service/base-service';
 export type { default as IDataContextService } from './service/data-context-service';
 export type {
     default as IValidationService,
-    Validation,
     ValidateReturn,
     IValidateApiError,
     IValidateApiSuccess,

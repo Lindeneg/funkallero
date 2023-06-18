@@ -1,4 +1,4 @@
-import type { Request, Promisify } from '../types';
+import type { Promisify } from '../types';
 
 type ValidateReturnUnion = IValidateApiSuccess<any> | IValidateApiError;
 
@@ -14,10 +14,8 @@ export interface IValidateApiError {
     error: Record<string, string>;
 }
 
-export type Validation<TValidateType = any> = Record<string, TValidateType>;
-
 interface IValidationService<TValidateType = any> {
-    validate(request: Request, property: keyof Validation<TValidateType>, validation: TValidateType): ValidateReturn;
+    validate(payload: any, validation: TValidateType): ValidateReturn;
 }
 
 export default IValidationService;
