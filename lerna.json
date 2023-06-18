@@ -1,5 +1,4 @@
 {
-    "packages": ["example-memory", "example-prisma", "packages/*"],
     "version": "independent",
     "npmClient": "yarn",
     "useWorkspaces": true

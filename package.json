@@ -10,11 +10,11 @@
         "cli": "bash ./scripts/cli.sh",
         "build": "yarn cli build",
         "lint": "yarn cli lint",
-        "start": "yarn cli start"
+        "start": "yarn cli start",
+        "ex": "yarn build core funkallero memory"
     },
     "workspaces": [
         "example-memory",
-        "example-prisma",
         "packages/*"
     ],
     "devDependencies": {

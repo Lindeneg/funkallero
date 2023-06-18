@@ -20,6 +20,5 @@
         "@types/express": "4.17.17"
     },
     "dependencies": {
-        "reflect-metadata": "0.1.13"
     }
 }
