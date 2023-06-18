@@ -1,5 +1,14 @@
-import { controller, httpGet, httpPost, httpPatch, httpDelete, injectService } from '@lindeneg/funkallero';
-import { validateBody, type Validated } from '@lindeneg/funkallero-zod-service';
+import {
+    controller,
+    httpGet,
+    httpPost,
+    httpPatch,
+    httpDelete,
+    injectService,
+    body,
+    params,
+} from '@lindeneg/funkallero';
+import type { Validated } from '@lindeneg/funkallero-zod-service';
 import SERVICE from '../enums/service';
 import Controller from './controller';
 import createBookDtoSchema from '../dtos/create-book-dto';
@@ -14,26 +23,28 @@ class BookCoreController extends Controller {
     }
 
     @httpGet('/:id')
-    public async getBook() {
-        return this.handleResult(await this.mediator.send('GetBookQuery', { id: this.request.params.id }));
+    public async getBook(@params(null, 'id') id: string) {
+        return this.handleResult(await this.mediator.send('GetBookQuery', { id }));
     }
 
     @httpPatch('/:id', { authPolicy: 'author-is-book-owner' })
-    @validateBody(updateBookDtoSchema)
-    public async updateBook(updateBookDto: Validated<typeof updateBookDtoSchema>) {
+    public async updateBook(
+        @body(updateBookDtoSchema) updateBookDto: Validated<typeof updateBookDtoSchema>,
+        @params(null, 'id') id: string
+    ) {
         return this.handleResult(
             await this.mediator.send('UpdateBookCommand', {
                 ...updateBookDto,
-                id: this.request.params.id,
+                id,
             })
         );
     }
 
     @httpDelete('/:id', { authPolicy: 'author-is-book-owner' })
-    public async deleteBook() {
+    public async deleteBook(@params(null, 'id') id: string) {
         return this.handleResult(
             await this.mediator.send('DeleteBookCommand', {
-                id: this.request.params.id,
+                id,
             })
         );
     }
@@ -45,8 +56,7 @@ class BookInjectedController extends Controller {
     private readonly authService: AuthenticationService;
 
     @httpPost('/', { authPolicy: 'authenticated' })
-    @validateBody(createBookDtoSchema)
-    public async createBook(createBookDto: Validated<typeof createBookDtoSchema>) {
+    public async createBook(@body(createBookDtoSchema) createBookDto: Validated<typeof createBookDtoSchema>) {
         return this.handleResult(
             await this.mediator.send('CreateBookCommand', {
                 ...createBookDto,
