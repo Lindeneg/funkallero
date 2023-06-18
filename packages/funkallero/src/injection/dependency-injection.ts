@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { META_DATA, type Constructor, type IBaseService, type IServiceInjection } from '@lindeneg/funkallero-core';
 import devLogger from '../dev-logger';
 
@@ -29,7 +28,7 @@ abstract class DependencyInjection implements IDependencyInjection {
     }
 
     private getBaseServiceInjection(Service: Constructor<IBaseService>) {
-        const serviceInjections = Reflect.getMetadata(META_DATA.SERVICE_INJECTION, Service);
+        const serviceInjections = Reflect.get(Service.prototype, META_DATA.SERVICE_INJECTION);
         const keys = serviceInjections ? Object.keys(serviceInjections) : [];
         for (const key of keys) {
             if (baseInjectionRegex.test(key)) {
@@ -45,7 +44,7 @@ abstract class DependencyInjection implements IDependencyInjection {
 
     private getSpecificInjections(Service: Constructor<IBaseService>, name?: string) {
         const key = name || Service.name;
-        const serviceInjections = Reflect.getMetadata(META_DATA.SERVICE_INJECTION, Service);
+        const serviceInjections = Reflect.get(Service.prototype, META_DATA.SERVICE_INJECTION);
         const specificInjections = serviceInjections ? serviceInjections[key] : [];
 
         return specificInjections || [];

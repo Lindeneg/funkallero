@@ -3,7 +3,7 @@ import {
     SERVICE_TYPE,
     isServiceType,
     type IScopedService,
-    type Injection,
+    type IServiceInjection,
     type Constructor,
     type Request,
     type Response,
@@ -19,7 +19,7 @@ class ControllerDependencyInjection extends DependencyInjection {
     private readonly response: Response;
     private readonly hasAuthorizationPolicy: boolean;
     private readonly scopedServices: Map<string, IScopedService>;
-    private readonly filteredControllerInjections: Injection[];
+    private readonly filteredControllerInjections: IServiceInjection[];
 
     constructor(
         request: Request,
@@ -104,7 +104,7 @@ class ControllerDependencyInjection extends DependencyInjection {
         }
     }
 
-    private setScopedDependencies(injection: Injection, injections: Injection[] = []) {
+    private setScopedDependencies(injection: IServiceInjection, injections: IServiceInjection[] = []) {
         const Service = serviceContainer.getService<any>(injection.serviceKey);
         if (isServiceType(Service, SERVICE_TYPE.SCOPED) && !this.scopedServices.has(injection.serviceKey)) {
             const service = new Service();

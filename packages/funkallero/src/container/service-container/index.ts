@@ -1,4 +1,5 @@
 import {
+    META_DATA,
     isKnownScopedServiceType,
     isKnownSingletonServiceType,
     type Constructor,
@@ -38,7 +39,10 @@ const registerSingletonService = <TKey extends string, TService extends Construc
         throw ServiceRegisterError.scopedServiceAsSingletonError(serviceKey);
     }
 
-    devLogger(`registering singleton service ${serviceKey} with injections:`, service.prototype.injection);
+    devLogger(
+        `registering singleton service ${serviceKey} with injections:`,
+        Reflect.get(service.prototype, META_DATA.SERVICE_INJECTION)
+    );
 
     uninstantiatedSingletons.set(serviceKey, service);
 };
@@ -47,11 +51,15 @@ const registerScopedService = <TKey extends string, TService extends Constructor
     serviceKey: TKey,
     service: ScopedServiceResult<TService, TKey>
 ) => {
+    if (!service) return;
     if (isKnownSingletonServiceType(serviceKey)) {
         throw ServiceRegisterError.singletonServiceAsScopedError(serviceKey);
     }
 
-    devLogger(`registering scoped service ${serviceKey} with injections:`, service?.prototype.injection);
+    devLogger(
+        `registering scoped service ${serviceKey} with injections:`,
+        Reflect.get(service.prototype, META_DATA.SERVICE_INJECTION)
+    );
 
     scopedServices.set(serviceKey, service as Constructor<IScopedService>);
 };

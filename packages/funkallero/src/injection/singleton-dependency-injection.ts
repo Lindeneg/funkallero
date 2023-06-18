@@ -1,7 +1,7 @@
 import {
     SERVICE_TYPE,
     isServiceType,
-    type Injection,
+    type IServiceInjection,
     type Constructor,
     type ISingletonService,
 } from '@lindeneg/funkallero-core';
@@ -16,7 +16,7 @@ import devLogger from '../dev-logger';
 class SingletonDependencyInjection extends DependencyInjection {
     private readonly mappedSingletonServices: Map<
         string,
-        { injections: Injection[]; service: Constructor<ISingletonService> }
+        { injections: IServiceInjection[]; service: Constructor<ISingletonService> }
     > = new Map();
 
     public async inject(): Promise<void> {

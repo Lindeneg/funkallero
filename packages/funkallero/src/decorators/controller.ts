@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import type { RouterOptions } from 'express';
 import {
     META_DATA,
@@ -27,11 +26,15 @@ const createRoute = (
 
 const routeDecoratorFactory = (route: string, opts: IControllerSettings, method: HttpMethodUnion) => {
     return function (target: any, key: string, _: PropertyDescriptor) {
-        if (!Reflect.hasMetadata(META_DATA.CONTROLLER_ROUTES, target)) {
-            Reflect.defineMetadata(META_DATA.CONTROLLER_ROUTES, [], target);
+        let routes = Reflect.get(target, META_DATA.CONTROLLER_ROUTES);
+
+        if (!routes) {
+            routes = [];
+            Reflect.defineProperty(target, META_DATA.CONTROLLER_ROUTES, {
+                get: () => routes,
+            });
         }
 
-        const routes = Reflect.getMetadata(META_DATA.CONTROLLER_ROUTES, target);
         let authPolicies: string[] = [];
 
         if (typeof opts.authPolicy === 'string') {
@@ -46,7 +49,9 @@ const routeDecoratorFactory = (route: string, opts: IControllerSettings, method:
 
 export function controller<T extends Constructor<IControllerService>>(basePath = '') {
     return function (target: T) {
-        Reflect.defineMetadata(META_DATA.CONTROLLER_PATH, basePath, target);
+        Reflect.defineProperty(target, META_DATA.CONTROLLER_PATH, {
+            get: () => basePath,
+        });
         controllerContainer.register(target);
     };
 }

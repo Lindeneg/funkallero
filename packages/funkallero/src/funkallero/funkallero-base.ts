@@ -2,9 +2,11 @@ import { randomUUID } from 'crypto';
 import { Application as Express, Router } from 'express';
 import urlJoin from 'url-join';
 import {
+    META_DATA,
     SERVICE,
     LOG_LEVEL,
     HttpException,
+    type IArgumentInjection,
     type IFunkalleroBase,
     type ILoggerService,
     type IControllerService,
@@ -15,6 +17,7 @@ import {
     type IRoute,
     type Request,
     type Validation,
+    type InjectableArgUnion,
 } from '@lindeneg/funkallero-core';
 import devLogger from '../dev-logger';
 import serviceContainer, { getUninstantiatedSingleton } from '../container/service-container';
@@ -39,14 +42,15 @@ abstract class FunkalleroBase implements IFunkalleroBase {
     public abstract start(): Promise<void>;
 
     protected configureController(app: Express, CustomController: Constructor<IControllerService>) {
-        const routes = CustomController.prototype.routes;
-        const baseRoute = urlJoin(this.config?.basePath || '', CustomController.prototype.baseRoute);
+        const routes: IRoute[] = Reflect.get(CustomController.prototype, META_DATA.CONTROLLER_ROUTES);
+        const controllerPath: string = Reflect.get(CustomController, META_DATA.CONTROLLER_PATH);
+        const basePath = urlJoin(this.config?.basePath || '', controllerPath);
 
-        devLogger(`configuring ${CustomController.name} with baseRoute ${baseRoute}`);
+        devLogger(`configuring ${CustomController.name} with baseRoute ${basePath}`);
 
         for (const route of routes) {
             const router = Router();
-            const routePath = urlJoin(baseRoute, route.route);
+            const routePath = urlJoin(basePath, route.path);
 
             this.configureRouteHandler(router, CustomController, route, routePath);
 
@@ -54,7 +58,7 @@ abstract class FunkalleroBase implements IFunkalleroBase {
                 `registering route ${route.method.toUpperCase()} ${routePath} on controller ${CustomController.name}`
             );
 
-            app.use(baseRoute, router);
+            app.use(basePath, router);
         }
     }
 
@@ -96,19 +100,22 @@ abstract class FunkalleroBase implements IFunkalleroBase {
         route: IRoute,
         routePath: string
     ) {
-        router[route.method](route.route, async (_request, response, next) => {
+        router[route.method](route.path, async (_request, response, next) => {
             const request = this.configureRequest(_request as Request);
             const logger = serviceContainer.getService(SERVICE.LOGGER);
-            const controllerValidation = CustomController.prototype.validation;
-            const validation = controllerValidation ? controllerValidation[route.handlerKey] : null;
+
             const hasAuthPolicy = route.authorizationPolicy.length > 0;
+            const argumentInjections = Object.entries(
+                (Reflect.get(CustomController.prototype, META_DATA.ARGUMENT_INJECTION)[route.handlerKey] ||
+                    {}) as Record<InjectableArgUnion, IArgumentInjection>
+            ).sort((a, b) => a[1].index - b[1].index) as [InjectableArgUnion, IArgumentInjection][];
 
             logger.info({
                 msg: `${route.method.toUpperCase()} ${routePath}`,
                 source: CustomController.name,
                 requestId: request.id,
-                hasValidation: !!validation,
                 hasAuthPolicy,
+                argumentInjections,
             });
 
             const [customController, services] = await new ControllerDependencyInjection(
@@ -125,9 +132,14 @@ abstract class FunkalleroBase implements IFunkalleroBase {
 
                 let handlerArgs: any[] = [];
 
-                if (validation) {
-                    handlerArgs = await this.handleValidation(request, validation, logger, request.id);
+                for (const [key, value] of argumentInjections) {
+                    const target = request[key];
+                    console.log({ key, value });
                 }
+
+                // if (validation) {
+                //     handlerArgs = await this.handleValidation(request, validation, logger, request.id);
+                // }
 
                 await (customController[<keyof typeof customController>route.handlerKey] as unknown as ControllerFn)(
                     ...handlerArgs
