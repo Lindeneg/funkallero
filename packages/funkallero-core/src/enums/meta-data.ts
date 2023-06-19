@@ -3,6 +3,8 @@ const META_DATA = {
     ARGUMENT_INJECTION: 'funkallero:argument-injection',
     CONTROLLER_ROUTES: 'funkallero:controller-routes',
     CONTROLLER_PATH: 'funkallero:controller-path',
+    MIDDLEWARE_AFTER: 'funkallero:middleware-after',
+    MIDDLEWARE_BEFORE: 'funkallero:middleware-before',
 } as const;
 
 export type MetaDataUnion = typeof META_DATA[keyof typeof META_DATA];

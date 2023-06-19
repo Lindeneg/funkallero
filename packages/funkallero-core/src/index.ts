@@ -7,6 +7,7 @@ export { default as META_DATA, type MetaDataUnion } from './enums/meta-data';
 export { default as INJECTABLE_ARG, type InjectableArgUnion } from './enums/injectable-arg';
 export { default as injectService } from './decorators/inject-service';
 export { default as injectArgFactory } from './decorators/inject-arg-factory';
+export { after, before } from './decorators/middleware';
 export { default as devLogger } from './dev-logger';
 export {
     default as isServiceType,
@@ -16,6 +17,8 @@ export {
 export { default as HttpException } from './http-exception';
 export { default as ScopedService, type IScopedService } from './service/scoped-service';
 export { default as SingletonService, type ISingletonService } from './service/singleton-service';
+export { default as MiddlewareScopedService } from './service/middleware-scoped-service';
+export { default as MiddlewareSingletonService } from './service/middleware-singleton-service';
 export {
     default as ControllerService,
     type IControllerService,
