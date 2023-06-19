@@ -1,5 +1,5 @@
-import { controller, httpGet, httpPatch, httpDelete, injectService } from '@lindeneg/funkallero';
-import { validateBody, type Validated } from '@lindeneg/funkallero-zod-service';
+import { body, params, controller, httpGet, httpPatch, httpDelete, injectService } from '@lindeneg/funkallero';
+import type { Validated } from '@lindeneg/funkallero-zod-service';
 import SERVICE from '../enums/service';
 import Controller from './controller';
 import updateAuthorDtoSchema from '../dtos/update-author-dto';
@@ -8,8 +8,8 @@ import type AuthenticationService from '../services/authentication-service';
 @controller('authors')
 class AuthorCoreController extends Controller {
     @httpGet('/:id')
-    public async getAuthor() {
-        return this.handleResult(await this.mediator.send('GetAuthorQuery', { id: this.request.params.id }));
+    public async getAuthor(@params('id') id: string) {
+        return this.handleResult(await this.mediator.send('GetAuthorQuery', { id }));
     }
 
     @httpGet()
@@ -31,8 +31,7 @@ class AuthorInjectedController extends Controller {
     }
 
     @httpPatch('/', { authPolicy: 'authenticated' })
-    @validateBody(updateAuthorDtoSchema)
-    public async updateAuthor(updateAuthorDto: Validated<typeof updateAuthorDtoSchema>) {
+    public async updateAuthor(@body(updateAuthorDtoSchema) updateAuthorDto: Validated<typeof updateAuthorDtoSchema>) {
         return this.handleResult(
             await this.mediator.send('UpdateAuthorCommand', {
                 ...updateAuthorDto,

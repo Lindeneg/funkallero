@@ -4,7 +4,7 @@ import Controller from './controller';
 import loginDtoSchema from '../dtos/login-dto';
 import signupDtoSchema from '../dtos/signup-dto';
 
-@controller('/')
+@controller()
 class AuthController extends Controller {
     @httpPost('/login')
     public async login(@body(loginDtoSchema) loginDto: Validated<typeof loginDtoSchema>) {
