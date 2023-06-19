@@ -74,5 +74,6 @@ export type {
     IArgumentInjection,
     IServiceInjection,
     ServiceInjectionContext,
+    TransformFn,
     Promisify,
 } from './types';

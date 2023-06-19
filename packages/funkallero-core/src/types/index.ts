@@ -15,10 +15,13 @@ export interface IServiceInjection {
 
 export type ServiceInjectionContext = Record<string, IServiceInjection[]>;
 
+export type TransformFn = (value: any) => any;
+
 export interface IArgumentInjection<TSchema = any> {
     index: number;
     schema: TSchema | null;
     properties: string[];
+    transform: TransformFn;
 }
 
 export type Promisify<T> = T | Promise<T>;
