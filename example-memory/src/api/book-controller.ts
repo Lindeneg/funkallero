@@ -29,8 +29,8 @@ class BookCoreController extends Controller {
 
     @httpPatch('/:id', { authPolicy: 'author-is-book-owner' })
     public async updateBook(
-        @body(updateBookDtoSchema) updateBookDto: Validated<typeof updateBookDtoSchema>,
-        @params('id') id: string
+        @params('id') id: string,
+        @body(updateBookDtoSchema) updateBookDto: Validated<typeof updateBookDtoSchema>
     ) {
         return this.handleResult(
             await this.mediator.send('UpdateBookCommand', {

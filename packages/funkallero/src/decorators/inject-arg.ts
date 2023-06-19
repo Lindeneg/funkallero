@@ -1,21 +1,18 @@
 import {
     INJECTABLE_ARG,
-    InjectableArgUnion,
-    TransformFn,
     injectArgFactory as injectArgFactoryCore,
+    type InjectableArgUnion,
+    type TransformFn,
 } from '@lindeneg/funkallero-core';
-import { z } from 'zod';
 
-const injectConfigSchema = z.object({
-    schema: z.any().nullable().optional(),
-    fn: z.function().nullable().optional(),
-    properties: z.union([z.string(), z.array(z.string())]).optional(),
-});
-
-type InjectConfig = z.infer<typeof injectConfigSchema>;
+interface IInjectConfig {
+    schema: Record<any, any> | null;
+    fn: TransformFn | null;
+    properties: string | string[];
+}
 
 type ArgUnionCore = string | string[] | TransformFn;
-type ArgUnion = ArgUnionCore | InjectConfig | Record<any, any>;
+type ArgUnion = ArgUnionCore | Record<any, any>;
 
 const ensureArray = (properties?: string | string[]): string[] => {
     if (!properties) return [];
@@ -23,35 +20,27 @@ const ensureArray = (properties?: string | string[]): string[] => {
     return properties;
 };
 
-const handleArg = (config: Required<InjectConfig>, arg?: ArgUnion) => {
-    if (typeof arg === 'object') {
-        // if arg is object, assume it can either be InjectConfig or a validation schema
-        const result = injectConfigSchema.safeParse(arg);
-
-        if (result.success) {
-            config.schema = result.data.schema || null;
-            config.fn = result.data.fn || null;
-            config.properties = result.data.properties || [];
-        } else {
+const handleArgs = (config: IInjectConfig, ...args: Array<ArgUnion | undefined>) => {
+    for (const arg of args) {
+        if (typeof arg === 'object') {
             config.schema = arg;
+        } else if (typeof arg === 'string' || Array.isArray(arg)) {
+            config.properties = arg;
+        } else if (typeof arg === 'function') {
+            config.fn = arg;
         }
-    } else if (typeof arg === 'string' || Array.isArray(arg)) {
-        config.properties = arg;
-    } else if (typeof arg === 'function') {
-        config.fn = arg;
     }
 };
 
 const injectFactory = (injectableArg: InjectableArgUnion) => {
-    return function (arg1?: ArgUnion, arg2?: ArgUnion) {
-        const config: Required<InjectConfig> = {
+    return function (arg1?: ArgUnion, arg2?: ArgUnion, arg3?: ArgUnion) {
+        const config: IInjectConfig = {
             schema: null,
             fn: null,
             properties: [],
         };
 
-        if (arg1) handleArg(config, arg1);
-        if (arg2) handleArg(config, arg2);
+        handleArgs(config, arg1, arg2, arg3);
 
         return injectArgFactoryCore(injectableArg, config.schema, ensureArray(config.properties), config.fn);
     };
