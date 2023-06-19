@@ -11,7 +11,7 @@ import DataContextService from './services/data-context-service';
 import DataContextSeedService from './services/data-context-seed-service';
 import AuthenticationService from './services/authentication-service';
 import AuthorizationService from './services/authorization-service';
-import CookieService from './services/cookie-service';
+import CookieMiddlewareService from './services/cookie-middleware-service';
 import './api/author-controller';
 import './api/book-controller';
 import './api/auth-controller';
@@ -51,7 +51,7 @@ Funkallero.create({
         service.registerSingletonService(SERVICE.DATA_CONTEXT_SEED, DataContextSeedService);
 
         // optional request scoped services
-        service.registerScopedService(SERVICE.COOKIE, CookieService);
+        service.registerScopedService(SERVICE.COOKIE_MIDDLEWARE, CookieMiddlewareService);
         service.registerScopedService(SERVICE.AUTHENTICATION, AuthenticationService);
         service.registerScopedService(SERVICE.AUTHORIZATION, AuthorizationService);
     },

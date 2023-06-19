@@ -8,13 +8,13 @@ import signupDtoSchema from '../dtos/signup-dto';
 @controller()
 class AuthController extends Controller {
     @httpPost('/login')
-    @after(SERVICE.COOKIE)
+    @after(SERVICE.COOKIE_MIDDLEWARE)
     public async login(@body(loginDtoSchema) loginDto: Validated<typeof loginDtoSchema>) {
         return this.handleResult(await this.mediator.send('LoginCommand', loginDto));
     }
 
     @httpPost('/signup')
-    @after(SERVICE.COOKIE)
+    @after(SERVICE.COOKIE_MIDDLEWARE)
     public async signup(@body(signupDtoSchema) signupDto: Validated<typeof signupDtoSchema>) {
         return this.handleResult(await this.mediator.send('SignupCommand', signupDto));
     }

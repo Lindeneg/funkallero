@@ -1,6 +1,8 @@
 import {
     injectService,
     MiddlewareScopedService,
+    MediatorResultSuccess,
+    ACTION_RESULT,
     type IConfigurationService,
     type ITokenService,
     type Response,
@@ -11,7 +13,7 @@ import SERVICE from '../enums/service';
 import AUTH from '../enums/auth';
 import type IAuthModel from '../domain/auth-model';
 
-class CookieService extends MiddlewareScopedService {
+class CookieMiddlewareService extends MiddlewareScopedService {
     @injectService(SERVICE.TOKEN)
     private readonly tokenService: ITokenService;
 
@@ -21,7 +23,9 @@ class CookieService extends MiddlewareScopedService {
     public async afterRequestHandler(response: Response, result: MediatorResult<IAuthModel>) {
         if (result.success) {
             await this.setAuthCookieOnResponse(response, result.value);
+            return new MediatorResultSuccess(ACTION_RESULT.UNIT);
         }
+        return result;
     }
 
     private async setAuthCookieOnResponse(response: Response, payload: IAuthModel): Promise<void> {
@@ -40,4 +44,4 @@ class CookieService extends MiddlewareScopedService {
     }
 }
 
-export default CookieService;
+export default CookieMiddlewareService;
