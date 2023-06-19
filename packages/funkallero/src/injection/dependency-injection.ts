@@ -1,5 +1,10 @@
-import { META_DATA, type Constructor, type IBaseService, type IServiceInjection } from '@lindeneg/funkallero-core';
-import devLogger from '../dev-logger';
+import {
+    devLogger,
+    META_DATA,
+    type Constructor,
+    type IBaseService,
+    type IServiceInjection,
+} from '@lindeneg/funkallero-core';
 
 const baseInjectionRegex = /^Base[a-zA-Z]+Service|Action$/;
 

@@ -1,4 +1,5 @@
 import {
+    devLogger,
     SingletonService,
     type BaseMediatorAction,
     type IMediatorService,
@@ -7,7 +8,6 @@ import {
     type MediatorSendResult,
 } from '@lindeneg/funkallero-core';
 import MediatorActionDependencyInjection from '../injection/mediator-dependency-injection';
-import devLogger from '../dev-logger';
 
 class BaseMediatorService<TActions extends MediatorActionsConstraint>
     extends SingletonService

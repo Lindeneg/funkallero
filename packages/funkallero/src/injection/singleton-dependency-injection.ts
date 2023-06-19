@@ -1,4 +1,5 @@
 import {
+    devLogger,
     SERVICE_TYPE,
     isServiceType,
     type IServiceInjection,
@@ -11,7 +12,6 @@ import serviceContainer, {
 } from '../container/service-container';
 import DependencyInjection from './dependency-injection';
 import SingletonInjectionError from '../errors/singleton-injection-error';
-import devLogger from '../dev-logger';
 
 class SingletonDependencyInjection extends DependencyInjection {
     private readonly mappedSingletonServices: Map<

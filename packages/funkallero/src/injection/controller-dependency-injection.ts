@@ -1,4 +1,5 @@
 import {
+    devLogger,
     SERVICE,
     SERVICE_TYPE,
     isServiceType,
@@ -11,7 +12,6 @@ import {
 } from '@lindeneg/funkallero-core';
 import DependencyInjection from './dependency-injection';
 import serviceContainer from '../container/service-container';
-import devLogger from '../dev-logger';
 
 class ControllerDependencyInjection extends DependencyInjection {
     private readonly CustomController: Constructor<IControllerService>;

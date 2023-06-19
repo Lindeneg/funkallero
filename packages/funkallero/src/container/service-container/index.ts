@@ -1,4 +1,5 @@
 import {
+    devLogger,
     META_DATA,
     isKnownScopedServiceType,
     isKnownSingletonServiceType,
@@ -9,7 +10,6 @@ import {
     type ScopedServiceResult,
 } from '@lindeneg/funkallero-core';
 import ServiceRegisterError from '../../errors/service-register-error';
-import devLogger from '../../dev-logger';
 
 const uninstantiatedSingletons = new Map<string, Constructor<ISingletonService>>();
 const singletonServices = new Map<string, ISingletonService>();

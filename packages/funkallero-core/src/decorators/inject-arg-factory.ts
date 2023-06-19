@@ -1,4 +1,5 @@
 import META_DATA from '../enums/meta-data';
+import devLogger from '../dev-logger';
 import type { InjectableArgUnion } from '../enums/injectable-arg';
 import type { IArgumentInjection } from '../types';
 
@@ -9,6 +10,12 @@ function injectArgFactory<TSchema>(
     transform: ((value: any) => any) | null
 ) {
     return function (target: any, propertyKey: string, index: number) {
+        devLogger('inject factory for', propertyKey, 'on', targetProperty, 'produced config', {
+            properties,
+            schema,
+            transform,
+        });
+
         let argumentMetaData = Reflect.get(target, META_DATA.ARGUMENT_INJECTION);
 
         if (!argumentMetaData) {

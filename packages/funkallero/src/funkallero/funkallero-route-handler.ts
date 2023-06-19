@@ -1,6 +1,7 @@
 import type { NextFunction } from 'express';
 import { randomUUID } from 'crypto';
 import {
+    devLogger,
     META_DATA,
     SERVICE,
     HttpException,
@@ -18,7 +19,6 @@ import {
 import serviceContainer from '../container/service-container';
 import AuthServiceNotFoundError from '../errors/auth-service-not-found-error';
 import ControllerDependencyInjection from '../injection/controller-dependency-injection';
-import devLogger from '../dev-logger';
 
 class FunkalleroRouteHandler {
     private readonly logger: ILoggerService;

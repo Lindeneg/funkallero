@@ -1,6 +1,7 @@
 import { Application as Express, Router } from 'express';
 import urlJoin from 'url-join';
 import {
+    devLogger,
     META_DATA,
     SERVICE,
     LOG_LEVEL,
@@ -18,7 +19,6 @@ import BaseConfigurationService from '../service/base-configuration-service';
 import BaseLoggerService from '../service/base-logger-service';
 import BaseExpressService from '../service/base-express-service';
 import BaseRequestErrorHandlerService from '../service/base-error-handler-service';
-import devLogger from '../dev-logger';
 
 abstract class FunkalleroBase implements IFunkalleroBase {
     protected readonly config: Omit<IFunkalleroPartialConfiguration, 'setup' | 'startup'>;
