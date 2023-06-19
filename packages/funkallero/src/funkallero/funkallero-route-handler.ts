@@ -121,11 +121,11 @@ class FunkalleroRouteHandler {
                 'has filtered target',
                 target,
                 'with schema',
-                value.schema ? 'true' : 'false'
+                value.schema,
             );
 
             if (!value.schema) {
-                handlerArgs.push(target);
+                handlerArgs.push(value.transform(target));
                 continue;
             }
 
