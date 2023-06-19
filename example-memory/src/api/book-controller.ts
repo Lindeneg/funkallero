@@ -23,14 +23,14 @@ class BookCoreController extends Controller {
     }
 
     @httpGet('/:id')
-    public async getBook(@params(null, 'id') id: string) {
+    public async getBook(@params('id') id: string) {
         return this.handleResult(await this.mediator.send('GetBookQuery', { id }));
     }
 
     @httpPatch('/:id', { authPolicy: 'author-is-book-owner' })
     public async updateBook(
         @body(updateBookDtoSchema) updateBookDto: Validated<typeof updateBookDtoSchema>,
-        @params(null, 'id') id: string
+        @params('id') id: string
     ) {
         return this.handleResult(
             await this.mediator.send('UpdateBookCommand', {
@@ -41,7 +41,7 @@ class BookCoreController extends Controller {
     }
 
     @httpDelete('/:id', { authPolicy: 'author-is-book-owner' })
-    public async deleteBook(@params(null, 'id') id: string) {
+    public async deleteBook(@params('id') id: string) {
         return this.handleResult(
             await this.mediator.send('DeleteBookCommand', {
                 id,

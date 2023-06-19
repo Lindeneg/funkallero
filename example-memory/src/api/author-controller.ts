@@ -8,7 +8,7 @@ import type AuthenticationService from '../services/authentication-service';
 @controller('authors')
 class AuthorCoreController extends Controller {
     @httpGet('/:id')
-    public async getAuthor(@params(null, 'id') id: string) {
+    public async getAuthor(@params('id') id: string) {
         return this.handleResult(await this.mediator.send('GetAuthorQuery', { id }));
     }
 
