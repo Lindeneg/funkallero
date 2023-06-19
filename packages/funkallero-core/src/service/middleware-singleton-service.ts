@@ -1,10 +1,16 @@
 import SingletonService from './singleton-service';
 import type { MediatorResult } from './mediator-service';
-import type { Promisify, Request, Response } from '../types';
+import type { Request, Response } from '../types';
 
 abstract class MiddlewareSingletonService extends SingletonService {
-    beforeRequestHandler(request: Request, response: Response): Promisify<void> {}
-    afterRequestHandler(request: Request, response: Response, result: MediatorResult<any>): Promisify<void> {}
+    public async beforeRequestHandler(request: Request, response: Response): Promise<void> {}
+    public async afterRequestHandler(
+        request: Request,
+        response: Response,
+        result: MediatorResult<any>
+    ): Promise<MediatorResult<any>> {
+        return result;
+    }
 }
 
 export default MiddlewareSingletonService;

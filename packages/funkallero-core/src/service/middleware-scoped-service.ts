@@ -1,10 +1,12 @@
 import ScopedService from './scoped-service';
 import type { MediatorResult } from './mediator-service';
-import type { Promisify, Response } from '../types';
+import type { Response } from '../types';
 
 abstract class MiddlewareScopedService extends ScopedService {
-    beforeRequestHandler(response: Response): Promisify<void> {}
-    afterRequestHandler(response: Response, result: MediatorResult<any>): Promisify<void> {}
+    public async beforeRequestHandler(response: Response): Promise<void> {}
+    public async afterRequestHandler(response: Response, result: MediatorResult<any>): Promise<MediatorResult<any>> {
+        return result;
+    }
 }
 
 export default MiddlewareScopedService;
