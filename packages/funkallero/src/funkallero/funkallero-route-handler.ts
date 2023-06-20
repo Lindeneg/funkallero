@@ -112,9 +112,11 @@ class FunkalleroRouteHandler {
     }
 
     private getArgumentInjections() {
-        const argumentInjections = (Reflect.get(this.CustomController.prototype, META_DATA.ARGUMENT_INJECTION)[
-            this.route.handlerKey
-        ] || {}) as Record<InjectableArgUnion, IArgumentInjection>;
+        const metaInjections = Reflect.get(this.CustomController.prototype, META_DATA.ARGUMENT_INJECTION);
+        const argumentInjections = (metaInjections ? metaInjections[this.route.handlerKey] : {}) as Record<
+            InjectableArgUnion,
+            IArgumentInjection
+        >;
 
         const entries = Object.entries(argumentInjections).sort((a, b) => a[1].index - b[1].index);
 

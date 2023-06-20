@@ -14,6 +14,7 @@ import {
 } from '@lindeneg/funkallero-core';
 import serviceContainer, { getScopedService, getSingletonService } from '../container/service-container';
 import ScopedDependencyInjection from '../injection/scoped-dependency-injection';
+import RequiredServiceMissingError from '../errors/required-service-missing-error';
 
 class FunkalleroMiddlewareHandler {
     private readonly logger: ILoggerService;
@@ -49,19 +50,19 @@ class FunkalleroMiddlewareHandler {
 
     private async runMiddleware(
         middlewareKeys: string[],
-        key: 'afterRequestHandler' | 'beforeRequestHandler',
+        method: 'afterRequestHandler' | 'beforeRequestHandler',
         result: any
     ) {
         for (const middlewareServiceKey of middlewareKeys) {
             const singletonService = getSingletonService<MiddlewareSingletonService>(middlewareServiceKey);
             if (singletonService) {
-                result = await singletonService[key](this.request, this.response, result);
+                result = await singletonService[method](this.request, this.response, result);
 
                 this.logger.verbose({
-                    msg: 'running singleton middleware',
-                    key,
-                    requestId: this.request.id,
+                    msg: 'singleton middleware result',
                     middlewareServiceKey,
+                    method,
+                    requestId: this.request.id,
                     result,
                 });
 
@@ -71,19 +72,20 @@ class FunkalleroMiddlewareHandler {
             let scopedService = this.services.get(middlewareServiceKey) as MiddlewareScopedService | undefined;
 
             if (!scopedService) {
-                const Service = getScopedService(middlewareServiceKey) as Constructor<MiddlewareScopedService> | null;
-                if (!Service) throw new Error('hello');
+                const Service = getScopedService<Constructor<MiddlewareScopedService>>(middlewareServiceKey);
+
+                if (!Service) throw new RequiredServiceMissingError(middlewareServiceKey);
 
                 scopedService = await new ScopedDependencyInjection(this.request, Service, this.services).inject();
 
                 this.services.set(middlewareServiceKey, scopedService);
             }
 
-            result = await scopedService[key](this.response, result);
+            result = await scopedService[method](this.response, result);
 
             this.logger.verbose({
-                msg: 'running scoped middleware',
-                key,
+                msg: 'scoped middleware result',
+                method,
                 requestId: this.request.id,
                 middlewareServiceKey,
                 result,
