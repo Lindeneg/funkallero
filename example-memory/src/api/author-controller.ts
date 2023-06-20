@@ -8,13 +8,13 @@ import type AuthenticationService from '../services/authentication-service';
 @controller('authors')
 class AuthorCoreController extends Controller {
     @httpGet('/:id')
-    public async getAuthor(@params('id') id: string) {
-        return this.handleResult(await this.mediator.send('GetAuthorQuery', { id }));
+    public getAuthor(@params('id') id: string) {
+        return this.mediator.send('GetAuthorQuery', { id });
     }
 
     @httpGet()
-    public async getAuthors() {
-        return this.handleResult(await this.mediator.send('GetAuthorsQuery'));
+    public getAuthors() {
+        return this.mediator.send('GetAuthorsQuery');
     }
 }
 
@@ -25,18 +25,14 @@ class AuthorInjectedController extends Controller {
 
     @httpDelete('/', { authPolicy: 'authenticated' })
     public async deleteAuthor() {
-        return this.handleResult(
-            await this.mediator.send('DeleteAuthorCommand', { id: await this.authService.getUserId() })
-        );
+        return this.mediator.send('DeleteAuthorCommand', { id: await this.authService.getUserId() });
     }
 
     @httpPatch('/', { authPolicy: 'authenticated' })
     public async updateAuthor(@body(updateAuthorDtoSchema) updateAuthorDto: Validated<typeof updateAuthorDtoSchema>) {
-        return this.handleResult(
-            await this.mediator.send('UpdateAuthorCommand', {
-                ...updateAuthorDto,
-                id: await this.authService.getUserId(),
-            })
-        );
+        return this.mediator.send('UpdateAuthorCommand', {
+            ...updateAuthorDto,
+            id: await this.authService.getUserId(),
+        });
     }
 }

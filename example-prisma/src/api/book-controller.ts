@@ -23,8 +23,8 @@ class BookCoreController extends Controller {
     }
 
     @httpGet('/:id')
-    public getBook() {
-        return this.mediator.send('GetBookQuery', { id: this.request.params.id });
+    public getBook(@params('id') id: string) {
+        return this.mediator.send('GetBookQuery', { id });
     }
 
     @httpPatch('/:id', { authPolicy: 'author-is-book-owner' })

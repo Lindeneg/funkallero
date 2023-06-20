@@ -57,7 +57,7 @@ Funkallero.create({
         service.registerScopedService(SERVICE.AUTHENTICATION, AuthenticationService);
         service.registerScopedService(SERVICE.AUTHORIZATION, AuthorizationService);
 
-        // testing middleware services
+        // example middleware services
         service.registerScopedService(SERVICE.COOKIE_MIDDLEWARE, CookieMiddlewareService);
         service.registerSingletonService(SERVICE.TEST_1_MIDDLEWARE, Test1MiddlewareService);
         service.registerScopedService(SERVICE.TEST_2_MIDDLEWARE, Test2MiddlewareService);

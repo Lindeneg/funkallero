@@ -7,13 +7,12 @@ import DataContextService from './services/data-context-service';
 import AuthenticationService from './services/authentication-service';
 import AuthorizationService from './services/authorization-service';
 import DataContextSeedService from './services/data-context-seed-service';
-import ExampleSingletonService from './services/example-singleton-service';
-import ExampleScopedService from './services/example-scoped-service';
+import ExampleSingletonMiddlewareService from './services/example-singleton-middleware-service';
+import ExampleScopedMiddlewareService from './services/example-scoped-middleware-service';
 import './api/author-controller';
 import './api/book-controller';
 import './api/auth-controller';
-import './api/example-controller-1';
-import './api/example-controller-2';
+import './api/example-middleware-controller';
 
 Funkallero.create({
     // default: ''
@@ -40,12 +39,14 @@ Funkallero.create({
         service.registerSingletonService(SERVICE.TOKEN, BaseTokenService);
         service.registerSingletonService(SERVICE.VALIDATION, BaseZodValidationService);
         service.registerSingletonService(SERVICE.DATA_CONTEXT_SEED, DataContextSeedService);
-        service.registerSingletonService(SERVICE.EXAMPLE_SINGLETON_SERVICE, ExampleSingletonService);
 
         // optional request scoped services
         service.registerScopedService(SERVICE.AUTHENTICATION, AuthenticationService);
         service.registerScopedService(SERVICE.AUTHORIZATION, AuthorizationService);
-        service.registerScopedService(SERVICE.EXAMPLE_SCOPED_SERVICE, ExampleScopedService);
+
+        // example middleware services
+        service.registerSingletonService(SERVICE.EXAMPLE_SINGLETON_MIDDLEWARE, ExampleSingletonMiddlewareService);
+        service.registerScopedService(SERVICE.EXAMPLE_SCOPED_MIDDLEWARE, ExampleScopedMiddlewareService);
     },
 
     // optional function that is run after setup but before app start
