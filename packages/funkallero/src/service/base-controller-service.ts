@@ -17,9 +17,7 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
     protected readonly logger: ILoggerService;
 
     // just a default implementation, meant to be overridden..
-    protected async handleResult(result: MediatorResult): Promise<void> {
-        this.setJsonContentType();
-
+    public async handleResult(result: MediatorResult): Promise<void> {
         if (!result.success) {
             return this.handleError(result.error);
         }
@@ -67,10 +65,6 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
             default:
                 throw HttpException.internal();
         }
-    }
-
-    private setJsonContentType() {
-        this.response.set('Content-Type', 'application/json');
     }
 }
 
