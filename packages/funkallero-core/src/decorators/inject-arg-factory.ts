@@ -12,8 +12,8 @@ function injectArgFactory<TSchema>(
     return function (target: any, propertyKey: string, index: number) {
         devLogger('inject factory for', propertyKey, 'on', targetProperty, 'produced config', {
             properties,
-            schema,
-            transform,
+            schema: !!schema,
+            transform: !!transform,
         });
 
         let argumentMetaData = Reflect.get(target, META_DATA.ARGUMENT_INJECTION);
