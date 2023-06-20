@@ -205,7 +205,7 @@ import type MediatorService from '../services/mediator-service';
 
 class Controller extends ControllerService<MediatorService> {
     // override handleResult if desired
-    // protected async handleResult(result: MediatorResult): Promise<void> {
+    // public async handleResult(result: MediatorResult): Promise<void> {
     // }
 }
 
@@ -228,33 +228,26 @@ Assume the `basePath` is set to `/api` and assume the app is running on `localho
 In order to have routes and handlers, simply define methods and use the appropiate `http` decorator.
 
 ```ts
-import { controller, httpGet, httpPost } from '@lindeneg/funkallero';
+import { body, params, controller, httpGet, httpPost } from '@lindeneg/funkallero';
 import Controller from './controller';
 
 @controller('user')
 class UserController extends Controller {
-    @httpPost() // POST http://localhost:3000/api/user
-    public async createUser() {
-        // handleResult comes from ControllerService (can be overridden)
-        return this.handleResult(
-            // type-safe mediator!
-            await this.mediator.send('CreateUserCommand', {
-                // alternatively use @lindeneg/funkallero-zod-service for easy validation
-                name: this.request.body.name,
-                email: this.request.body.email,
-                password: this.request.body.password,
-            })
-        );
+    @httpPost()
+    // if a validation service has been registered, it can neatly be used here
+    public createUser(@body(createUserDtoSchema) createUserDto: ICreateUserDto) {
+        // type-safe mediator!
+        return this.mediator.send('CreateUserCommand', createUserDto);
     }
 
-    @httpGet('/:id') // GET http://localhost:3000/api/user/some-id
-    public async getUser() {
-        return this.handleResult(await this.mediator.send('GetUserQuery', { id: this.request.params.id }));
+    @httpGet('/:id')
+    public async getUser(@params('id') id: string) {
+        return this.mediator.send('GetUserQuery', { id });
     }
 
-    @httpGet() // GET http://localhost:3000/api/user
+    @httpGet()
     public async getUsers() {
-        return this.handleResult(await this.mediator.send('GetUsersQuery'));
+        return this.mediator.send('GetUsersQuery');
     }
 }
 ```
@@ -263,4 +256,4 @@ In order for the controller to be registered, just import the file itself inside
 
 `import './api/user-controller';`
 
-There's more to do with controllers, such as specifying authorization policies, validating the body of the request or injecting other services. Both singletons and scoped services can be injected into controllers.
+There's more to do with controllers, such as specifying middleware or authorization policies, both via decorators. Singletons and scoped services can also be injected into controllers.
