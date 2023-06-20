@@ -12,6 +12,9 @@ import DataContextSeedService from './services/data-context-seed-service';
 import AuthenticationService from './services/authentication-service';
 import AuthorizationService from './services/authorization-service';
 import CookieMiddlewareService from './services/cookie-middleware-service';
+import Test1MiddlewareService from './services/test-1-middleware-service';
+import Test2MiddlewareService from './services/test-2-middleware-service';
+
 import './api/author-controller';
 import './api/book-controller';
 import './api/auth-controller';
@@ -51,9 +54,13 @@ Funkallero.create({
         service.registerSingletonService(SERVICE.DATA_CONTEXT_SEED, DataContextSeedService);
 
         // optional request scoped services
-        service.registerScopedService(SERVICE.COOKIE_MIDDLEWARE, CookieMiddlewareService);
         service.registerScopedService(SERVICE.AUTHENTICATION, AuthenticationService);
         service.registerScopedService(SERVICE.AUTHORIZATION, AuthorizationService);
+
+        // testing middleware services
+        service.registerScopedService(SERVICE.COOKIE_MIDDLEWARE, CookieMiddlewareService);
+        service.registerSingletonService(SERVICE.TEST_1_MIDDLEWARE, Test1MiddlewareService);
+        service.registerScopedService(SERVICE.TEST_2_MIDDLEWARE, Test2MiddlewareService);
     },
 
     // optional function that is run after setup but before app start
