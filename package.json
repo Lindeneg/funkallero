@@ -14,7 +14,7 @@
         "ex": "yarn build core funkallero memory"
     },
     "workspaces": [
-        "example-memory",
+        "example-*",
         "packages/*"
     ],
     "devDependencies": {
