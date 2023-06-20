@@ -3,7 +3,7 @@ import type { MediatorResult } from './mediator-service';
 import type { Request, Response } from '../types';
 
 abstract class MiddlewareSingletonService extends SingletonService {
-    public async beforeRequestHandler(request: Request, response: Response): Promise<void> {}
+    public async beforeRequestHandler(request: Request, response: Response, result: any): Promise<any> {}
     public async afterRequestHandler(
         request: Request,
         response: Response,
