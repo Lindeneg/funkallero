@@ -15,10 +15,12 @@ import {
     type Request,
     type Response,
     type InjectableArgUnion,
+    type IScopedService,
 } from '@lindeneg/funkallero-core';
 import serviceContainer from '../container/service-container';
 import AuthServiceNotFoundError from '../errors/auth-service-not-found-error';
-import ControllerDependencyInjection from '../injection/controller-dependency-injection';
+import ScopedDependencyInjection from '../injection/scoped-dependency-injection';
+import FunkalleroMiddlewareHandler from './funkallero-middleware-handler';
 
 class FunkalleroRouteHandler {
     private readonly logger: ILoggerService;
@@ -47,37 +49,51 @@ class FunkalleroRouteHandler {
     }
 
     public async handle() {
-        const hasAuthPolicy = this.route.authorizationPolicy.length > 0;
-        const argumentInjections = this.getArgumentInjections();
+        const hasAuthorizationPolicy = this.route.authorizationPolicy.length > 0;
 
         this.logger.info({
             msg: `${this.route.method.toUpperCase()} ${this.routePath}`,
             source: this.CustomController.name,
             requestId: this.request.id,
-            hasAuthPolicy,
+            hasAuthorizationPolicy,
         });
 
-        const [customController, services] = await new ControllerDependencyInjection(
-            this.request,
-            this.response,
-            this.CustomController,
-            hasAuthPolicy
-        ).inject();
+        const services = new Map<string, IScopedService>();
+
+        const customController = await new ScopedDependencyInjection(this.request, this.CustomController, services, {
+            hasAuthorizationPolicy,
+            response: this.response,
+        }).inject();
 
         try {
-            if (hasAuthPolicy) {
+            if (hasAuthorizationPolicy) {
                 await this.authorizePolicies(this.route.authorizationPolicy, this.routePath, services);
             }
 
-            let handlerArgs: any[] = [];
+            const middlewareHandler = new FunkalleroMiddlewareHandler(
+                this.CustomController,
+                this.request,
+                this.response,
+                services,
+                this.route.handlerKey
+            );
 
+            await middlewareHandler.runBeforeMiddleware();
+
+            let handlerArgs: unknown[] = [];
+
+            const argumentInjections = this.getArgumentInjections();
             if (argumentInjections.length > 0) {
                 handlerArgs = await this.getHandlerArgs(argumentInjections);
             }
 
-            await (customController[<keyof typeof customController>this.route.handlerKey] as unknown as ControllerFn)(
-                ...handlerArgs
-            );
+            const result = await (
+                customController[<keyof typeof customController>this.route.handlerKey] as unknown as ControllerFn
+            )(...handlerArgs);
+
+            const amendedResult = await middlewareHandler.runAfterMiddleware(result);
+
+            await customController.handleResult(amendedResult);
         } catch (err) {
             this.next(err);
         }
@@ -120,8 +136,8 @@ class FunkalleroRouteHandler {
                 this.request.id,
                 'has filtered target',
                 target,
-                'with schema',
-                value.schema,
+                'with schema:',
+                !!value.schema
             );
 
             if (!value.schema) {
