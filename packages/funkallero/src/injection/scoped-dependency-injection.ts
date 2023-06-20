@@ -13,46 +13,50 @@ import {
 import DependencyInjection from './dependency-injection';
 import serviceContainer from '../container/service-container';
 
-class ControllerDependencyInjection extends DependencyInjection {
-    private readonly CustomController: Constructor<IControllerService>;
+type ControllerOptions = {
+    response: Response;
+    hasAuthorizationPolicy: boolean;
+} | null;
+
+class ScopedDependencyInjection<TService extends IScopedService | IControllerService> extends DependencyInjection {
+    private readonly Service: Constructor<TService>;
     private readonly request: Request;
-    private readonly response: Response;
-    private readonly hasAuthorizationPolicy: boolean;
+    private readonly controllerOptions: ControllerOptions;
     private readonly scopedServices: Map<string, IScopedService>;
-    private readonly filteredControllerInjections: IServiceInjection[];
+    private readonly filteredServiceInjections: IServiceInjection[];
 
     constructor(
         request: Request,
-        response: Response,
-        CustomController: Constructor<IControllerService>,
-        hasAuthorizationPolicy: boolean
+        Service: Constructor<TService>,
+        scopedServices: Map<string, IScopedService>,
+        controllerOptions: ControllerOptions = null
     ) {
         super();
-        this.CustomController = CustomController;
-        this.scopedServices = new Map();
+        this.Service = Service;
+        this.scopedServices = scopedServices;
         this.request = request;
-        this.response = response;
-        this.hasAuthorizationPolicy = hasAuthorizationPolicy;
-        this.filteredControllerInjections = this.getServiceInjections(this.CustomController);
+        this.controllerOptions = controllerOptions;
+        this.filteredServiceInjections = this.getServiceInjections(this.Service);
     }
 
-    public async inject(): Promise<[IControllerService, Map<any, any>]> {
+    public async inject(): Promise<TService> {
         await this.prepare();
 
-        const controller = new this.CustomController();
+        const service = new this.Service();
+        (service as any).injections = this.filteredServiceInjections;
 
         this.injectScopedServices();
-        this.injectServicesIntoController(controller);
+        this.injectServicesIntoService(service);
 
-        return [controller, this.scopedServices];
+        return service;
     }
 
     private async prepare() {
-        for (const injection of this.filteredControllerInjections) {
+        for (const injection of this.filteredServiceInjections) {
             this.setScopedDependencies(injection);
         }
 
-        this.setDefaultAuthorizationService();
+        this.setDefaultAuthorizationServiceIfNeeded();
     }
 
     private injectScopedServices() {
@@ -75,12 +79,15 @@ class ControllerDependencyInjection extends DependencyInjection {
         }
     }
 
-    private injectServicesIntoController(controller: IControllerService) {
-        (controller as any).request = this.request;
-        (controller as any).response = this.response;
+    private injectServicesIntoService(service: TService) {
+        (service as any).request = this.request;
 
-        for (const injection of this.filteredControllerInjections) {
-            const baseService = serviceContainer.getService<any>(injection.serviceKey);
+        if (!!this.controllerOptions?.response) {
+            (service as any).response = this.controllerOptions.response;
+        }
+
+        for (const injection of this.filteredServiceInjections) {
+            const baseService = serviceContainer.getService<IScopedService>(injection.serviceKey);
 
             let actualService = baseService;
 
@@ -95,12 +102,12 @@ class ControllerDependencyInjection extends DependencyInjection {
                 'injecting',
                 actualService.constructor.name,
                 'into',
-                this.CustomController.name,
+                this.Service.name,
                 'on request',
                 this.request.id
             );
 
-            (controller as any)[injection.instanceMember] = actualService;
+            (service as any)[injection.instanceMember] = actualService;
         }
     }
 
@@ -140,8 +147,8 @@ class ControllerDependencyInjection extends DependencyInjection {
         }
     }
 
-    private setDefaultAuthorizationService() {
-        if (this.hasAuthorizationPolicy && !this.scopedServices.has(SERVICE.AUTHORIZATION)) {
+    private setDefaultAuthorizationServiceIfNeeded() {
+        if (!!this.controllerOptions?.hasAuthorizationPolicy && !this.scopedServices.has(SERVICE.AUTHORIZATION)) {
             this.setScopedDependencies({
                 serviceKey: SERVICE.AUTHORIZATION,
                 instanceMember: '__authorizationService',
@@ -150,4 +157,4 @@ class ControllerDependencyInjection extends DependencyInjection {
     }
 }
 
-export default ControllerDependencyInjection;
+export default ScopedDependencyInjection;
