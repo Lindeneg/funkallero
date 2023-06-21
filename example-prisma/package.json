@@ -24,7 +24,6 @@
     "dependencies": {
         "@lindeneg/funkallero": "0.0.0",
         "@lindeneg/funkallero-auth-service": "0.0.0",
-        "@lindeneg/funkallero-prisma-service": "0.0.0",
         "@lindeneg/funkallero-zod-service": "0.0.0",
         "@prisma/client": "4.15.0",
         "cookie-parser": "1.4.6",
