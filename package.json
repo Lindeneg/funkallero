@@ -10,8 +10,7 @@
         "cli": "bash ./scripts/cli.sh",
         "build": "yarn cli build",
         "lint": "yarn cli lint",
-        "start": "yarn cli start",
-        "ex": "yarn build core funkallero memory"
+        "start": "yarn cli start"
     },
     "workspaces": [
         "example-*",
