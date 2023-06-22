@@ -7,8 +7,8 @@ import {
     httpPatch,
     httpDelete,
     injectService,
+    type ParsedSchema,
 } from '@lindeneg/funkallero';
-import type { Validated } from '@lindeneg/funkallero-zod-service';
 import SERVICE from '../enums/service';
 import Controller from './controller';
 import createBookDtoSchema from '../dtos/create-book-dto';
@@ -30,7 +30,7 @@ class BookCoreController extends Controller {
     @httpPatch('/:id', { authPolicy: 'author-is-book-owner' })
     public updateBook(
         @params('id') id: string,
-        @body(updateBookDtoSchema) updateBookDto: Validated<typeof updateBookDtoSchema>
+        @body(updateBookDtoSchema) updateBookDto: ParsedSchema<typeof updateBookDtoSchema>
     ) {
         return this.mediator.send('UpdateBookCommand', {
             ...updateBookDto,
@@ -52,7 +52,7 @@ class BookInjectedController extends Controller {
     private readonly authService: AuthenticationService;
 
     @httpPost('/', { authPolicy: 'authenticated' })
-    public async createBook(@body(createBookDtoSchema) createBookDto: Validated<typeof createBookDtoSchema>) {
+    public async createBook(@body(createBookDtoSchema) createBookDto: ParsedSchema<typeof createBookDtoSchema>) {
         return this.mediator.send('CreateBookCommand', {
             ...createBookDto,
             authorId: await this.authService.getUserId(),

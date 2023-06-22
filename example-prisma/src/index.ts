@@ -1,9 +1,8 @@
 import { join as joinPath } from 'path';
 import { readFileSync } from 'fs';
 import { cwd as getCurrentDirectory } from 'process';
-import Funkallero, { LOG_LEVEL } from '@lindeneg/funkallero';
+import Funkallero, { LOG_LEVEL, BaseZodParserService } from '@lindeneg/funkallero';
 import { BaseTokenService } from '@lindeneg/funkallero-auth-service';
-import BaseZodValidationService from '@lindeneg/funkallero-zod-service';
 import SERVICE from './enums/service';
 import ExpressService from './services/express-service';
 import MediatorService from './services/mediator-service';
@@ -50,7 +49,7 @@ Funkallero.create({
         // optional singleton services
         service.registerSingletonService(SERVICE.EXPRESS, ExpressService);
         service.registerSingletonService(SERVICE.TOKEN, BaseTokenService);
-        service.registerSingletonService(SERVICE.VALIDATION, BaseZodValidationService);
+        service.registerSingletonService(SERVICE.SCHEMA_PARSER, BaseZodParserService);
         service.registerSingletonService(SERVICE.DATA_CONTEXT_SEED, DataContextSeedService);
 
         // optional request scoped services
@@ -58,9 +57,9 @@ Funkallero.create({
         service.registerScopedService(SERVICE.AUTHORIZATION, AuthorizationService);
 
         // example middleware services
-        service.registerScopedService(SERVICE.COOKIE_MIDDLEWARE, CookieMiddlewareService);
         service.registerSingletonService(SERVICE.TEST_1_MIDDLEWARE, Test1MiddlewareService);
         service.registerScopedService(SERVICE.TEST_2_MIDDLEWARE, Test2MiddlewareService);
+        service.registerScopedService(SERVICE.COOKIE_MIDDLEWARE, CookieMiddlewareService);
     },
 
     // optional function that is run after setup but before app start
