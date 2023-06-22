@@ -32,8 +32,8 @@ function injectArgFactory<TSchema>(
         const argumentInjection: IArgumentInjection = {
             index,
             schema,
+            transform,
             properties,
-            transform: transform || ((e) => e),
         };
 
         argumentMetaData[propertyKey][targetProperty] = argumentInjection;
