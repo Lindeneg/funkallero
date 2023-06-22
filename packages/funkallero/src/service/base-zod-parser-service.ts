@@ -1,11 +1,11 @@
 import type { z } from 'zod';
-import { SingletonService, type IValidationService, type ValidateReturn } from '@lindeneg/funkallero-core';
+import { SingletonService, type ISchemaParserService, type SchemaParserResult } from '@lindeneg/funkallero-core';
 
-export type Validated<TZod extends z.ZodType<any, any, any>> = z.infer<TZod>;
+export type ParsedSchema<TZod extends z.ZodType<any, any, any>> = z.infer<TZod>;
 
-class BaseZodValidationService extends SingletonService implements IValidationService {
-    public validate(payload: any, validation: z.Schema): ValidateReturn {
-        const result = validation.safeParse(payload);
+class BaseZodParserService extends SingletonService implements ISchemaParserService {
+    public async parse(payload: any, validation: z.Schema): Promise<SchemaParserResult> {
+        const result = await validation.safeParseAsync(payload);
 
         if (result.success) {
             return {
@@ -29,4 +29,4 @@ class BaseZodValidationService extends SingletonService implements IValidationSe
     }
 }
 
-export default BaseZodValidationService;
+export default BaseZodParserService;

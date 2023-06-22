@@ -17,7 +17,6 @@
     "dependencies": {
         "@lindeneg/funkallero": "0.0.0",
         "@lindeneg/funkallero-auth-service": "0.0.0",
-        "@lindeneg/funkallero-zod-service": "0.0.0",
         "zod": "3.21.4"
     }
 }
