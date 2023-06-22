@@ -9,7 +9,7 @@ import type ILoggerService from '../service/logger-service';
 import type IAuthorizationService from '../service/authorization-service';
 import type IExpressErrorHandlerService from '../service/express-error-handler-service';
 import type ITokenService from '../service/token-service';
-import type IValidationService from '../service/validation-service';
+import type ISchemaParserService from '../service/schema-parser-service';
 import type { Constructor } from '../types';
 
 type KnownSingletonService<TKey, TIsRegister> = TKey extends typeof SINGLETON_SERVICE.EXPRESS
@@ -36,10 +36,10 @@ type KnownSingletonService<TKey, TIsRegister> = TKey extends typeof SINGLETON_SE
     ? TIsRegister extends true
         ? Constructor<IExpressErrorHandlerService>
         : IExpressErrorHandlerService
-    : TKey extends typeof SINGLETON_SERVICE.VALIDATION
+    : TKey extends typeof SINGLETON_SERVICE.SCHEMA_PARSER
     ? TIsRegister extends true
-        ? Constructor<IValidationService>
-        : IValidationService
+        ? Constructor<ISchemaParserService>
+        : ISchemaParserService
     : TKey extends typeof SINGLETON_SERVICE.TOKEN
     ? TIsRegister extends true
         ? Constructor<ITokenService>

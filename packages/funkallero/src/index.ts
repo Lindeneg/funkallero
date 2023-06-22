@@ -2,6 +2,7 @@ export { default as default } from './funkallero';
 export { default as ControllerService } from './service/base-controller-service';
 export { default as MediatorService } from './service/base-mediator-service';
 export { default as BaseExpressService } from './service/base-express-service';
+export { default as BaseZodParserService, type ParsedSchema } from './service/base-zod-parser-service';
 export { default as MediatorAction } from './mediator-action';
 export { default as LOG_LEVEL_COLOR } from './enums/log-level-color';
 export { controller, httpGet, httpPost, httpPut, httpPatch, httpDelete } from './decorators/controller';
@@ -47,6 +48,8 @@ export type {
     IAuthenticationService,
     IAuthorizationService,
     IConfigurationService,
+    IMiddlewareScopedService,
+    IMiddlewareSingletonService,
     ILoggerService,
     Request,
     Response,

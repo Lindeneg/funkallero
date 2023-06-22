@@ -124,12 +124,12 @@ class FunkalleroRouteHandler {
     }
 
     private async getHandlerArgs(argumentInjections: [InjectableArgUnion, IArgumentInjection<any>][]) {
-        const validationService = serviceContainer.getService(SERVICE.VALIDATION);
+        const validationService = serviceContainer.getService(SERVICE.SCHEMA_PARSER);
         const handlerArgs: unknown[] = [];
         const errors: Record<string, string>[] = [];
 
-        for (const [key, value] of argumentInjections) {
-            const target = this.getFilteredTarget(this.request[key], value.properties);
+        for (const [key, opts] of argumentInjections) {
+            const target = this.getFilteredTarget(this.request[key], opts.properties);
 
             devLogger(
                 'argument injection target',
@@ -139,18 +139,18 @@ class FunkalleroRouteHandler {
                 'has filtered target',
                 target,
                 'with schema:',
-                !!value.schema
+                !!opts.schema
             );
 
-            if (!value.schema) {
-                handlerArgs.push(value.transform(target));
+            if (!opts.schema) {
+                handlerArgs.push(opts.transform ? opts.transform(target) : target);
                 continue;
             }
 
-            const result = await validationService.validate(target, value.schema);
+            const result = await validationService.parse(target, opts.schema);
 
             if (result.success) {
-                handlerArgs.push(result.data);
+                handlerArgs.push(opts.transform ? opts.transform(result.data) : result.data);
             } else {
                 errors.push(result.error);
             }

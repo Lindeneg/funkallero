@@ -17,8 +17,11 @@ export {
 export { default as HttpException } from './http-exception';
 export { default as ScopedService, type IScopedService } from './service/scoped-service';
 export { default as SingletonService, type ISingletonService } from './service/singleton-service';
-export { default as MiddlewareScopedService } from './service/middleware-scoped-service';
-export { default as MiddlewareSingletonService } from './service/middleware-singleton-service';
+export { default as MiddlewareScopedService, type IMiddlewareScopedService } from './service/middleware-scoped-service';
+export {
+    default as MiddlewareSingletonService,
+    type IMiddlewareSingletonService,
+} from './service/middleware-singleton-service';
 export {
     default as ControllerService,
     type IControllerService,
@@ -41,11 +44,11 @@ export {
 export type { default as IBaseService } from './service/base-service';
 export type { default as IDataContextService } from './service/data-context-service';
 export type {
-    default as IValidationService,
-    ValidateReturn,
-    IValidateApiError,
-    IValidateApiSuccess,
-} from './service/validation-service';
+    default as ISchemaParserService,
+    ISchemaParserSuccess,
+    ISchemaParserError,
+    SchemaParserResult,
+} from './service/schema-parser-service';
 export type {
     default as IExpressErrorhandlerService,
     ExpressErrorHandlerFn,
