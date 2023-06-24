@@ -15,7 +15,7 @@ import serviceContainer from '../container/service-container';
 
 type ControllerOptions = {
     response: Response;
-    hasAuthorizationPolicy: boolean;
+    hasAuthPolicies: boolean;
 } | null;
 
 class ScopedDependencyInjection<TService extends IScopedService | IControllerService> extends DependencyInjection {
@@ -148,7 +148,7 @@ class ScopedDependencyInjection<TService extends IScopedService | IControllerSer
     }
 
     private setDefaultAuthorizationServiceIfNeeded() {
-        if (!!this.controllerOptions?.hasAuthorizationPolicy && !this.scopedServices.has(SERVICE.AUTHORIZATION)) {
+        if (!!this.controllerOptions?.hasAuthPolicies && !this.scopedServices.has(SERVICE.AUTHORIZATION)) {
             this.setScopedDependencies({
                 serviceKey: SERVICE.AUTHORIZATION,
                 instanceMember: '__authorizationService',

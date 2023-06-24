@@ -5,6 +5,7 @@ export { default as BaseExpressService } from './service/base-express-service';
 export { default as BaseZodParserService, type ParsedSchema } from './service/base-zod-parser-service';
 export { default as MediatorAction } from './mediator-action';
 export { default as LOG_LEVEL_COLOR } from './enums/log-level-color';
+export { default as auth } from './decorators//auth';
 export { controller, httpGet, httpPost, httpPut, httpPatch, httpDelete } from './decorators/controller';
 export { body, query, params, headers } from './decorators/inject-arg';
 export {
@@ -33,7 +34,7 @@ export type {
     IScopedService,
     ISingletonService,
     IControllerService,
-    IControllerSettings,
+    ControllerSettings,
     IRoute,
     ControllerFn,
     IMediatorService,

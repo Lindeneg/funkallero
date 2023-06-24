@@ -24,4 +24,14 @@ export interface IArgumentInjection<TSchema = any> {
     properties: string[];
 }
 
+export interface IAuthPolicyInjectUserConfig {
+    destProperty: string;
+    srcProperty: string;
+}
+
+export interface IAuthPoliciesInjection {
+    policies: string[];
+    injectUser: string | IAuthPolicyInjectUserConfig | null;
+}
+
 export type Promisify<T> = T | Promise<T>;

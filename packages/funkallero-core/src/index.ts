@@ -26,7 +26,7 @@ export {
     default as ControllerService,
     type IControllerService,
     type IRoute,
-    type IControllerSettings,
+    type ControllerSettings,
     type ControllerFn,
 } from './service/controller-service';
 export {
@@ -80,6 +80,7 @@ export type {
     IDomain,
     IArgumentInjection,
     IServiceInjection,
+    IAuthPoliciesInjection,
     ServiceInjectionContext,
     TransformFn,
     Promisify,

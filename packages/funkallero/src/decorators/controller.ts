@@ -4,7 +4,7 @@ import {
     HTTP_METHOD,
     type HttpMethodUnion,
     type IControllerService,
-    type IControllerSettings,
+    type ControllerSettings,
     type IRoute,
     type Constructor,
 } from '@lindeneg/funkallero-core';
@@ -14,17 +14,15 @@ const createRoute = (
     method: HttpMethodUnion,
     path: string,
     handlerKey: string,
-    authorizationPolicy: string[],
-    routerOptions: RouterOptions = {}
+    routerOptions?: RouterOptions
 ): IRoute => ({
     method,
     path,
     handlerKey,
-    authorizationPolicy,
     routerOptions,
 });
 
-const routeDecoratorFactory = (route: string, opts: IControllerSettings, method: HttpMethodUnion) => {
+const routeDecoratorFactory = (route: string, method: HttpMethodUnion, opts?: ControllerSettings) => {
     return function (target: any, key: string, _: PropertyDescriptor) {
         let routes = Reflect.get(target, META_DATA.CONTROLLER_ROUTES);
 
@@ -35,15 +33,7 @@ const routeDecoratorFactory = (route: string, opts: IControllerSettings, method:
             });
         }
 
-        let authPolicies: string[] = [];
-
-        if (typeof opts.authPolicy === 'string') {
-            authPolicies = [opts.authPolicy];
-        } else if (Array.isArray(opts.authPolicy)) {
-            authPolicies = opts.authPolicy;
-        }
-
-        routes.push(createRoute(method, route, key, authPolicies, opts.options));
+        routes.push(createRoute(method, route, key, opts));
     };
 };
 
@@ -56,22 +46,22 @@ export function controller<T extends Constructor<IControllerService>>(basePath =
     };
 }
 
-export function httpGet(route = '', opts: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, opts, HTTP_METHOD.GET);
+export function httpGet(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.GET, opts);
 }
 
-export function httpPost(route = '', opts: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, opts, HTTP_METHOD.POST);
+export function httpPost(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.POST, opts);
 }
 
-export function httpPut(route = '', opts: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, opts, HTTP_METHOD.PUT);
+export function httpPut(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.PUT, opts);
 }
 
-export function httpPatch(route = '', opts: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, opts, HTTP_METHOD.PATCH);
+export function httpPatch(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.PATCH, opts);
 }
 
-export function httpDelete(route = '', opts: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, opts, HTTP_METHOD.DELETE);
+export function httpDelete(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.DELETE, opts);
 }

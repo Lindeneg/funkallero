@@ -14,7 +14,7 @@ import {
     type Response,
 } from '@lindeneg/funkallero-core';
 import serviceContainer, { getUninstantiatedSingleton } from '../container/service-container';
-import FunkalleroRouteHandler from './funkallero-route-handler';
+import RouteHandler from './route-handler';
 import BaseConfigurationService from '../service/base-configuration-service';
 import BaseLoggerService from '../service/base-logger-service';
 import BaseExpressService from '../service/base-express-service';
@@ -41,7 +41,7 @@ abstract class FunkalleroBase implements IFunkalleroBase {
         devLogger(`configuring ${CustomController.name} with baseRoute ${basePath}`);
 
         for (const route of routes) {
-            const router = Router();
+            const router = Router(route.routerOptions);
             const routePath = urlJoin(basePath, route.path);
 
             this.configureRouteHandler(router, CustomController, route, routePath);
@@ -93,7 +93,7 @@ abstract class FunkalleroBase implements IFunkalleroBase {
         routePath: string
     ) {
         router[route.method](route.path, async (request, response, next) => {
-            await new FunkalleroRouteHandler(
+            await new RouteHandler(
                 CustomController,
                 route,
                 routePath,

@@ -8,7 +8,6 @@ import {
     type IArgumentInjection,
     type ILoggerService,
     type IControllerService,
-    type IAuthorizationService,
     type Constructor,
     type ControllerFn,
     type IRoute,
@@ -17,12 +16,12 @@ import {
     type InjectableArgUnion,
     type IScopedService,
 } from '@lindeneg/funkallero-core';
-import serviceContainer from '../container/service-container';
-import AuthServiceNotFoundError from '../errors/auth-service-not-found-error';
-import ScopedDependencyInjection from '../injection/scoped-dependency-injection';
-import FunkalleroMiddlewareHandler from './funkallero-middleware-handler';
+import serviceContainer from '../../container/service-container';
+import ScopedDependencyInjection from '../../injection/scoped-dependency-injection';
+import RouteMiddlewareHandler from './route-middleware-handler';
+import RouteAuthHandler from './route-auth-handler';
 
-class FunkalleroRouteHandler {
+class RouteHandler {
     private readonly logger: ILoggerService;
     private readonly CustomController: Constructor<IControllerService>;
     private readonly route: IRoute;
@@ -49,51 +48,64 @@ class FunkalleroRouteHandler {
     }
 
     public async handle() {
-        const hasAuthorizationPolicy = this.route.authorizationPolicy.length > 0;
+        const authInjection = RouteAuthHandler.getAuthorizationPolicyInjection(
+            this.CustomController,
+            this.route.handlerKey
+        );
+        const middlewareContext = RouteMiddlewareHandler.getMiddleware(this.CustomController, this.route.handlerKey);
+        const hasAuthPolicies = authInjection.policies.length > 0;
 
         this.logger.info({
             msg: `${this.route.method.toUpperCase()} ${this.routePath}`,
             source: this.CustomController.name,
             requestId: this.request.id,
-            hasAuthorizationPolicy,
+            hasAuthPolicies,
+            hasMiddleware: middlewareContext.hasMiddleware,
         });
 
-        const services = new Map<string, IScopedService>();
+        const scopedServices = new Map<string, IScopedService>();
 
-        const customController = await new ScopedDependencyInjection(this.request, this.CustomController, services, {
-            hasAuthorizationPolicy,
-            response: this.response,
-        }).inject();
+        const customController = await new ScopedDependencyInjection(
+            this.request,
+            this.CustomController,
+            scopedServices,
+            {
+                hasAuthPolicies,
+                response: this.response,
+            }
+        ).inject();
 
         try {
-            if (hasAuthorizationPolicy) {
-                await this.authorizePolicies(this.route.authorizationPolicy, this.routePath, services);
+            if (hasAuthPolicies) {
+                await new RouteAuthHandler(this.routePath).handle(customController, authInjection, scopedServices);
             }
 
-            const middlewareHandler = new FunkalleroMiddlewareHandler(
-                this.CustomController,
-                this.request,
-                this.response,
-                services,
-                this.route.handlerKey
-            );
+            let middlewareHandler: RouteMiddlewareHandler | null = null;
 
-            await middlewareHandler.runBeforeMiddleware();
-
-            let handlerArgs: unknown[] = [];
-
-            const argumentInjections = this.getArgumentInjections();
-            if (argumentInjections.length > 0) {
-                handlerArgs = await this.getHandlerArgs(argumentInjections);
+            if (middlewareContext.hasMiddleware) {
+                middlewareHandler = new RouteMiddlewareHandler(
+                    this.request,
+                    this.response,
+                    scopedServices,
+                    middlewareContext.middleware
+                );
             }
 
-            const result = await (
+            if (middlewareHandler && middlewareContext.hasBeforeMiddleware) {
+                await middlewareHandler.runBeforeMiddleware();
+            }
+
+            const handlerArgs = await this.getHandlerArgs();
+
+            let result = await (
                 customController[<keyof typeof customController>this.route.handlerKey] as unknown as ControllerFn
             )(...handlerArgs);
 
-            const amendedResult = await middlewareHandler.runAfterMiddleware(result);
+            if (middlewareHandler && middlewareContext.hasAfterMiddleware) {
+                result = await middlewareHandler.runAfterMiddleware(result);
+            }
 
-            await customController.handleResult(amendedResult);
+            await customController.handleResult(result);
         } catch (err) {
             this.next(err);
         }
@@ -118,12 +130,23 @@ class FunkalleroRouteHandler {
             IArgumentInjection
         >;
 
-        const entries = Object.entries(argumentInjections).sort((a, b) => a[1].index - b[1].index);
+        const entries = Object.entries(argumentInjections || {}).sort((a, b) => a[1].index - b[1].index);
 
         return entries as [InjectableArgUnion, IArgumentInjection][];
     }
 
-    private async getHandlerArgs(argumentInjections: [InjectableArgUnion, IArgumentInjection<any>][]) {
+    private async getHandlerArgs() {
+        const argumentInjections = this.getArgumentInjections();
+        let handlerArgs: unknown[] = [];
+
+        if (argumentInjections.length > 0) {
+            handlerArgs = await this.getValidatedHandlerArgs(argumentInjections);
+        }
+
+        return handlerArgs;
+    }
+
+    private async getValidatedHandlerArgs(argumentInjections: [InjectableArgUnion, IArgumentInjection<any>][]) {
         const validationService = serviceContainer.getService(SERVICE.SCHEMA_PARSER);
         const handlerArgs: unknown[] = [];
         const errors: Record<string, string>[] = [];
@@ -178,27 +201,6 @@ class FunkalleroRouteHandler {
         request.id = randomUUID();
         return request as Request;
     }
-
-    private async authorizePolicies(authorizationPolicies: string[], routePath: string, services: Map<any, any>) {
-        const authorizationService = services.get(SERVICE.AUTHORIZATION) as IAuthorizationService;
-
-        if (!authorizationService) {
-            devLogger('authorization service not found but is used on route', routePath);
-            throw new AuthServiceNotFoundError(authorizationPolicies.join(','), routePath);
-        }
-
-        for (const policy of authorizationPolicies) {
-            await this.authorizePolicy(authorizationService, policy);
-        }
-    }
-
-    private async authorizePolicy(service: IAuthorizationService, authorizationPolicy: string) {
-        const isAuthorized = await service.isAuthorized(authorizationPolicy);
-
-        if (!isAuthorized) {
-            throw HttpException.unauthorized();
-        }
-    }
 }
 
-export default FunkalleroRouteHandler;
+export default RouteHandler;

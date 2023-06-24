@@ -13,11 +13,21 @@ export interface IDependencyInjection {
 }
 
 abstract class DependencyInjection implements IDependencyInjection {
+    private static injectionCache: Map<string, IServiceInjection[]> = new Map();
+
     public abstract inject(...args: any[]): Promise<any>;
 
     protected getServiceInjections(Service: Constructor<IBaseService>) {
+        const cached = DependencyInjection.injectionCache.get(Service.name);
+
+        if (cached) return cached;
+
         const injections = [...this.getBaseServiceInjection(Service), ...this.getSpecificInjections(Service)];
-        return this.filterServiceKeys(injections);
+        const filteredInjections = this.filterServiceKeys(injections);
+
+        DependencyInjection.injectionCache.set(Service.name, filteredInjections);
+
+        return filteredInjections;
     }
 
     protected filterServiceKeys(injections: IServiceInjection[]): IServiceInjection[] {

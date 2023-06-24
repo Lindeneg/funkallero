@@ -3,7 +3,7 @@ import type { MediatorResult } from './mediator-service';
 import type { Request, Response } from '../types';
 
 export interface IMiddlewareSingletonService {
-    beforeRequestHandler(request: Request, response: Response, result: any): Promise<any>;
+    beforeRequestHandler(request: Request, response: Response): Promise<void>;
     afterRequestHandler(
         request: Request,
         response: Response,
@@ -12,7 +12,7 @@ export interface IMiddlewareSingletonService {
 }
 
 abstract class MiddlewareSingletonService extends SingletonService implements IMiddlewareSingletonService {
-    public async beforeRequestHandler(request: Request, response: Response, result: any): Promise<any> {}
+    public async beforeRequestHandler(request: Request, response: Response): Promise<void> {}
     public async afterRequestHandler(
         request: Request,
         response: Response,

@@ -4,6 +4,7 @@ import {
     type InjectableArgUnion,
     type TransformFn,
 } from '@lindeneg/funkallero-core';
+import { ensureStringArray } from './shared';
 
 interface IInjectConfig {
     schema: Record<any, any> | null;
@@ -13,12 +14,6 @@ interface IInjectConfig {
 
 type ArgUnionCore = string | string[] | TransformFn;
 type ArgUnion = ArgUnionCore | Record<any, any>;
-
-const ensureArray = (properties?: string | string[]): string[] => {
-    if (!properties) return [];
-    if (typeof properties === 'string') return [properties];
-    return properties;
-};
 
 const handleArgs = (config: IInjectConfig, ...args: Array<ArgUnion | undefined>) => {
     for (const arg of args) {
@@ -42,7 +37,7 @@ const injectFactory = (injectableArg: InjectableArgUnion) => {
 
         handleArgs(config, arg1, arg2, arg3);
 
-        return injectArgFactoryCore(injectableArg, config.schema, ensureArray(config.properties), config.fn);
+        return injectArgFactoryCore(injectableArg, config.schema, ensureStringArray(config.properties), config.fn);
     };
 };
 

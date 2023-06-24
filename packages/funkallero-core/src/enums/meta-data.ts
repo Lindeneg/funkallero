@@ -5,6 +5,7 @@ const META_DATA = {
     CONTROLLER_PATH: 'funkallero:controller-path',
     MIDDLEWARE_AFTER: 'funkallero:middleware-after',
     MIDDLEWARE_BEFORE: 'funkallero:middleware-before',
+    AUTHORIZATION_POLICIES: 'funkallero:authorization-policies',
 } as const;
 
 export type MetaDataUnion = typeof META_DATA[keyof typeof META_DATA];
