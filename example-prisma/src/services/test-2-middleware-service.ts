@@ -5,14 +5,11 @@ class Test2MiddlewareService extends MiddlewareScopedService {
     @injectService(SERVICE.LOGGER)
     private readonly logger: ILoggerService;
 
-    async beforeRequestHandler(response: Response, result: any) {
+    async beforeRequestHandler(response: Response) {
         this.logger.info({
             msg: 'test-2-middleware running',
             requestId: this.request.id,
-            test1MiddlewareResult: result,
         });
-
-        return result;
     }
 }
 

@@ -5,17 +5,12 @@ class ExampleScopedMiddlewareService extends MiddlewareScopedService {
     @injectService(SERVICE.LOGGER)
     private readonly logger: ILoggerService;
 
-    async beforeRequestHandler(response: Response, result: any): Promise<any> {
+    async beforeRequestHandler(response: Response) {
         this.logger.verbose('Hello from a scoped service!');
 
         this.logger.verbose({
             msg: 'Do we have access to the request?',
             requestId: this.request.id,
-        });
-
-        this.logger.verbose({
-            msg: 'Do we have access to ExampleSingletonMiddlewareService result?',
-            result,
         });
     }
 }

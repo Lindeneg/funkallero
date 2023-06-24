@@ -6,17 +6,18 @@ import {
     httpPost,
     httpPatch,
     httpDelete,
-    injectService,
+    auth,
     type ParsedSchema,
 } from '@lindeneg/funkallero';
-import SERVICE from '../enums/service';
+import { AUTH_POLICY } from '../enums/auth';
 import Controller from './controller';
 import createBookDtoSchema from '../dtos/create-book-dto';
 import updateBookDtoSchema from '../dtos/update-book-dto';
-import type AuthenticationService from '../services/authentication-service';
 
 @controller('books')
 class BookCoreController extends Controller {
+    private readonly userId: string;
+
     @httpGet()
     public getBooks() {
         return this.mediator.send('GetBooksQuery');
@@ -27,7 +28,8 @@ class BookCoreController extends Controller {
         return this.mediator.send('GetBookQuery', { id });
     }
 
-    @httpPatch('/:id', { authPolicy: 'author-is-book-owner' })
+    @httpPatch('/:id')
+    @auth(AUTH_POLICY.AUTHOR_IS_BOOK_OWNER)
     public updateBook(
         @params('id') id: string,
         @body(updateBookDtoSchema) updateBookDto: ParsedSchema<typeof updateBookDtoSchema>
@@ -38,24 +40,20 @@ class BookCoreController extends Controller {
         });
     }
 
-    @httpDelete('/:id', { authPolicy: 'author-is-book-owner' })
+    @httpDelete('/:id')
+    @auth(AUTH_POLICY.AUTHOR_IS_BOOK_OWNER)
     public async deleteBook() {
         return this.mediator.send('DeleteBookCommand', {
             id: this.request.params.id,
         });
     }
-}
 
-@controller('books')
-class BookInjectedController extends Controller {
-    @injectService(SERVICE.AUTHENTICATION)
-    private readonly authService: AuthenticationService;
-
-    @httpPost('/', { authPolicy: 'authenticated' })
-    public async createBook(@body(createBookDtoSchema) createBookDto: ParsedSchema<typeof createBookDtoSchema>) {
+    @httpPost()
+    @auth(AUTH_POLICY.AUTHENTICATED, { srcProperty: 'id', destProperty: 'userId' })
+    public createBook(@body(createBookDtoSchema) createBookDto: ParsedSchema<typeof createBookDtoSchema>) {
         return this.mediator.send('CreateBookCommand', {
             ...createBookDto,
-            authorId: await this.authService.getUserId(),
+            authorId: this.userId,
         });
     }
 }

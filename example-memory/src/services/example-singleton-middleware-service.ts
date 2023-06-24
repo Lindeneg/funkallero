@@ -15,7 +15,7 @@ class ExampleSingletonMiddlewareService extends MiddlewareSingletonService {
     @injectService(SERVICE.LOGGER)
     private readonly logger: ILoggerService;
 
-    async beforeRequestHandler(request: Request, response: Response, result: any): Promise<any> {
+    async beforeRequestHandler(request: Request, response: Response) {
         this.logger.verbose('Hello from a singleton middleware service!');
 
         this.logger.verbose('Do we have access to the configuration?');
@@ -23,10 +23,6 @@ class ExampleSingletonMiddlewareService extends MiddlewareSingletonService {
         this.logger.verbose({
             msg: 'someApiKey: ' + this.config.meta.someApiKey,
         });
-
-        return {
-            payload: 'some payload from singleton middleware example',
-        };
     }
 }
 

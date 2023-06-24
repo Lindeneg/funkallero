@@ -1,6 +1,7 @@
 import { injectService } from '@lindeneg/funkallero';
 import { BaseAuthorizationService, type AuthorizationPolicyHandlerFn } from '@lindeneg/funkallero-auth-service';
 import SERVICE from '../enums/service';
+import AUTH_POLICY from '../enums/auth-policy';
 import type IAuthModel from '../domain/auth-model';
 import type DataContextService from './data-context-service';
 
@@ -31,8 +32,8 @@ const authorIsBookOwnerPolicy: AuthHandler = async ({ request, decodedToken, dat
 };
 
 AuthorizationService.addPolicy(
-    ['authenticated', authenticatedPolicy],
-    ['author-is-book-owner', authorIsBookOwnerPolicy]
+    [AUTH_POLICY.AUTHENTICATED, authenticatedPolicy],
+    [AUTH_POLICY.AUTHOR_IS_BOOK_OWNER, authorIsBookOwnerPolicy]
 );
 
 export default AuthorizationService;

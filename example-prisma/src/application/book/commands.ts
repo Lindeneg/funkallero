@@ -6,23 +6,22 @@ import type ICreateBookResponse from '../../dtos/create-book-response';
 
 export class CreateBookCommand extends Action {
     public async execute({ name, description, authorId }: ICreateBookDto) {
-        try {
-            const createdBookId: ICreateBookResponse = await this.dataContext.exec((p) =>
-                p.book.create({
-                    data: {
-                        name,
-                        description,
-                        authorId,
-                    },
-                    select: {
-                        id: true,
-                    },
-                })
-            );
-            return new MediatorResultSuccess(createdBookId, ACTION_RESULT.SUCCESS_CREATE);
-        } catch (err) {
-            return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR, err);
-        }
+        const createdBookResponse: ICreateBookResponse | null = await this.dataContext.exec((p) =>
+            p.book.create({
+                data: {
+                    name,
+                    description,
+                    authorId,
+                },
+                select: {
+                    id: true,
+                },
+            })
+        );
+
+        if (!createdBookResponse) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
+
+        return new MediatorResultSuccess(createdBookResponse, ACTION_RESULT.SUCCESS_CREATE);
     }
 }
 
@@ -32,18 +31,16 @@ export class UpdateBookCommand extends Action {
 
         if (!book) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
-        try {
-            await this.dataContext.exec((p) =>
-                p.book.update({
-                    where: {
-                        id: book.id,
-                    },
-                    data: this.createUpdatePayload({ name, description }),
-                })
-            );
-        } catch (err) {
-            return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR, err);
-        }
+        const success = await this.dataContext.exec((p) =>
+            p.book.update({
+                where: {
+                    id: book.id,
+                },
+                data: this.createUpdatePayload({ name, description }),
+            })
+        );
+
+        if (!success) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
 
         return new MediatorResultSuccess(ACTION_RESULT.UNIT, ACTION_RESULT.SUCCESS_UPDATE);
     }
@@ -55,7 +52,9 @@ export class DeleteBookCommand extends Action {
 
         if (!book) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
-        await this.dataContext.exec((p) => p.book.delete({ where: { id } }));
+        const success = await this.dataContext.exec((p) => p.book.delete({ where: { id } }));
+
+        if (!success) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
 
         return new MediatorResultSuccess(ACTION_RESULT.UNIT, ACTION_RESULT.SUCCESS_DELETE);
     }

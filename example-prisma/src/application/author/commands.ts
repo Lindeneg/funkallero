@@ -8,18 +8,16 @@ export class UpdateAuthorCommand extends Action {
 
         if (!author) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
-        try {
-            await this.dataContext.exec((p) =>
-                p.author.update({
-                    where: {
-                        id: author.id,
-                    },
-                    data: this.createUpdatePayload({ name, email }),
-                })
-            );
-        } catch (err) {
-            return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR, err);
-        }
+        const success = await this.dataContext.exec((p) =>
+            p.author.update({
+                where: {
+                    id: author.id,
+                },
+                data: this.createUpdatePayload({ name, email }),
+            })
+        );
+
+        if (!success) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
 
         return new MediatorResultSuccess(ACTION_RESULT.UNIT, ACTION_RESULT.SUCCESS_UPDATE);
     }
@@ -31,7 +29,9 @@ export class DeleteAuthorCommand extends Action {
 
         if (!author) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
-        await this.dataContext.exec(async (p) => p.author.delete({ where: { id } }));
+        const success = await this.dataContext.exec(async (p) => p.author.delete({ where: { id } }));
+
+        if (!success) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
 
         return new MediatorResultSuccess(ACTION_RESULT.UNIT, ACTION_RESULT.SUCCESS_DELETE);
     }

@@ -1,18 +1,17 @@
-import { controller, httpPost, body } from '@lindeneg/funkallero';
-import type { Validated } from '@lindeneg/funkallero-zod-service';
+import { body, controller, httpPost, type ParsedSchema } from '@lindeneg/funkallero';
 import Controller from './controller';
-import loginDtoSchema from '../dtos/login-dto';
-import signupDtoSchema from '../dtos/signup-dto';
+import loginSchema from '../dtos/login-dto';
+import signupSchema from '../dtos/signup-dto';
 
 @controller()
 class AuthController extends Controller {
     @httpPost('/login')
-    public login(@body(loginDtoSchema) loginDto: Validated<typeof loginDtoSchema>) {
+    public async login(@body(loginSchema) loginDto: ParsedSchema<typeof loginSchema>) {
         return this.mediator.send('LoginCommand', loginDto);
     }
 
     @httpPost('/signup')
-    public signup(@body(signupDtoSchema) signupDto: Validated<typeof signupDtoSchema>) {
+    public async signup(@body(signupSchema) signupDto: ParsedSchema<typeof signupSchema>) {
         return this.mediator.send('SignupCommand', signupDto);
     }
 }

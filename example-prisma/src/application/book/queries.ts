@@ -4,21 +4,22 @@ import type IGetBookResponse from '../../dtos/get-book-response';
 
 export class GetBooksQuery extends Action {
     public async execute() {
-        const books: IGetBookResponse[] = await this.dataContext.exec((p) =>
-            p.book.findMany({
-                select: {
-                    id: true,
-                    name: true,
-                    description: true,
-                    author: {
-                        select: {
-                            id: true,
-                            name: true,
+        const books: IGetBookResponse[] =
+            (await this.dataContext.exec((p) =>
+                p.book.findMany({
+                    select: {
+                        id: true,
+                        name: true,
+                        description: true,
+                        author: {
+                            select: {
+                                id: true,
+                                name: true,
+                            },
                         },
                     },
-                },
-            })
-        );
+                })
+            )) || [];
 
         return new MediatorResultSuccess(books);
     }

@@ -29,21 +29,22 @@ export class GetAuthorQuery extends Action {
 
 export class GetAuthorsQuery extends Action {
     public async execute() {
-        const authorsResponse: IGetAuthorResponse[] = await this.dataContext.exec((p) =>
-            p.author.findMany({
-                select: {
-                    id: true,
-                    name: true,
-                    books: {
-                        select: {
-                            id: true,
-                            name: true,
-                            description: true,
+        const authorsResponse: IGetAuthorResponse[] =
+            (await this.dataContext.exec((p) =>
+                p.author.findMany({
+                    select: {
+                        id: true,
+                        name: true,
+                        books: {
+                            select: {
+                                id: true,
+                                name: true,
+                                description: true,
+                            },
                         },
                     },
-                },
-            })
-        );
+                })
+            )) || [];
 
         return new MediatorResultSuccess(authorsResponse);
     }

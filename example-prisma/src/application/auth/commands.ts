@@ -44,20 +44,18 @@ export class SignupCommand extends Action {
 
         if (exitingAuthor) return new MediatorResultFailure(ACTION_RESULT.ERROR_UNPROCESSABLE);
 
-        try {
-            const author = await this.dataContext.exec(async (p) =>
-                p.author.create({
-                    data: {
-                        name,
-                        email,
-                        password: await this.tokenService.hashPassword(password),
-                    },
-                })
-            );
+        const author = await this.dataContext.exec(async (p) =>
+            p.author.create({
+                data: {
+                    name,
+                    email,
+                    password: await this.tokenService.hashPassword(password),
+                },
+            })
+        );
 
-            return new MediatorResultSuccess({ id: author.id, name: author.name }, ACTION_RESULT.SUCCESS_CREATE);
-        } catch (err) {
-            return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR, err);
-        }
+        if (!author) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
+
+        return new MediatorResultSuccess({ id: author.id, name: author.name }, ACTION_RESULT.SUCCESS_CREATE);
     }
 }

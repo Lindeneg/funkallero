@@ -1,6 +1,5 @@
-import Funkallero, { LOG_LEVEL } from '@lindeneg/funkallero';
+import Funkallero, { LOG_LEVEL, BaseZodParserService } from '@lindeneg/funkallero';
 import { BaseTokenService } from '@lindeneg/funkallero-auth-service';
-import BaseZodValidationService from '@lindeneg/funkallero-zod-service';
 import SERVICE from './enums/service';
 import MediatorService from './services/mediator-service';
 import DataContextService from './services/data-context-service';
@@ -9,6 +8,7 @@ import AuthorizationService from './services/authorization-service';
 import DataContextSeedService from './services/data-context-seed-service';
 import ExampleSingletonMiddlewareService from './services/example-singleton-middleware-service';
 import ExampleScopedMiddlewareService from './services/example-scoped-middleware-service';
+
 import './api/author-controller';
 import './api/book-controller';
 import './api/auth-controller';
@@ -37,7 +37,7 @@ Funkallero.create({
 
         // optional singleton services
         service.registerSingletonService(SERVICE.TOKEN, BaseTokenService);
-        service.registerSingletonService(SERVICE.VALIDATION, BaseZodValidationService);
+        service.registerSingletonService(SERVICE.SCHEMA_PARSER, BaseZodParserService);
         service.registerSingletonService(SERVICE.DATA_CONTEXT_SEED, DataContextSeedService);
 
         // optional request scoped services

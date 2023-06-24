@@ -1,48 +1,45 @@
 import {
-    body,
-    params,
     controller,
     httpGet,
     httpPatch,
     httpDelete,
-    injectService,
+    body,
+    params,
+    auth,
     type ParsedSchema,
 } from '@lindeneg/funkallero';
-import SERVICE from '../enums/service';
+import { AUTH_POLICY } from '../enums/auth';
 import Controller from './controller';
-import updateAuthorDtoSchema from '../dtos/update-author-dto';
-import type AuthenticationService from '../services/authentication-service';
+import updateAuthorSchema from '../dtos/update-author-dto';
+
+const userInjection = { srcProperty: 'id', destProperty: 'userId' };
 
 @controller('authors')
-class AuthorCoreController extends Controller {
+class AuthorController extends Controller {
+    private readonly userId: string;
+
     @httpGet('/:id')
-    public getAuthor(@params('id') id: string) {
+    public async getAuthor(@params('id') id: string) {
         return this.mediator.send('GetAuthorQuery', { id });
     }
 
     @httpGet()
-    public getAuthors() {
+    public async getAuthors() {
         return this.mediator.send('GetAuthorsQuery');
     }
-}
 
-@controller('authors')
-class AuthorInjectedController extends Controller {
-    @injectService(SERVICE.AUTHENTICATION)
-    private readonly authService: AuthenticationService;
-
-    @httpDelete('/', { authPolicy: 'authenticated' })
+    @httpDelete()
+    @auth(AUTH_POLICY.AUTHENTICATED, userInjection)
     public async deleteAuthor() {
-        return this.mediator.send('DeleteAuthorCommand', { id: await this.authService.getUserId() });
+        return this.mediator.send('DeleteAuthorCommand', { id: this.userId });
     }
 
-    @httpPatch('/', { authPolicy: 'authenticated' })
-    public async updateAuthor(
-        @body(updateAuthorDtoSchema) updateAuthorDto: ParsedSchema<typeof updateAuthorDtoSchema>
-    ) {
+    @httpPatch()
+    @auth(AUTH_POLICY.AUTHENTICATED, userInjection)
+    public async updateAuthor(@body(updateAuthorSchema) updateAuthorDto: ParsedSchema<typeof updateAuthorSchema>) {
         return this.mediator.send('UpdateAuthorCommand', {
             ...updateAuthorDto,
-            id: await this.authService.getUserId(),
+            id: this.userId,
         });
     }
 }
