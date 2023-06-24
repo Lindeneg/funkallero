@@ -32,7 +32,7 @@ class Funkallero extends FunkalleroBase {
 
         await new SingletonDependencyInjection().inject();
 
-        this.setupConfiguration();
+        await this.setupConfiguration();
 
         const expressService = serviceContainer.getService(SERVICE.EXPRESS);
         const app = expressService.app;
