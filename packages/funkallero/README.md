@@ -10,7 +10,7 @@ It enforces the use of a mediator service to proxy communication between API and
 
 The structure of consuming projects are then encouraged to follow the principles of clean architecture and command-query-segregation but neither of those are actually enforced.
 
-Take a look at the two example applications, [in-memory](https://github.com/Lindeneg/funkallero/tree/master/example-memory) or [prisma](https://github.com/Lindeneg/funkallero/tree/master/example-prisma).
+Take a look at an example [here](https://github.com/Lindeneg/funkallero/tree/master/example).
 
 ### Install
 
@@ -18,7 +18,7 @@ Take a look at the two example applications, [in-memory](https://github.com/Lind
 
 ### Usage
 
-The best is just to take a look at the examples. However, one thing to note, in order for new projects to work as intended, these two properties must be set in `tsconfig.json`:
+The best is just to take a look at the example. However, one thing to note, in order for new projects to work as intended, these two properties must be set in `tsconfig.json`:
 
 ```json
 {
@@ -190,7 +190,7 @@ export class GetUsersQuery extends Action {
 }
 ```
 
-The mediator, from where the actions are ultimately dispatched, knows about the application layer when it is extended, as seen [here](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/mediator-service.ts).
+The mediator, from where the actions are ultimately dispatched, knows about the application layer when it is extended, as seen [here](https://github.com/Lindeneg/funkallero/blob/master/example/src/services/mediator-service.ts).
 
 ### API Layer
 
@@ -212,7 +212,7 @@ class Controller extends ControllerService<MediatorService> {
 export default Controller;
 ```
 
-In order to create a controller, the `controller` decorator must be used and a `path` must be provided.
+In order to create a controller, the `controller` decorator must be used and a `path` can be provided.
 
 ```ts
 // api/user-controller.ts
@@ -225,7 +225,7 @@ class UserController extends Controller {}
 
 Assume the `basePath` is set to `/api` and assume the app is running on `localhost:3000`, the controller path would be `http://localhost:3000/api/user`.
 
-In order to have routes and handlers, simply define methods and use the appropiate `http` decorator.
+In order to have routes and handlers, simply define methods and use the appropiate `http` decorator. The handler method must always return a `MediatorResult`.
 
 ```ts
 import { body, params, controller, httpGet, httpPost } from '@lindeneg/funkallero';
@@ -234,8 +234,8 @@ import Controller from './controller';
 @controller('user')
 class UserController extends Controller {
     @httpPost()
-    // if a validation service has been registered, it can neatly be used here
-    public createUser(@body(createUserDtoSchema) createUserDto: ICreateUserDto) {
+    // if a schema service service has been registered, such as zod, it can neatly be used here
+    public createUser(@body(createUserZodSchema) createUserDto: ICreateUserDto) {
         // type-safe mediator!
         return this.mediator.send('CreateUserCommand', createUserDto);
     }
@@ -257,3 +257,86 @@ In order for the controller to be registered, just import the file itself inside
 `import './api/user-controller';`
 
 There's more to do with controllers, such as specifying middleware or authorization policies, both via decorators. Singletons and scoped services can also be injected into controllers.
+
+##### Middleware
+
+Middleware are attached to route handlers using `before` and `after` decorators. The before middleware is run before the route handler, after is run after the route handler and is given the handler result as an argument.
+
+Middleware are again services and thus inherits all service properties. Middleware services are then guaranteed to contain two public methods: `beforeRequestHandler` and `afterRequestHandler`, which correlates to `before` and `after` decorators, respectively.
+
+If multiple middleware services are added to a handler, then this rule applies:
+
+If multiple `before` middleware services are added, they are executed in arbitrary order. If multiple `after` middleware services are added, they are always executed in the order they were provided.
+
+###### Singleton Middleware
+
+```ts
+import {
+    injectService,
+    MiddlewareSingletonService,
+    type ILoggerService,
+    type Response,
+    type Request,
+    type MediatorResult,
+} from '@lindeneg/funkallero';
+import SERVICE from '../enums/service';
+
+// can only have singleton services injected but is also only instantiated once
+class Test1MiddlewareService extends MiddlewareSingletonService {
+    @injectService(SERVICE.LOGGER)
+    private readonly logger: ILoggerService;
+
+    async beforeRequestHandler(request: Request, response: Response) {
+        this.logger.info(`before test-1-middleware running on request: ${request.id}`);
+    }
+
+    async afterRequestHandler(request: Request, response: Response, result: MediatorResult) {
+        this.logger.info(`after test-1-middleware running on request: ${request.id}`);
+        return result;
+    }
+}
+
+export default Test1MiddlewareService;
+```
+
+###### Scoped Middleware
+
+```ts
+import {
+    injectService,
+    MiddlewareScopedService,
+    type ILoggerService,
+    type Response,
+    type MediatorResult,
+} from '@lindeneg/funkallero';
+import SERVICE from '../enums/service';
+
+// can have scoped and singleton services injected but is instantiated per request
+class Test2MiddlewareService extends MiddlewareScopedService {
+    @injectService(SERVICE.LOGGER)
+    private readonly logger: ILoggerService;
+
+    async beforeRequestHandler(response: Response) {
+        this.logger.info(`before test-2-middleware running on request: ${this.request.id}`);
+    }
+
+    async afterRequestHandler(response: Response, result: MediatorResult) {
+        this.logger.info(`after test-2-middleware running on request: ${this.request.id}`);
+        return result;
+    }
+}
+
+export default Test2MiddlewareService;
+```
+
+Middleware must be registered exactly like other services and once done, they can be used via decorators:
+
+```ts
+
+@httpGet('/:id')
+@before(SERVICE.TEST_1_MIDDLEWARE, SERVICE.TEST_2_MIDDLEWARE)
+@after(SERVICE.TEST_2_MIDDLEWARE)
+public async getUser(@params('id') id: string) {
+    return this.mediator.send('GetUserQuery', { id });
+}
+```
