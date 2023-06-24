@@ -1,4 +1,4 @@
-This example uses prisma, postgres, cookies for authentication and local https server.
+This example uses prisma, postgres and http-only cookie with jwt for authentication.
 
 ---
 
@@ -10,12 +10,9 @@ To run the example:
 
 3. Run a DB migration, i.e `yarn migrate` from here or `yarn cli migrate prisma` from root.
 
-4. Either:
+4. Optionally uncomment `https` property in main index.ts file. Remember to generate https credentials if so. See [package.json](./package.json) `setup-https` script for an example.
 
-    - Generate HTTPS credentials. See [package.json](./package.json) `setup-https` script for an example.
-    - Or simply comment out the https property in the configuration. Then the example will run on http.
-
-5. Use `yarn start` (or `yarn start prisma` from root).
+5. Run `yarn start` (or `yarn start prisma` from root).
 
 Optionally, open a new shell and either run `yarn studio` from here or `yarn cli studio prisma` from root, to utilize prisma studio.
 

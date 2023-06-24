@@ -29,7 +29,7 @@ export class DeleteAuthorCommand extends Action {
 
         if (!author) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
-        const success = await this.dataContext.exec(async (p) => p.author.delete({ where: { id } }));
+        const success = await this.dataContext.exec((p) => p.author.delete({ where: { id } }));
 
         if (!success) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
 

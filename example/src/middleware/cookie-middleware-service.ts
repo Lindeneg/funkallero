@@ -1,10 +1,11 @@
 import {
     injectService,
-    MiddlewareScopedService,
+    MiddlewareSingletonService,
     MediatorResultSuccess,
     ACTION_RESULT,
     type IConfigurationService,
     type ITokenService,
+    type Request,
     type Response,
     type MediatorResult,
 } from '@lindeneg/funkallero';
@@ -13,24 +14,20 @@ import SERVICE from '../enums/service';
 import AUTH from '../enums/auth';
 import type IAuthModel from '../domain/auth-model';
 
-class CookieMiddlewareService extends MiddlewareScopedService {
+class CookieMiddlewareService extends MiddlewareSingletonService {
     @injectService(SERVICE.TOKEN)
     private readonly tokenService: ITokenService;
 
     @injectService(SERVICE.CONFIGURATION)
     private readonly config: IConfigurationService;
 
-    public async afterRequestHandler(response: Response, result: MediatorResult<IAuthModel>) {
+    public async afterRequestHandler(_: Request, response: Response, result: MediatorResult<IAuthModel>) {
         if (result.success) {
-            await this.setAuthCookieOnResponse(response, result.value);
+            const token = await this.tokenService.createToken(result.value);
+            response.setHeader('Set-Cookie', this.createCookieString(token));
             return new MediatorResultSuccess(ACTION_RESULT.UNIT);
         }
         return result;
-    }
-
-    private async setAuthCookieOnResponse(response: Response, payload: IAuthModel): Promise<void> {
-        const token = await this.tokenService.createToken(payload);
-        response.setHeader('Set-Cookie', this.createCookieString(token));
     }
 
     private createCookieString(token: string) {

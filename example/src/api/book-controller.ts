@@ -42,10 +42,8 @@ class BookCoreController extends Controller {
 
     @httpDelete('/:id')
     @auth(AUTH_POLICY.AUTHOR_IS_BOOK_OWNER)
-    public async deleteBook() {
-        return this.mediator.send('DeleteBookCommand', {
-            id: this.request.params.id,
-        });
+    public async deleteBook(@params('id') id: string) {
+        return this.mediator.send('DeleteBookCommand', { id });
     }
 
     @httpPost()

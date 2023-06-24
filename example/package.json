@@ -1,5 +1,5 @@
 {
-    "name": "@lindeneg/example",
+    "name": "@lindeneg/funkallero-example",
     "private": true,
     "description": "Example Funkallero application using Prisma with Postgres",
     "version": "0.0.0",
@@ -16,7 +16,7 @@
         "build:rollup": "rollup -c",
         "lint": "prettier \"src/**\" --ignore-unknown --write",
         "studio": "npx prisma studio",
-        "migrate": "npx prisma migrate dev",
+        "migrate": "npx prisma migrate",
         "setup-https": "yarn run generate:https-creds && yarn run generate:decrypt-https-key",
         "generate:https-creds": "openssl req -x509 -newkey rsa:2048 -keyout https/keytmp.pem -out https/cert.pem -days 365",
         "generate:decrypt-https-key": "openssl rsa -in https/keytmp.pem -out https/key.pem && rm https/keytmp.pem"
