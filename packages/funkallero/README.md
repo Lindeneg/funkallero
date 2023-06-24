@@ -196,6 +196,8 @@ The mediator, from where the actions are ultimately dispatched, knows about the 
 
 The API layer is composed of controllers that contain route definitions.
 
+#### Controller
+
 A controller is a special kind of scoped service that receives both the request and response context. A base implementation is provided that is injected with the mediator service. It is recommend to extend the base service and provide the mediator as a type.
 
 ```ts
@@ -224,6 +226,8 @@ class UserController extends Controller {}
 ```
 
 Assume the `basePath` is set to `/api` and assume the app is running on `localhost:3000`, the controller path would be `http://localhost:3000/api/user`.
+
+#### Route Handler
 
 In order to have routes and handlers, simply define methods and use the appropiate `http` decorator. The handler method must always return a `MediatorResult`.
 
@@ -258,7 +262,7 @@ In order for the controller to be registered, just import the file itself inside
 
 There's more to do with controllers, such as specifying middleware or authorization policies, both via decorators. Singletons and scoped services can also be injected into controllers.
 
-##### Middleware
+#### Middleware
 
 Middleware are attached to route handlers using `before` and `after` decorators. The before middleware is run before the route handler, after is run after the route handler and is given the handler result as an argument.
 
