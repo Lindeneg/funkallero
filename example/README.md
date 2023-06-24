@@ -12,7 +12,7 @@ To run the example:
 
 4. Optionally uncomment `https` property in main index.ts file. Remember to generate https credentials if so. See [package.json](./package.json) `setup-https` script for an example.
 
-5. Run `yarn start` (or `yarn start prisma` from root).
+5. Run `yarn start` (or `yarn start example` from root).
 
 Optionally, open a new shell and either run `yarn studio` from here or `yarn cli studio prisma` from root, to utilize prisma studio.
 
