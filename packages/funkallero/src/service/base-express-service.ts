@@ -28,7 +28,6 @@ class BaseExpressService extends SingletonService implements IExpressService {
 
     public async setup() {
         this.app.use(express.json());
-        this.app.use(setJsonContentTypeMiddleware);
 
         if (this.config.https) {
             const https = await import('https');
@@ -45,6 +44,10 @@ class BaseExpressService extends SingletonService implements IExpressService {
         this.server.listen(this.config.port, () => {
             this.logger.info(`Server listening on ${url}`);
         });
+    }
+
+    public useJsonContentType() {
+        this.app.use(setJsonContentTypeMiddleware);
     }
 }
 
