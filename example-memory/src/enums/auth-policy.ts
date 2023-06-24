@@ -1,6 +1,0 @@
-const AUTH_POLICY = {
-    AUTHENTICATED: 'AUTHENTICATED',
-    AUTHOR_IS_BOOK_OWNER: 'AUTHOR_IS_BOOK_OWNER',
-} as const;
-
-export default AUTH_POLICY;

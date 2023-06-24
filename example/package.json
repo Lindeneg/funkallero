@@ -1,5 +1,5 @@
 {
-    "name": "@lindeneg/funkallero-prisma",
+    "name": "@lindeneg/example",
     "private": true,
     "description": "Example Funkallero application using Prisma with Postgres",
     "version": "0.0.0",

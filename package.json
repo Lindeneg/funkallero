@@ -13,7 +13,7 @@
         "start": "yarn cli start"
     },
     "workspaces": [
-        "example-*",
+        "example",
         "packages/*"
     ],
     "devDependencies": {
