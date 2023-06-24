@@ -26,17 +26,17 @@ Funkallero.create({
 
     // default: null
     // uncomment to use https, if so remember to generate creds (see package.json for example)
-    https: async () => {
-        const [path, process, fs] = await Promise.all([import('path'), import('process'), import('fs/promises')]);
-        const getPath = (name: string) => path.join(process.cwd(), 'https', `${name}.pem`);
+    // https: async () => {
+    //     const [path, process, fs] = await Promise.all([import('path'), import('process'), import('fs/promises')]);
+    //     const getPath = (name: string) => path.join(process.cwd(), 'https', `${name}.pem`);
 
-        const [key, cert] = await Promise.all([
-            fs.readFile(getPath('key'), { encoding: 'utf-8' }),
-            fs.readFile(getPath('cert'), { encoding: 'utf-8' }),
-        ]);
+    //     const [key, cert] = await Promise.all([
+    //         fs.readFile(getPath('key'), { encoding: 'utf-8' }),
+    //         fs.readFile(getPath('cert'), { encoding: 'utf-8' }),
+    //     ]);
 
-        return { key, cert };
-    },
+    //     return { key, cert };
+    // },
 
     // default: {}
     // this object will, among other things, be available in the configuration service
