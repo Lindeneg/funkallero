@@ -15,6 +15,9 @@
         "build:prisma": "npx prisma generate",
         "build:rollup": "rollup -c",
         "lint": "prettier \"src/**\" --ignore-unknown --write",
+        "test": "start-server-and-test test:start http://localhost:3000/api/authors test:postman",
+        "test:start": "yarn start --test-mode",
+        "test:postman": "npx -y newman run e2e/funkallero-test-suite.postman_collection.json",
         "studio": "npx prisma studio",
         "migrate": "npx prisma migrate dev",
         "setup-https": "yarn run generate:https-creds && yarn run generate:decrypt-https-key",
@@ -29,6 +32,7 @@
         "zod": "3.21.4"
     },
     "devDependencies": {
-        "@types/cookie-parser": "1.4.3"
+        "@types/cookie-parser": "1.4.3",
+        "start-server-and-test": "^2.0.0"
     }
 }

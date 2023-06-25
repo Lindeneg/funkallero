@@ -22,10 +22,9 @@ Funkallero.create({
     port: 3000,
 
     // default: LOG_LEVEL.INFO
-    logLevel: LOG_LEVEL.VERBOSE,
+    logLevel: process.argv[2] === '--test-mode' ? LOG_LEVEL.SILENT : LOG_LEVEL.VERBOSE,
 
     // default: null
-    // uncomment to use https, if so remember to generate creds (see package.json for example)
     // https: async () => {
     //     const [path, process, fs] = await Promise.all([import('path'), import('process'), import('fs/promises')]);
     //     const getPath = (name: string) => path.join(process.cwd(), 'https', `${name}.pem`);
