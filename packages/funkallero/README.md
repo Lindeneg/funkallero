@@ -293,11 +293,6 @@ class Test1MiddlewareService extends MiddlewareSingletonService {
     async beforeRequestHandler(request: Request, response: Response) {
         this.logger.info(`before test-1-middleware running on request: ${request.id}`);
     }
-
-    async afterRequestHandler(request: Request, response: Response, result: MediatorResult) {
-        this.logger.info(`after test-1-middleware running on request: ${request.id}`);
-        return result;
-    }
 }
 
 export default Test1MiddlewareService;
