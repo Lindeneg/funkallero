@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "ce203f6b-b52e-42a2-9961-e3b3f7bdb843",
-		"name": "Funkallero Prisma Example",
+		"_postman_id": "765a4c4e-387f-4437-a6f6-4bac813cfffc",
+		"name": "Funkallero Example",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "14852340"
 	},
@@ -29,7 +29,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "id"
 								}
 							]
 						}
@@ -137,7 +137,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "id"
 								}
 							]
 						}
@@ -184,7 +184,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "id"
 								}
 							]
 						}
@@ -220,7 +220,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": ""
+									"value": "id"
 								}
 							]
 						}
