@@ -18,7 +18,7 @@ Optionally, open a new shell and either run `yarn studio` from here or `yarn cli
 
 ---
 
-Make use of the postman-collection [here](./postman) for easy usage of this example.
+Make use of the postman-collection [here](./postman) for easy usage of this example. Remember to update the `url` postman variable if `https` server is used.
 
 ---
 
