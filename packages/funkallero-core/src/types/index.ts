@@ -8,11 +8,30 @@ export interface IDomain<TId = string> {
     id: TId;
 }
 
-export interface Injection {
+export interface IServiceInjection {
     serviceKey: string;
     instanceMember: string;
 }
 
-export type InjectionContext = Record<string, Injection[]>;
+export type ServiceInjectionContext = Record<string, IServiceInjection[]>;
+
+export type TransformFn = (value: any) => any;
+
+export interface IArgumentInjection<TSchema = any> {
+    index: number;
+    schema: TSchema | null;
+    transform: TransformFn | null;
+    properties: string[];
+}
+
+export interface IAuthPolicyInjectUserConfig {
+    destProperty: string;
+    srcProperty: string;
+}
+
+export interface IAuthPoliciesInjection {
+    policies: string[];
+    injectUser: string | IAuthPolicyInjectUserConfig | null;
+}
 
 export type Promisify<T> = T | Promise<T>;

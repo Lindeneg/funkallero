@@ -12,15 +12,21 @@ export interface IHttpsConfiguration {
     readonly cert: string;
 }
 
-interface IConfigurationService {
+type HttpsConfigCore = IHttpsConfiguration | null;
+type HttpsConfigFn = () => Promisify<IHttpsConfiguration>;
+type HttpsConfigUnion = HttpsConfigCore | HttpsConfigFn;
+
+interface IConfigurationService<THttps extends HttpsConfigUnion = HttpsConfigCore> {
     readonly basePath: string;
     readonly port: number;
     readonly logLevel: LogLevelUnion;
-    readonly https: IHttpsConfiguration | null;
+    readonly https: THttps;
     readonly meta: Record<string, any>;
 }
 
-export interface IFunkalleroConfiguration extends IConfigurationService, IConfigurationCallback {}
-export interface IFunkalleroPartialConfiguration extends Partial<IConfigurationService>, IConfigurationCallback {}
+export interface IFunkalleroConfiguration extends IConfigurationService<HttpsConfigUnion>, IConfigurationCallback {}
+export interface IFunkalleroPartialConfiguration
+    extends Partial<IConfigurationService<HttpsConfigUnion>>,
+        IConfigurationCallback {}
 
 export default IConfigurationService;

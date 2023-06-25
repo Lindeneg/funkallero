@@ -11,7 +11,7 @@ import {
 export class BaseTokenConfiguration {
     public static expiresIn = 7 * 24 * 60 * 60;
     public static secret = 'super-duper-secret';
-    public static salt = 12;
+    public static salt = 10;
 }
 
 class BaseTokenService<TAuthModel = any> extends SingletonService implements ITokenService<TAuthModel> {

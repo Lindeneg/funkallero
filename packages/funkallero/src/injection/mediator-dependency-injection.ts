@@ -1,8 +1,7 @@
-import { SERVICE_TYPE, isServiceType, type BaseMediatorAction } from '@lindeneg/funkallero-core';
+import { devLogger, SERVICE_TYPE, isServiceType, type BaseMediatorAction } from '@lindeneg/funkallero-core';
 import SingletonInjectionError from '../errors/singleton-injection-error';
 import DependencyInjection from './dependency-injection';
 import serviceContainer from '../container/service-container';
-import devLogger from '../dev-logger';
 
 class MediatorActionDependencyInjection extends DependencyInjection {
     private readonly Action: typeof BaseMediatorAction;

@@ -1,8 +1,10 @@
+import type { RouterOptions } from 'express';
 import {
+    META_DATA,
     HTTP_METHOD,
     type HttpMethodUnion,
     type IControllerService,
-    type IControllerSettings,
+    type ControllerSettings,
     type IRoute,
     type Constructor,
 } from '@lindeneg/funkallero-core';
@@ -10,57 +12,56 @@ import controllerContainer from '../container/controller-container';
 
 const createRoute = (
     method: HttpMethodUnion,
-    route: string,
+    path: string,
     handlerKey: string,
-    authorizationPolicy: string[]
+    routerOptions?: RouterOptions
 ): IRoute => ({
     method,
-    route,
+    path,
     handlerKey,
-    authorizationPolicy,
+    routerOptions,
 });
 
-const routeDecoratorFactory = (route: string, { authPolicy }: IControllerSettings, method: HttpMethodUnion) => {
+const routeDecoratorFactory = (route: string, method: HttpMethodUnion, opts?: ControllerSettings) => {
     return function (target: any, key: string, _: PropertyDescriptor) {
-        if (!Array.isArray(target.routes)) {
-            target.routes = [];
+        let routes = Reflect.get(target, META_DATA.CONTROLLER_ROUTES);
+
+        if (!routes) {
+            routes = [];
+            Reflect.defineProperty(target, META_DATA.CONTROLLER_ROUTES, {
+                get: () => routes,
+            });
         }
 
-        let authPolicies: string[] = [];
-
-        if (typeof authPolicy === 'string') {
-            authPolicies = [authPolicy];
-        } else if (Array.isArray(authPolicy)) {
-            authPolicies = authPolicy;
-        }
-
-        target.routes.push(createRoute(method, route, key, authPolicies));
+        routes.push(createRoute(method, route, key, opts));
     };
 };
 
-export function controller<T extends Constructor<IControllerService>>(baseRoute: string) {
+export function controller<T extends Constructor<IControllerService>>(basePath = '') {
     return function (target: T) {
-        target.prototype.baseRoute = baseRoute;
+        Reflect.defineProperty(target, META_DATA.CONTROLLER_PATH, {
+            get: () => basePath,
+        });
         controllerContainer.register(target);
     };
 }
 
-export function httpGet(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.GET);
+export function httpGet(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.GET, opts);
 }
 
-export function httpPost(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.POST);
+export function httpPost(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.POST, opts);
 }
 
-export function httpPut(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.PUT);
+export function httpPut(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.PUT, opts);
 }
 
-export function httpPatch(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.PATCH);
+export function httpPatch(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.PATCH, opts);
 }
 
-export function httpDelete(route = '', { authPolicy }: IControllerSettings = {}) {
-    return routeDecoratorFactory(route, { authPolicy }, HTTP_METHOD.DELETE);
+export function httpDelete(route = '', opts?: ControllerSettings) {
+    return routeDecoratorFactory(route, HTTP_METHOD.DELETE, opts);
 }

@@ -13,8 +13,7 @@
         "start": "yarn cli start"
     },
     "workspaces": [
-        "example-memory",
-        "example-prisma",
+        "example",
         "packages/*"
     ],
     "devDependencies": {

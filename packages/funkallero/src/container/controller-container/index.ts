@@ -1,6 +1,5 @@
-import type { Constructor, IControllerService } from '@lindeneg/funkallero-core';
+import { devLogger, type Constructor, type IControllerService } from '@lindeneg/funkallero-core';
 import ControllerAlreadyRegisteredError from '../../errors/controller-already-registered-error';
-import devLogger from '../../dev-logger';
 
 const controllers = new Map<string, Constructor<IControllerService>>();
 

@@ -17,7 +17,8 @@
         "lint": "prettier \"src/**\" --ignore-unknown --write"
     },
     "devDependencies": {
-        "@types/express": "4.17.17"
+        "@types/express": "4.17.17",
+        "zod": "3.21.4"
     },
     "dependencies": {
         "@lindeneg/funkallero-core": "0.0.0",
