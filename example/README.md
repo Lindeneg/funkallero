@@ -8,13 +8,13 @@ To run the example:
 
 2. Ensure you have set the correct environmental variables, see `.env-example`.
 
-3. Run a DB migration, i.e `yarn migrate` from here or `yarn cli migrate prisma` from root.
+3. Run a DB migration, i.e `yarn migrate` from here or `yarn cli migrate example` from root.
 
-4. Optionally uncomment `https` property in main index.ts file. Remember to generate https credentials if so. See [package.json](./package.json) `setup-https` script for an example.
+4. Optionally uncomment `https` property in main index.ts file. Remember to generate https credentials if so. See [package.json](./package.json#L20-L22) `setup-https` script for an example.
 
 5. Run `yarn start` (or `yarn start example` from root).
 
-Optionally, open a new shell and either run `yarn studio` from here or `yarn cli studio prisma` from root, to utilize prisma studio.
+Optionally, open a new shell and either run `yarn studio` from here or `yarn cli studio example` from root, to utilize prisma studio.
 
 ---
 
