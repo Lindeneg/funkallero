@@ -25,7 +25,7 @@ class CookieMiddlewareService extends MiddlewareSingletonService {
         if (result.success) {
             const token = await this.tokenService.createToken(result.value);
             response.setHeader('Set-Cookie', this.createCookieString(token));
-            return new MediatorResultSuccess(ACTION_RESULT.UNIT);
+            return new MediatorResultSuccess(ACTION_RESULT.UNIT, result.context);
         }
         return result;
     }

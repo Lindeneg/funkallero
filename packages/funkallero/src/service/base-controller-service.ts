@@ -24,10 +24,6 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
 
         const hasPayload = !!result.value;
 
-        if (hasPayload) {
-            this.response.json({ data: result.value });
-        }
-
         let statusCode: number = 200;
 
         if (result.context === ACTION_RESULT.SUCCESS_CREATE) {
@@ -47,7 +43,13 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
             requestId: this.request.id,
         });
 
-        this.response.status(statusCode).end();
+        this.response.status(statusCode);
+
+        if (hasPayload) {
+            this.response.json({ data: result.value });
+        }
+
+        this.response.send();
     }
 
     private async handleError(err: string) {
