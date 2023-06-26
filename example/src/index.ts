@@ -22,7 +22,7 @@ Funkallero.create({
     port: 3000,
 
     // default: LOG_LEVEL.INFO
-    logLevel: process.argv[2] === '--test-mode' ? LOG_LEVEL.SILENT : LOG_LEVEL.VERBOSE,
+    logLevel: LOG_LEVEL.VERBOSE,
 
     // default: null
     // https: async () => {
