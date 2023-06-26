@@ -3,12 +3,12 @@ import {
     injectService,
     ScopedService,
     HttpException,
-    type Request,
     type ILoggerService,
     type IAuthenticationService,
     type ITokenService,
     type IDataContextService,
     type IDomain,
+    type Promisify,
 } from '@lindeneg/funkallero-core';
 
 abstract class BaseAuthenticationService<
@@ -31,16 +31,13 @@ abstract class BaseAuthenticationService<
     private user: TUserModel | null = null;
     private decodedToken: TDecodedToken | null = null;
 
-    protected abstract getUserFromDataContext(decodedToken: TDecodedToken): Promise<TUserModel | null>;
-
-    public abstract getTokenFromRequest(
-        request: Request
-    ): ReturnType<IAuthenticationService<any>['getTokenFromRequest']>;
+    protected abstract getEncodedToken(): Promisify<string | null>;
+    protected abstract getUserFromDecodedToken(decodedToken: TDecodedToken): Promise<TUserModel | null>;
 
     private async setUser() {
         if (!this.decodedToken) await this.setDecodedToken();
 
-        const user = await this.getUserFromDataContext(this.decodedToken as TDecodedToken);
+        const user = await this.getUserFromDecodedToken(this.decodedToken as TDecodedToken);
         if (!user) throw HttpException.unauthorized();
 
         this.user = user;
@@ -56,9 +53,9 @@ abstract class BaseAuthenticationService<
         let token: string | null = null;
 
         try {
-            token = await this.getTokenFromRequest(this.request);
+            token = await this.getEncodedToken();
         } catch (err) {
-            this.logger.error({ msg: 'getTokenFromRequest threw an error', err, requestId: this.request.id });
+            this.logger.error({ msg: 'getEncodedToken threw an error', err, requestId: this.request.id });
         }
 
         if (!token) throw HttpException.unauthorized();

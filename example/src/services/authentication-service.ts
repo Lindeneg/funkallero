@@ -5,16 +5,16 @@ import type IAuthModel from '../domain/auth-model';
 import type DataContextService from './data-context-service';
 
 class AuthenticationService extends BaseAuthenticationService<Author, IAuthModel, DataContextService> {
-    public getTokenFromRequest(): string | null {
-        const token = this.request.cookies[AUTH.COOKIE_NAME];
+    protected getEncodedToken(): string | null {
+        const encodedToken = this.request.cookies[AUTH.COOKIE_NAME];
 
-        if (!token) return null;
+        if (!encodedToken) return null;
 
-        return token;
+        return encodedToken;
     }
 
-    protected async getUserFromDataContext(payload: IAuthModel): Promise<Author | null> {
-        return this.dataContext.exec((p) => p.author.findUnique({ where: { id: payload.id } }));
+    protected async getUserFromDecodedToken(decodedToken: IAuthModel): Promise<Author | null> {
+        return this.dataContext.exec((p) => p.author.findUnique({ where: { id: decodedToken.id } }));
     }
 }
 

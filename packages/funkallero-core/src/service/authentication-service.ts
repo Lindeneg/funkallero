@@ -1,4 +1,4 @@
-import type { Request, IDomain, Promisify } from '../types';
+import type { IDomain, Promisify } from '../types';
 
 interface IAuthenticationService<TUserModel extends IDomain = any, TDecodedToken = any> {
     getUser(): Promisify<TUserModel>;
@@ -7,7 +7,6 @@ interface IAuthenticationService<TUserModel extends IDomain = any, TDecodedToken
     getUserIdSafe(): Promisify<string | null>;
     getDecodedToken(): Promisify<TDecodedToken>;
     getDecodedTokenSafe(): Promisify<TDecodedToken | null>;
-    getTokenFromRequest(request: Request): Promisify<string | null>;
 }
 
 export default IAuthenticationService;
