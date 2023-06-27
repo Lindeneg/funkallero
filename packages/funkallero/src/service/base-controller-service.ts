@@ -49,7 +49,7 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
             this.response.json({ data: result.value });
         }
 
-        this.response.send();
+        this.response.end();
     }
 
     private async handleError(err: string) {
