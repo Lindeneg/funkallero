@@ -10,10 +10,9 @@ import {
     type LoggerPayload,
 } from '@lindeneg/funkallero-core';
 
-export type BaseLoggerPaletteColor = string;
-export type BaseLoggerPaletteColorExtended = BaseLoggerPaletteColor | ((msg: string) => string);
-export type BaseLoggerPaletteObj = Record<LogLevelUnion, BaseLoggerPaletteColorExtended>;
-export type BaseLoggerPalette = Map<LogLevelUnion, BaseLoggerPaletteColorExtended>;
+export type BaseLoggerPaletteColor = string | ((msg: string) => string);
+export type BaseLoggerPaletteObj = Record<LogLevelUnion, BaseLoggerPaletteColor>;
+export type BaseLoggerPalette = Map<LogLevelUnion, BaseLoggerPaletteColor>;
 
 const DISABLE_LOGGER = process.argv[2] === '--disable-funkallero-logger';
 
@@ -25,21 +24,29 @@ const EMPTY_PALETTE = {
     [LOG_LEVEL.SILENT]: '',
 } as const;
 
+const DEFAULT_PALETTE = {
+    [LOG_LEVEL.INFO]: '\x1b[32m%s\x1b[0m',
+    [LOG_LEVEL.WARNING]: '\x1b[33m%s\x1b[0m',
+    [LOG_LEVEL.ERROR]: '\x1b[31m%s\x1b[0m',
+    [LOG_LEVEL.VERBOSE]: '\x1b[36m%s\x1b[0m',
+    [LOG_LEVEL.SILENT]: '',
+} as const;
+
 export class BaseLoggerServicePalette {
     private static readonly palette: BaseLoggerPalette = new Map();
 
-    public static getColor(level: LogLevelUnion, msg = ''): BaseLoggerPaletteColor {
+    public static getColor(level: LogLevelUnion, msg = ''): Array<string | Record<string, unknown>> {
         const match = BaseLoggerServicePalette.palette.get(level);
 
         if (typeof match === 'function') {
-            return match(msg);
+            return [match(msg)];
         }
 
         if (typeof match === 'string') {
-            return match + ' ' + msg;
+            return [match, msg];
         }
 
-        return msg;
+        return [msg];
     }
 
     public static setPalette(palette: Partial<BaseLoggerPaletteObj>) {
@@ -49,8 +56,12 @@ export class BaseLoggerServicePalette {
         }
     }
 
-    public static resetPalette() {
+    public static useEmptyPalette() {
         BaseLoggerServicePalette.setPalette(EMPTY_PALETTE);
+    }
+
+    public static useDefaultPalette() {
+        BaseLoggerServicePalette.setPalette(DEFAULT_PALETTE);
     }
 }
 
@@ -84,8 +95,7 @@ class BaseLoggerService extends SingletonService implements ILoggerService {
         if (this.configService.logLevel === LOG_LEVEL.SILENT || level === LOG_LEVEL.SILENT) return;
 
         if (force || this.configService.logLevel >= level) {
-            const coloredMsg = BaseLoggerServicePalette.getColor(level, msg);
-            const args: Array<string | Record<string, unknown>> = coloredMsg ? [coloredMsg] : [];
+            const args = BaseLoggerServicePalette.getColor(level, msg);
 
             if (this.configService.logLevel === LOG_LEVEL.VERBOSE && Object.keys(rest).length > 0) {
                 args.push({ ...rest });
