@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import Funkallero, { LOG_LEVEL, BaseZodParserService, BaseLoggerServicePalette } from '@lindeneg/funkallero';
 import { BaseTokenService } from '@lindeneg/funkallero-auth-service';
 import SERVICE from './enums/service';
@@ -15,14 +14,7 @@ import './api/author-controller';
 import './api/book-controller';
 import './api/auth-controller';
 
-// set a neat logger palette using chalk
-BaseLoggerServicePalette.setPalette({
-    [LOG_LEVEL.INFO]: chalk.white,
-    [LOG_LEVEL.WARNING]: chalk.yellow,
-    [LOG_LEVEL.ERROR]: chalk.bgRed,
-    [LOG_LEVEL.VERBOSE]: chalk.cyan,
-    [LOG_LEVEL.SILENT]: chalk.hidden,
-});
+BaseLoggerServicePalette.useDefaultPalette();
 
 Funkallero.create({
     // default: ''
