@@ -6,6 +6,7 @@
     "license": "MIT",
     "scripts": {
         "bootstrap": "yarn install && lerna bootstrap",
+        "bootstrap:ci": "yarn install --frozen-lockfile && lerna bootstrap",
         "reset": "lerna exec --parallel -- rm -rf dist lib node_modules coverage && rm -rf yarn.lock node_modules coverage",
         "cli": "bash ./scripts/cli.sh",
         "build": "yarn cli build",
