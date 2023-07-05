@@ -36,13 +36,13 @@ export class SignupCommand extends Action {
     private readonly tokenService: ITokenService;
 
     public async execute({ name, email, password }: ISignupDto) {
-        const exitingAuthor = await this.dataContext.exec((p) =>
+        const existingAuthor = await this.dataContext.exec((p) =>
             p.author.findUnique({
                 where: { email },
             })
         );
 
-        if (exitingAuthor) return new MediatorResultFailure(ACTION_RESULT.ERROR_UNPROCESSABLE);
+        if (existingAuthor) return new MediatorResultFailure(ACTION_RESULT.ERROR_UNPROCESSABLE);
 
         const author = await this.dataContext.exec(async (p) =>
             p.author.create({
