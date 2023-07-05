@@ -57,15 +57,12 @@ class SingletonDependencyInjection extends DependencyInjection {
         const uninstantiatedSingletons = getUninstantiatedSingletons();
 
         for (const [serviceKey, Service] of uninstantiatedSingletons) {
-            try {
-                if (filteredMap.has(serviceKey)) {
-                    continue;
-                }
-
-                serviceContainer.getService(serviceKey);
-            } catch (err) {
-                filteredMap.set(serviceKey, Service);
+            if (filteredMap.has(serviceKey)) {
+                continue;
             }
+
+            const existingService = serviceContainer.getServiceSafe<any>(serviceKey);
+            if (!existingService) filteredMap.set(serviceKey, Service);
         }
 
         return filteredMap.entries();
