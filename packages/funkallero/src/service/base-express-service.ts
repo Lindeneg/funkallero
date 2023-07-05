@@ -1,5 +1,6 @@
-import type { Server } from 'https';
-import express, { type RequestHandler, type Express } from 'express';
+import type { Server as HttpsServer } from 'https';
+import type { Server as HttpServer } from 'http';
+import express, { type RequestHandler } from 'express';
 import urlJoin from 'url-join';
 import {
     SERVICE,
@@ -9,6 +10,8 @@ import {
     type ILoggerService,
     type IConfigurationService,
 } from '@lindeneg/funkallero-core';
+
+type Server = HttpServer | HttpsServer;
 
 const setJsonContentTypeMiddleware: RequestHandler = (_, res, next) => {
     res.set('Content-Type', 'application/json');
@@ -24,22 +27,24 @@ class BaseExpressService extends SingletonService implements IExpressService {
 
     public readonly app = express();
 
-    private server: Server | Express;
+    protected server: Server;
+    private protocol: 'http' | 'https' = 'http';
 
     public async setup() {
         this.app.use(express.json());
 
         if (this.config.https) {
+            this.protocol = 'https';
             const https = await import('https');
             this.server = https.createServer(this.config.https, this.app);
         } else {
-            this.server = this.app;
+            const http = await import('http');
+            this.server = http.createServer(this.app);
         }
     }
 
     public startup(): void | Promise<void> {
-        const protocol = this.config.https ? 'https' : 'http';
-        const url = urlJoin(`${protocol}://localhost:${this.config.port}`, this.config.basePath);
+        const url = urlJoin(`${this.protocol}://localhost:${this.config.port}`, this.config.basePath);
 
         this.server.listen(this.config.port, () => {
             this.logger.info(`Server listening on ${url}`);
