@@ -12,13 +12,16 @@
     "scripts": {
         "start": "node ./dist/index.mjs",
         "build": "yarn run build:prisma && yarn run build:rollup",
-        "build:prisma": "npx prisma generate",
+        "build:prisma": "npx -y prisma generate",
         "build:rollup": "rollup -c",
         "lint": "prettier \"src/**\" --ignore-unknown --write",
-        "test": "start-server-and-test start http://localhost:3000/api/authors test:postman",
+        "test": "yarn run test:without-logs",
+        "test:without-logs": "start-server-and-test start:test http://localhost:3000/api/authors test:postman",
+        "test:with-logs": "start-server-and-test start http://localhost:3000/api/authors test:postman",
+        "start:test": "yarn run start --disable-funkallero-logger",
         "test:postman": "npx -y newman run e2e/funkallero-test-suite.postman_collection.json",
-        "studio": "npx prisma studio",
-        "migrate": "npx prisma migrate dev",
+        "studio": "npx -y prisma studio",
+        "migrate": "npx -y prisma migrate dev",
         "setup-https": "yarn run generate:https-creds && yarn run generate:decrypt-https-key",
         "generate:https-creds": "openssl req -x509 -newkey rsa:2048 -keyout https/keytmp.pem -out https/cert.pem -days 365",
         "generate:decrypt-https-key": "openssl rsa -in https/keytmp.pem -out https/key.pem && rm https/keytmp.pem"
@@ -27,6 +30,7 @@
         "@lindeneg/funkallero": "0.0.0",
         "@lindeneg/funkallero-auth-service": "0.0.0",
         "@prisma/client": "4.15.0",
+        "chalk": "5.3.0",
         "cookie-parser": "1.4.6",
         "zod": "3.21.4"
     },

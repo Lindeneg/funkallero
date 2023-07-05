@@ -11,7 +11,7 @@ export default () => {
             format: 'esm',
             exports: 'named',
         },
-        external: ['@lindeneg/funkallero-core', 'express', 'url-join', 'chalk'],
+        external: ['@lindeneg/funkallero-core', 'express', 'url-join'],
         plugins: [
             cleaner({
                 targets: ['./dist'],
