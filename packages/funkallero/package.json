@@ -1,8 +1,7 @@
 {
     "name": "@lindeneg/funkallero",
-    "private": true,
-    "description": "Funkallero is an express extension using dependency injection and mediator pattern",
-    "version": "0.0.0",
+    "description": "Funkallero is an opinionated framework to create web API's built on top of express",
+    "version": "0.0.1",
     "repository": "git@github.com:lindeneg/funkallero.git",
     "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero",
     "author": "Christian Lindeneg",
@@ -22,7 +21,7 @@
         "zod": "3.21.4"
     },
     "dependencies": {
-        "@lindeneg/funkallero-core": "0.0.0",
+        "@lindeneg/funkallero-core": "^0.0.1",
         "express": "4.18.2",
         "url-join": "5.0.0"
     }

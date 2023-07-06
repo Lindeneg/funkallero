@@ -4,7 +4,7 @@
 
 Funkallero is an opinionated framework to create web API's built on top of [express](https://expressjs.com/).
 
-It's all just a bit of fun.. and I had loads of that! It's still work in progress and thus the functionality is limited. As of now, nothing has been published.
+It's all just a bit of fun.. and I had loads of that!
 
 It enforces the use of a mediator service to proxy communication between API and application layers in a type-safe manner and enforces the use of dependency-injection to inject services into other services.
 
@@ -41,26 +41,13 @@ This of course has a direct influence on the lifetime of a given service instanc
 
 Singleton services can only have other singleton services as injection dependencies. Scoped services can have other scoped services as well as singletons as dependencies.
 
-##### Required Services
-
-A `MediatorService` and `DataContextService` must always be registered as singleton services. In addition, three other singletons are required and if not registered by the consumer, a default implementation will automatically be used.
-
-The core service are as such:
-
-| Name                        | Required | Context                                                                                                                                                                                                                                                                                                                                                                                                     |
-| --------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| IMediatorService            | Yes      | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/mediator-service.ts#L77-L79), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-mediator-service.ts#L12-L45), [Consumer Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/mediator-service.ts) |
-| IDataContextService         | Yes      | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/data-context-service.ts#L3), [Consumer Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/data-context-service.ts)                                                                                                                                          |
-| IExpressService             | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-service.ts#L4-L8), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-express-service.ts)                                                                                                                                            |
-| IExpressErrorHandlerService | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-error-handler-service.ts#L8-L10), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-error-handler-service.ts)                                                                                                                       |
-| IConfigurationService       | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/configuration-service.ts#L15-L21), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-configuration-service.ts)                                                                                                                              |
-| ILoggerService              | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/logger-service.ts#L18-L23), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-logger-service.ts)                                                                                                                                            |
+A bunch of defaults services are provided but any service can be extended/overwritten and custom services can be easily added.
 
 ### Application Layer
 
 The application layer is effectively a bunch of `MediatorAction`'s. A default implementation is provided but a custom one can also be used if desired.
 
-The default implementation is always injected with the registered `DataContextService`. It is recommend to extend the base action and provide the data context as a type. Then it can be reused across action implementations.
+The default implementation is always injected with the registered `DataContextService`. It is recommend to extend the base action and provide the data context as a type.
 
 ```ts
 // application/action/index.ts
@@ -238,7 +225,8 @@ import Controller from './controller';
 @controller('user')
 class UserController extends Controller {
     @httpPost()
-    // if a schema service service has been registered, such as zod, it can neatly be used here
+    // if a schema parser service has been registered, such as zod
+    // it can neatly be used here via the body decorator
     public createUser(@body(createUserZodSchema) createUserDto: ICreateUserDto) {
         // type-safe mediator!
         return this.mediator.send('CreateUserCommand', createUserDto);
@@ -266,7 +254,7 @@ There's more to do with controllers, such as specifying middleware or authorizat
 
 Middleware are attached to route handlers using `before` and `after` decorators. The before middleware is run before the route handler, after is run after the route handler and is given the handler result as an argument.
 
-Middleware are again services and thus inherits all service properties. Middleware services are then guaranteed to contain two public methods: `beforeRequestHandler` and `afterRequestHandler`, which correlates to `before` and `after` decorators, respectively.
+Middleware are again services and thus inherits all service properties. Middleware services are then guaranteed to contain two public methods: `beforeRequestHandler` and `afterRequestHandler`, which correlates to `before` and `after` decorators, respectively. However, both have an empty default implementation and thus one can implement only what's desired.
 
 If multiple middleware services are added to a handler, then this rule applies:
 
@@ -339,3 +327,18 @@ public async getUser(@params('id') id: string) {
     return this.mediator.send('GetUserQuery', { id });
 }
 ```
+
+##### Required Services
+
+A `MediatorService` and `DataContextService` must always be registered as singleton services. In addition, three other singletons are required and if not registered by the consumer, a default implementation will automatically be used.
+
+The core service are as such:
+
+| Name                        | Required | Context                                                                                                                                                                                                                                                                                                                                                                                                     |
+| --------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IMediatorService            | Yes      | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/mediator-service.ts#L77-L79), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-mediator-service.ts#L12-L45), [Consumer Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/mediator-service.ts) |
+| IDataContextService         | Yes      | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/data-context-service.ts#L3), [Consumer Implementation](https://github.com/Lindeneg/funkallero/blob/master/example-prisma/src/services/data-context-service.ts)                                                                                                                                          |
+| IExpressService             | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-service.ts#L4-L8), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-express-service.ts)                                                                                                                                            |
+| IExpressErrorHandlerService | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/express-error-handler-service.ts#L8-L10), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-error-handler-service.ts)                                                                                                                       |
+| IConfigurationService       | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/configuration-service.ts#L15-L21), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-configuration-service.ts)                                                                                                                              |
+| ILoggerService              | No       | [Interface](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/logger-service.ts#L18-L23), [Base Implementation](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero/src/service/base-logger-service.ts)                                                                                                                                            |
