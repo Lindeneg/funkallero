@@ -13,7 +13,7 @@
         "start": "yarn cli start",
         "lint": "yarn cli lint",
         "test": "yarn cli test",
-        "pub": "yarn run pub:pre yarn lerna publish --no-private",
+        "pub": "yarn run pub:pre && yarn lerna publish --no-private",
         "pub:pre": "yarn build core funkallero auth-service && yarn test e2e"
     },
     "workspaces": [
