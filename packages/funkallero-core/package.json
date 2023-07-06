@@ -1,6 +1,5 @@
 {
     "name": "@lindeneg/funkallero-core",
-    "private": true,
     "description": "Funkallero core interfaces, enums and types",
     "version": "0.0.0",
     "repository": "git@github.com:lindeneg/funkallero.git",

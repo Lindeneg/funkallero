@@ -1,7 +1,6 @@
 {
     "name": "@lindeneg/funkallero",
-    "private": true,
-    "description": "Funkallero is an express extension using dependency injection and mediator pattern",
+    "description": "Funkallero is an opinionated framework to create web API's built on top of express",
     "version": "0.0.0",
     "repository": "git@github.com:lindeneg/funkallero.git",
     "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero",

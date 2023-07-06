@@ -1,6 +1,5 @@
 {
     "name": "@lindeneg/funkallero-auth-service",
-    "private": true,
     "description": "Default implementations of Funkallero auth service interfaces",
     "version": "0.0.0",
     "repository": "git@github.com:lindeneg/funkallero.git",
