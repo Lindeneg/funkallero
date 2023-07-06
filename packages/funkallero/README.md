@@ -47,7 +47,7 @@ A bunch of defaults services are provided but any service can be extended/overwr
 
 The application layer is effectively a bunch of `MediatorAction`'s. A default implementation is provided but a custom one can also be used if desired.
 
-The default implementation is always injected with the registered `DataContextService`. It is recommend to extend the base action and provide the data context as a type. Then it can be reused across action implementations.
+The default implementation is always injected with the registered `DataContextService`. It is recommend to extend the base action and provide the data context as a type.
 
 ```ts
 // application/action/index.ts
@@ -225,7 +225,8 @@ import Controller from './controller';
 @controller('user')
 class UserController extends Controller {
     @httpPost()
-    // if a schema service service has been registered, such as zod, it can neatly be used here
+    // if a schema parser service has been registered, such as zod
+    // it can neatly be used here via the body decorator
     public createUser(@body(createUserZodSchema) createUserDto: ICreateUserDto) {
         // type-safe mediator!
         return this.mediator.send('CreateUserCommand', createUserDto);
@@ -253,7 +254,7 @@ There's more to do with controllers, such as specifying middleware or authorizat
 
 Middleware are attached to route handlers using `before` and `after` decorators. The before middleware is run before the route handler, after is run after the route handler and is given the handler result as an argument.
 
-Middleware are again services and thus inherits all service properties. Middleware services are then guaranteed to contain two public methods: `beforeRequestHandler` and `afterRequestHandler`, which correlates to `before` and `after` decorators, respectively.
+Middleware are again services and thus inherits all service properties. Middleware services are then guaranteed to contain two public methods: `beforeRequestHandler` and `afterRequestHandler`, which correlates to `before` and `after` decorators, respectively. However, both have an empty default implementation and thus one can implement only what's desired.
 
 If multiple middleware services are added to a handler, then this rule applies:
 
