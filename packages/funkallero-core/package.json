@@ -1,7 +1,7 @@
 {
     "name": "@lindeneg/funkallero-core",
     "description": "Funkallero core interfaces, enums and types",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "repository": "git@github.com:lindeneg/funkallero.git",
     "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero-core",
     "author": "Christian Lindeneg",
