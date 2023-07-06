@@ -12,7 +12,9 @@
         "build": "yarn cli build",
         "start": "yarn cli start",
         "lint": "yarn cli lint",
-        "test": "yarn cli test"
+        "test": "yarn cli test",
+        "pub": "yarn lerna publish",
+        "pre:publish": "yarn build core funkallero auth-service && yarn test e2e"
     },
     "workspaces": [
         "example",
