@@ -1,7 +1,7 @@
 {
     "name": "@lindeneg/funkallero-auth-service",
     "description": "Default implementations of Funkallero auth service interfaces",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "repository": "git@github.com:lindeneg/funkallero.git",
     "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero-auth-service",
     "author": "Christian Lindeneg",
@@ -21,7 +21,7 @@
         "@types/jsonwebtoken": "9.0.0"
     },
     "dependencies": {
-        "@lindeneg/funkallero-core": "0.0.0",
+        "@lindeneg/funkallero-core": "^0.0.1",
         "bcryptjs": "2.4.2",
         "jsonwebtoken": "9.0.0"
     }
