@@ -1602,7 +1602,7 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					"pm.test(\"Response time is less than 200ms\", function() {",
+					"pm.test(\"Response time is less than 250ms\", function() {",
 					"    pm.expect(pm.response.responseTime).to.be.below(Number(pm.collectionVariables.get('maxAcceptableResponseTimeInMs')));",
 					"});",
 					""

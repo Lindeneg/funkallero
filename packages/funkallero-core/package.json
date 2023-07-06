@@ -14,7 +14,8 @@
         "build": "yarn run build:js && yarn run build:types",
         "build:js": "rollup -c",
         "build:types": "tsc --project ./tsconfig-types.json",
-        "lint": "prettier \"src/**\" --ignore-unknown --write"
+        "lint": "prettier \"src/**\" --ignore-unknown --write",
+        "test": "echo Error: no test specified"
     },
     "devDependencies": {
         "@types/express": "4.17.17"

@@ -6,20 +6,16 @@ import {
     type ITokenService,
 } from '@lindeneg/funkallero';
 import Action from '../action';
-import SERVICE from '../../enums/service';
-import type { ILoginDto } from '../../dtos/login-dto';
-import type { ISignupDto } from '../../dtos/signup-dto';
+import SERVICE from '../../../../example/src/enums/service';
+import type { ILoginDto } from '../../../../example/src/dtos/login-dto';
+import type { ISignupDto } from '../../../../example/src/dtos/signup-dto';
 
 export class LoginCommand extends Action {
     @injectService(SERVICE.TOKEN)
     private readonly tokenService: ITokenService;
 
     public async execute({ email, password }: ILoginDto) {
-        const author = await this.dataContext.exec((p) =>
-            p.author.findUnique({
-                where: { email },
-            })
-        );
+        const author = (await this.dataContext.Author.getAll()).find((e) => e.email === email);
 
         if (!author) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
@@ -36,26 +32,26 @@ export class SignupCommand extends Action {
     private readonly tokenService: ITokenService;
 
     public async execute({ name, email, password }: ISignupDto) {
-        const existingAuthor = await this.dataContext.exec((p) =>
-            p.author.findUnique({
-                where: { email },
-            })
-        );
+        const existingAuthor = (await this.dataContext.Author.getAll()).find((e) => e.email === email);
 
         if (existingAuthor) return new MediatorResultFailure(ACTION_RESULT.ERROR_UNPROCESSABLE);
 
-        const author = await this.dataContext.exec(async (p) =>
-            p.author.create({
-                data: {
-                    name,
-                    email,
-                    password: await this.tokenService.hashPassword(password),
-                },
-            })
+        const author = this.dataContext.Author.new();
+
+        author.name = name;
+        author.email = email;
+        author.password = await this.tokenService.hashPassword(password);
+        author.createdAt = new Date();
+        author.updatedAt = new Date();
+        author.bookIds = [];
+
+        const createdAuthor = await this.dataContext.Author.create(author);
+
+        if (!createdAuthor) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
+
+        return new MediatorResultSuccess(
+            { id: createdAuthor.id, name: createdAuthor.name },
+            ACTION_RESULT.SUCCESS_CREATE
         );
-
-        if (!author) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
-
-        return new MediatorResultSuccess({ id: author.id, name: author.name }, ACTION_RESULT.SUCCESS_CREATE);
     }
 }

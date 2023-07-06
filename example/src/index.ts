@@ -1,4 +1,4 @@
-import Funkallero, { LOG_LEVEL, BaseZodParserService } from '@lindeneg/funkallero';
+import Funkallero, { LOG_LEVEL, BaseZodParserService, BaseLoggerServicePalette } from '@lindeneg/funkallero';
 import { BaseTokenService } from '@lindeneg/funkallero-auth-service';
 import SERVICE from './enums/service';
 import ExpressService from './services/express-service';
@@ -13,6 +13,8 @@ import Test2MiddlewareService from './middleware/test-2-middleware-service';
 import './api/author-controller';
 import './api/book-controller';
 import './api/auth-controller';
+
+BaseLoggerServicePalette.useDefaultPalette();
 
 Funkallero.create({
     // default: ''

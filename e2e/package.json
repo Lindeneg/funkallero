@@ -1,0 +1,28 @@
+{
+    "name": "@lindeneg/funkallero-e2e",
+    "private": true,
+    "description": "E2E tests for funkallero",
+    "version": "0.0.0",
+    "repository": "git@github.com:lindeneg/funkallero.git",
+    "author": "Christian Lindeneg",
+    "license": "MIT",
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "scripts": {
+        "start": "node ./dist/index.mjs",
+        "build": "rollup -c",
+        "lint": "prettier \"src/**\" --ignore-unknown --write",
+        "test": "start-server-and-test start http://localhost:3000/api/authors test:postman",
+        "test:postman": "npx -y newman run tests/funkallero-test-suite.postman_collection.json"
+    },
+    "dependencies": {
+        "@lindeneg/funkallero": "0.0.0",
+        "@lindeneg/funkallero-auth-service": "0.0.0",
+        "cookie-parser": "1.4.6",
+        "zod": "3.21.4"
+    },
+    "devDependencies": {
+        "@types/cookie-parser": "1.4.3",
+        "start-server-and-test": "^2.0.0"
+    }
+}

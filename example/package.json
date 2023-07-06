@@ -12,13 +12,13 @@
     "scripts": {
         "start": "node ./dist/index.mjs",
         "build": "yarn run build:prisma && yarn run build:rollup",
-        "build:prisma": "npx prisma generate",
+        "build:prisma": "npx -y prisma generate",
         "build:rollup": "rollup -c",
         "lint": "prettier \"src/**\" --ignore-unknown --write",
         "test": "start-server-and-test start http://localhost:3000/api/authors test:postman",
-        "test:postman": "npx -y newman run e2e/funkallero-test-suite.postman_collection.json",
-        "studio": "npx prisma studio",
-        "migrate": "npx prisma migrate dev",
+        "test:postman": "npx -y newman run ../e2e/tests/funkallero-test-suite.postman_collection.json",
+        "studio": "npx -y prisma studio",
+        "migrate": "npx -y prisma migrate dev",
         "setup-https": "yarn run generate:https-creds && yarn run generate:decrypt-https-key",
         "generate:https-creds": "openssl req -x509 -newkey rsa:2048 -keyout https/keytmp.pem -out https/cert.pem -days 365",
         "generate:decrypt-https-key": "openssl rsa -in https/keytmp.pem -out https/key.pem && rm https/keytmp.pem"
