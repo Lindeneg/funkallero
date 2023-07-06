@@ -14,8 +14,6 @@ export type BaseLoggerPaletteColor = string | ((msg: string) => string);
 export type BaseLoggerPaletteObj = Record<LogLevelUnion, BaseLoggerPaletteColor>;
 export type BaseLoggerPalette = Map<LogLevelUnion, BaseLoggerPaletteColor>;
 
-const DISABLE_LOGGER = process.argv[2] === '--disable-funkallero-logger';
-
 const EMPTY_PALETTE = {
     [LOG_LEVEL.INFO]: '',
     [LOG_LEVEL.WARNING]: '',
@@ -86,7 +84,6 @@ class BaseLoggerService extends SingletonService implements ILoggerService {
     }
 
     private prepare(payload: LoggerPayload | string, level: LogLevelUnion) {
-        if (DISABLE_LOGGER) return;
         if (typeof payload === 'string') return this.log({ msg: payload, level });
         this.log({ ...payload, level });
     }
