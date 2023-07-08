@@ -4,3 +4,4 @@ test-report.xml
 notes
 .env*
 !.env.example
+funkallero-cli
