@@ -4,4 +4,4 @@ This package includes core interfaces, classes, enums, decorators and types for 
 
 ##### Install
 
-`yarn install @lindeneg/funkallero-core`
+`yarn add @lindeneg/funkallero-core`

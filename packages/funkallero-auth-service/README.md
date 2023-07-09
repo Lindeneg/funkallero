@@ -6,4 +6,4 @@ Take a look at an example [here](https://github.com/Lindeneg/funkallero/tree/mas
 
 ##### Install
 
-`yarn install @lindeneg/funkallero-auth-service`
+`yarn add @lindeneg/funkallero-auth-service`

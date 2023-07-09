@@ -14,7 +14,7 @@ Take a look at an example [here](https://github.com/Lindeneg/funkallero/tree/mas
 
 ### Install
 
-`yarn install @lindeneg/funkallero`
+`yarn add @lindeneg/funkallero`
 
 ### Usage
 
