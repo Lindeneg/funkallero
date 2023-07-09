@@ -1,3 +1,5 @@
-src
-*config*
 !dist
+src
+rollup.config.js
+tsconfig-types.json
+tsconfig.json
