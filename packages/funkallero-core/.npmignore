@@ -1,0 +1,6 @@
+src
+tsconfig*
+*.config.js
+.gitignore
+node_modules
+coverage
