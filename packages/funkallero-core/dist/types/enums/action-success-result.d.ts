@@ -1,8 +1,0 @@
-declare const ACTION_SUCCESS_RESULT: Readonly<{
-    UNIT: "";
-    SUCCESS_CREATE: "SUCCESS_CREATE";
-    SUCCESS_UPDATE: "SUCCESS_UPDATE";
-    SUCCESS_DELETE: "SUCCESS_DELETE";
-}>;
-export type ActionSuccessResultUnion = typeof ACTION_SUCCESS_RESULT[keyof typeof ACTION_SUCCESS_RESULT];
-export default ACTION_SUCCESS_RESULT;
