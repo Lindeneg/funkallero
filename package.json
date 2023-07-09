@@ -13,7 +13,7 @@
         "start": "yarn cli start",
         "lint": "yarn cli lint",
         "test": "yarn cli test",
-        "prepublish": "yarn build core funkallero auth-service && yarn test e2e"
+        "test:e2e": "yarn build core funkallero auth-service e2e && yarn test e2e"
     },
     "workspaces": [
         "example",
