@@ -9,6 +9,17 @@
     "main": "./dist/esm/index.mjs",
     "module": "./dist/esm/index.mjs",
     "types": "./dist/types/index.d.ts",
+    "keywords": [
+        "express",
+        "api",
+        "rest",
+        "typescript",
+        "type-safety",
+        "framework",
+        "mediator",
+        "command-query-segregation",
+        "clean-architecture"
+    ],
     "scripts": {
         "build": "yarn run build:js && yarn run build:types",
         "build:js": "rollup -c",

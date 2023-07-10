@@ -9,6 +9,13 @@
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",
     "types": "./dist/types/index.d.ts",
+    "keywords": [
+        "express",
+        "funkallero",
+        "typescript",
+        "types",
+        "interfaces"
+    ],
     "scripts": {
         "build": "yarn run build:js && yarn run build:types",
         "build:js": "rollup -c",
