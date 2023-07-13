@@ -1,0 +1,11 @@
+import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
+import BaseAction from '@/application/base-action';
+
+class {{actionName}}{{type}} extends BaseAction {
+    public async execute() {
+
+        return new MediatorResultSuccess({{actionResult}});
+    }
+}
+
+export default {{actionName}}{{type}};

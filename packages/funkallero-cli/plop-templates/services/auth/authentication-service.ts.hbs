@@ -1,0 +1,20 @@
+import { IDomain } from '@lindeneg/funkallero-core';
+import { BaseAuthenticationService } from '@lindeneg/funkallero-auth-service';
+import type DataContextService from '@/services/data-context-service';
+
+interface IUserModel extends IDomain {}
+interface IAuthModel {}
+
+class AuthenticationService extends BaseAuthenticationService<IUserModel, IAuthModel, DataContextService> {
+    protected getEncodedToken(): string | null {
+        return null;
+    }
+
+    protected async getUserFromDecodedToken(decodedToken: IAuthModel): Promise<IUserModel | null> {
+        return {
+            id: 'some-id',
+        };
+    }
+}
+
+export default AuthenticationService;

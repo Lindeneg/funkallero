@@ -1,0 +1,41 @@
+import typescript from 'rollup-plugin-typescript2';
+import commonjs from '@rollup/plugin-commonjs';
+import cleaner from 'rollup-plugin-cleaner';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+{{#each plugins}}
+{{esmImport this.name this.namedImport this.camelCase}};
+{{/each}}
+
+export default {
+    input: '{{inputFile}}',
+
+    output: [
+    {{#each outputs}}
+        {{jsonString this}},
+    {{/each}}
+    ],
+
+    external: [
+    '@lindeneg/funkallero',
+    {{#each external}}
+        '{{this}}',
+    {{/each}}
+    ],
+
+    plugins: [
+        cleaner({
+            targets: ['./dist'],
+        }),
+        nodeResolve({
+            preferBuiltins: true,
+        }),
+        commonjs(),
+        typescript({
+            tsconfig: './tsconfig.json',
+            clean: true,
+        }),
+    {{#each plugins}}
+        {{getImportName this.name this.camelCase}}({{#if this.options}}{{jsonString this.options}}{{/if}}),
+    {{/each}}
+    ],
+};
