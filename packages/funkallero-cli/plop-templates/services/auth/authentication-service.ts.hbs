@@ -2,6 +2,7 @@ import { IDomain } from '@lindeneg/funkallero-core';
 import { BaseAuthenticationService } from '@lindeneg/funkallero-auth-service';
 import type DataContextService from '@/services/data-context-service';
 
+// switch out mock interfaces
 interface IUserModel extends IDomain {}
 interface IAuthModel {}
 
@@ -11,9 +12,7 @@ class AuthenticationService extends BaseAuthenticationService<IUserModel, IAuthM
     }
 
     protected async getUserFromDecodedToken(decodedToken: IAuthModel): Promise<IUserModel | null> {
-        return {
-            id: 'some-id',
-        };
+        return null;
     }
 }
 

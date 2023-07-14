@@ -3,6 +3,7 @@ import { BaseAuthorizationService, type AuthorizationPolicyHandlerFn } from '@li
 import SERVICE from '@/enums/service';
 import type DataContextService from '@/services/data-context-service';
 
+// switch out mock interface
 interface IAuthModel {}
 
 type AuthHandler = AuthorizationPolicyHandlerFn<{ dataContext: DataContextService }, IAuthModel>;
