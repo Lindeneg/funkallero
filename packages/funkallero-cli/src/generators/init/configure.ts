@@ -30,7 +30,7 @@ const core = (configure: ConfigureModuleFn) => {
             mod.core.templates.mainIndex.addFile(cxt.projectSrc, {
                 zod: cxt.hasProperty.zod,
                 authentication: cxt.hasProperty.auth,
-                controllerImport: "import '@/api/example-controller.ts';",
+                controllerImport: "import '@/api/example-controller';",
             })
         );
     });
@@ -72,8 +72,7 @@ const application = (configure: ConfigureModuleFn) => {
             mod.application.templates.action.addFile(
                 joinPath(cxt.projectSrc, 'application', 'example', 'get-all-query.ts'),
                 {
-                    actionName: 'GetAll',
-                    type: 'Query',
+                    actionClassName: 'GetAllQuery',
                     actionResult: "['data-1', 'data-2', 'data-3']",
                 }
             ),

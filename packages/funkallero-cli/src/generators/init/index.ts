@@ -78,7 +78,7 @@ const initGenerator = createGenerator<InitGeneratorAnswers>({
                     type: 'list',
                     name: 'manager',
                     message: 'Configure package manager',
-                    choices: modulePrompt(packageManager.npm, [packageManager.yarn, 'checked']),
+                    choices: modulePrompt(packageManager.yarn, packageManager.npm),
                 },
                 {
                     type: 'checkbox',
