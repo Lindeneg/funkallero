@@ -1,5 +1,6 @@
-import { createModule, createTemplate, createAction, logger, joinPath } from '@lindeneg/scaffold-core';
 import { readFile, writeFile } from 'fs/promises';
+import { createModule, createTemplate, createAction, logger, joinPath } from '@lindeneg/scaffold-core';
+
 
 interface IndexFileTemplateData {
     exports: Array<{

@@ -9,6 +9,6 @@ class {{controllerName}}Controller extends BaseController {
 
     @httpGet({{#if routePath}}{{routePath}}{{/if}})
     public async {{handler}}() {
-        return this.mediator.send('{{actionId}}'{{#if args}}, {{jsonString args}}{{/if}});
+        {{#if handlerReturn}}{{handlerReturn}}{{/if}}
     }
 }

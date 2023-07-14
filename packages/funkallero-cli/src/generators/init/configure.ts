@@ -54,8 +54,8 @@ const api = (configure: ConfigureModuleFn) => {
             mod.api.templates.baseController.addFile(joinPath(cxt.projectSrc, 'api'), {}),
             mod.api.templates.controller.addFile(joinPath(cxt.projectSrc, 'api', 'example-controller.ts'), {
                 controllerName: 'Example',
-                handler: 'getAll',
-                actionId: 'GetAllQuery',
+                handler: 'getExamples',
+                handlerReturn: "this.mediator.send('GetExamplesQuery');",
                 controllerPath: 'example',
             })
         );

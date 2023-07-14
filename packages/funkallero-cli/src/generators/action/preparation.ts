@@ -16,7 +16,7 @@ const preparation = (destPath: string, answers: Partial<ActionGeneratorAnswers>,
 };
 
 export interface ActionGeneratorAnswers {
-    actionName: string;
+    applicationActionName: string;
     flags?: string[];
 }
 

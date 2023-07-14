@@ -4,10 +4,10 @@ import type { ConfigureModuleFn } from './preparation';
 
 const actionConfigureFactory = (type: 'Command' | 'Query') => (configure: ConfigureModuleFn) => {
     configure(application, (cxt) => {
-        if (!cxt.answers.actionName) return;
-        const name = toKebabCase(cxt.answers.actionName) + '-' + type.toLowerCase();
+        if (!cxt.answers.applicationActionName) return;
+        const name = toKebabCase(cxt.answers.applicationActionName) + '-' + type.toLowerCase();
         const fileName = name + '.ts';
-        const actionClassName = toPascalCase(cxt.answers.actionName) + type;
+        const actionClassName = toPascalCase(cxt.answers.applicationActionName) + type;
 
         let actionPath: string;
         let exportPath: string;

@@ -33,17 +33,17 @@ const actionGeneratorFactory = (type: 'Command' | 'Query') =>
                 }
             }
 
-            answers.actionName = name;
+            answers.applicationActionName = name;
             answers.flags = flags;
         },
 
         hasRequiredAnswers(answers) {
-            return !!answers.actionName;
+            return !!answers.applicationActionName;
         },
 
         async setAnswersFromInquirer(answers, prompt) {
-            if (!answers.actionName) {
-                answers.actionName = (
+            if (!answers.applicationActionName) {
+                answers.applicationActionName = (
                     await prompt({
                         type: 'input',
                         name: 'actionName',

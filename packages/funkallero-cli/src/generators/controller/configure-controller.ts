@@ -5,7 +5,7 @@ import type { ConfigureModuleFn } from './preparation';
 const configureController = (configure: ConfigureModuleFn) => {
     configure(api, (cxt) => {
         if (!cxt.answers.apiControllerName) return;
-        const controllerName = toPascalCase(cxt.answers.apiControllerName) + 'Controller';
+        const controllerName = toPascalCase(cxt.answers.apiControllerName);
         const name = toKebabCase(cxt.answers.apiControllerName) + '-controller';
         const fileName = name + '.ts';
         const filePath = joinPath(cxt.apiPath, fileName);
@@ -21,8 +21,11 @@ const configureController = (configure: ConfigureModuleFn) => {
         cxt.customActions.add(
             api.templates.controller.addFile(filePath, {
                 controllerName,
-                actionId: 'ActionName',
                 handler: 'getSomething',
+            }),
+            api.actions.addControllerImportToMainIndex.prepare({
+                rootDir: cxt.projectSrc,
+                importString: `import '@/api/${name}';`,
             })
         );
     });
