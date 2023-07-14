@@ -1,0 +1,13 @@
+{
+    "name": "{{kebabCase name}}",
+    "private": true,
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "scripts": {
+        "start": "node ./dist/index.mjs",
+        "start:dev": "npx -y nodemon ./dist/index.mjs",
+        "build": "rollup -c",
+        "build:dev": "{{packageManager.construct.run}} build {{packageManager.argvFlagSeparator}}--watch",
+        "lint": "prettier \"src/**\" --ignore-unknown --write"
+    }
+}

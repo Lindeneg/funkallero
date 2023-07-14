@@ -1,8 +1,6 @@
 node_modules
 coverage
 test-report.xml
-notes
-.env*
-!.env.example
 dist
-scaffold-core
+test-app
+plopfile.mjs
