@@ -74,9 +74,34 @@ export default createModule({
             'add-service-import-to-main-index',
             async (_, { rootDir, importString }) => {
                 try {
-                    return '';
+                    const { fileContents, matchesMinusOne, lastMatchIndex, matches, write } =
+                        await readFileAndFindLastIndexOfRegex(rootDir, 'index.ts', /import.*;/g);
+
+                    if (typeof lastMatchIndex !== 'undefined' && lastMatchIndex !== -1) {
+                        const newContents =
+                            fileContents.slice(0, lastMatchIndex + matches[matchesMinusOne][0].length) +
+                            '\n' +
+                            importString +
+                            fileContents.slice(lastMatchIndex + matches[matchesMinusOne][0].length);
+
+                        await write(newContents);
+
+                        return 'successfully added service import';
+                    } else {
+                        return 'file or import not found';
+                    }
                 } catch (err) {
-                    return '';
+                    const msg = 'failed to add service import';
+
+                    logger.error({
+                        source: 'modules.base-services.actions.addServiceImportToMainIndex',
+                        msg,
+                        err,
+                        rootDir,
+                        importString,
+                    });
+
+                    throw msg;
                 }
             }
         ),
@@ -86,19 +111,51 @@ export default createModule({
             enumName: string;
             className: string;
         }>('register-service-in-main-index', async (_, { rootDir, type, enumName, className }) => {
-            let registerString: string;
+            try {
+                let registerString: string;
 
-            if (type === 'SingletonService') {
-                registerString = 'registerSingletonService';
-            } else {
-                registerString = 'registerScopedService';
+                if (type === 'SingletonService') {
+                    registerString = 'registerSingletonService';
+                } else {
+                    registerString = 'registerScopedService';
+                }
+
+                const registerService = `    service.${registerString}(SERVICE.${enumName}, ${className});`;
+                const { fileContents, matchesMinusOne, lastMatchIndex, matches, write } =
+                    await readFileAndFindLastIndexOfRegex(
+                        rootDir,
+                        'index.ts',
+                        /(registerSingletonService|registerScopedService).*;/g
+                    );
+
+                if (typeof lastMatchIndex !== 'undefined' && lastMatchIndex !== -1) {
+                    const newContents =
+                        fileContents.slice(0, lastMatchIndex + matches[matchesMinusOne][0].length) +
+                        '\n' +
+                        registerService +
+                        fileContents.slice(lastMatchIndex + matches[matchesMinusOne][0].length);
+
+                    await write(newContents);
+
+                    return 'successfully registered service';
+                } else {
+                    return 'file or import not found';
+                }
+            } catch (err) {
+                const msg = 'failed to register service';
+
+                logger.error({
+                    source: 'modules.base-services.actions.registerServiceInMainIndex',
+                    msg,
+                    err,
+                    rootDir,
+                    type,
+                    enumName,
+                    className,
+                });
+
+                throw msg;
             }
-
-            const registerService = `service.${registerString}(SERVICE.${enumName}, ${className});`;
-
-            console.log('registerService', registerService);
-
-            return '';
         }),
     },
 });

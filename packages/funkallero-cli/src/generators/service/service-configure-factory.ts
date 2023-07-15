@@ -11,11 +11,13 @@ const serviceConfigureFactory = (type: ServiceType) => (configure: ConfigureModu
         const enumName = kebabedName.replace(/-/g, '_').toUpperCase();
         const fileName = name + '.ts';
         const filePath = joinPath(cxt.servicesPath, fileName);
+        const className = serviceName + 'Service';
 
         logger.verbose({
             msg: 'Creating service',
             type,
             name,
+            className,
             enumName,
             serviceName,
             fileName,
@@ -33,11 +35,11 @@ const serviceConfigureFactory = (type: ServiceType) => (configure: ConfigureModu
             }),
             baseServices.actions.addServiceImportToMainIndex.prepare({
                 rootDir: cxt.projectSrc,
-                importString: '',
+                importString: `import ${className} from '@/services/${name}';`,
             }),
             baseServices.actions.registerServiceInMainIndex.prepare({
                 rootDir: cxt.projectSrc,
-                className: serviceName + 'Service',
+                className,
                 enumName,
                 type,
             })
