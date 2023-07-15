@@ -5,4 +5,3 @@ notes
 .env*
 !.env.example
 dist
-scaffold-core
