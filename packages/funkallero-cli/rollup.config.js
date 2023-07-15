@@ -20,6 +20,7 @@ export default () => {
             commonjs(),
             typescript({
                 tsconfig: './tsconfig.json',
+                clean: true,
             }),
         ],
     };
