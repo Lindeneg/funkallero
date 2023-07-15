@@ -2,46 +2,29 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Funkallero - What is it?
 
-Let's discover **Docusaurus in less than 5 minutes**.
+I quite like developing web APIs using mediator pattern, dependency injection and command-query segregation. Funkallero is effectively a wrapper on top of [Express](https://expressjs.com) that enforces those patterns with strong type safety.
 
-## Getting Started
+Since the framework is still in its infancy, features are missing, performance is not optimized and tests are lacking. Needless to say, this will be developed over time but for anything serious, please use [Express](https://expressjs.com) directly or another wrapper such as [NestJS](https://nestjs.com/).
 
-Get started by **creating a new site**.
+## Packages
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+Funkallero is composed of the following packages:
 
-### What you'll need
+-   [funkallero-cli](https://github.com/Lindeneg/funkallero/tree/master/packages/funkallero-cli)
+    -   CLI tool to initialize and develop `Funkallero` projects.
+-   [funkallero](https://github.com/Lindeneg/funkallero/tree/master/packages/funkallero)
+    -   Serves as the main package that wraps everything together.
+    -   Dependant upon `funkallero-core` and `express`.
+-   [funkallero-auth-service](https://github.com/Lindeneg/funkallero/tree/master/packages/funkallero-auth-service)
+    -   Optional addon package.
+    -   Provides a default implementation of `IAuthenticationService`, `IAuthorizationService` and `ITokenService`.
+    -   Dependant upon `funkallero-core`, `bcryptjs` and `jsonwebtoken`.
+-   [funkallero-core](https://github.com/Lindeneg/funkallero/tree/master/packages/funkallero-core)
+    -   Defines core interfaces, abstracts, enums and decorators.
+    -   No dependencies.
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+## Example
 
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+There's an example application available on GitHub that demonstrates Funkallero [here](https://github.com/Lindeneg/funkallero/tree/master/example).
