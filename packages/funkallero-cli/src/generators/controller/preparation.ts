@@ -1,6 +1,6 @@
 import { joinPath, configureGeneratorModules, type ScaffoldRegister } from '@lindeneg/scaffold-core';
 
-const preparation = (destPath: string, answers: Partial<ActionGeneratorAnswers>, register: ScaffoldRegister) => {
+const preparation = (destPath: string, answers: Partial<ControllerGeneratorAnswers>, register: ScaffoldRegister) => {
     const apiPath = joinPath(destPath, 'src', 'api');
 
     return configureGeneratorModules({
@@ -14,7 +14,7 @@ const preparation = (destPath: string, answers: Partial<ActionGeneratorAnswers>,
     });
 };
 
-export interface ActionGeneratorAnswers {
+export interface ControllerGeneratorAnswers {
     apiControllerName: string;
 }
 

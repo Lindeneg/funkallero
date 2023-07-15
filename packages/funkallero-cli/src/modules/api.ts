@@ -1,5 +1,5 @@
-import { readFile, writeFile } from 'fs/promises';
-import { createAction, createModule, createTemplate, joinPath, logger } from '@lindeneg/scaffold-core';
+import { createAction, createModule, createTemplate, logger } from '@lindeneg/scaffold-core';
+import { readFileAndFindLastIndexOfRegex } from './utils';
 
 interface ControllerTemplateData {
     controllerName: string;
@@ -32,24 +32,22 @@ const api = createModule({
             'add-controller-import-to-main-index',
             async (_, { rootDir, importString }) => {
                 try {
-                    const path = joinPath(rootDir, 'index.ts');
-                    const file = await readFile(path, { encoding: 'utf8' });
-                    const lastImportRegex = /import.*;/g;
-                    const matches = [...file.matchAll(lastImportRegex)];
-                    const matchesMinusOne = matches.length - 1;
-                    const lastImportIndex = matches.length > 0 ? matches[matchesMinusOne].index : -1;
+                    const { fileContents, matchesMinusOne, lastMatchIndex, matches, write } =
+                        await readFileAndFindLastIndexOfRegex(rootDir, 'index.ts', /import.*;/g);
 
-                    if (typeof lastImportIndex !== 'undefined' && lastImportIndex !== -1) {
+                    if (typeof lastMatchIndex !== 'undefined' && lastMatchIndex !== -1) {
                         const newContents =
-                            file.slice(0, lastImportIndex + matches[matchesMinusOne][0].length) +
+                            fileContents.slice(0, lastMatchIndex + matches[matchesMinusOne][0].length) +
                             '\n' +
                             importString +
-                            file.slice(lastImportIndex + matches[matchesMinusOne][0].length);
+                            fileContents.slice(lastMatchIndex + matches[matchesMinusOne][0].length);
 
-                        await writeFile(path, newContents, { encoding: 'utf8' });
+                        await write(newContents);
+
+                        return 'successfully added controller import';
+                    } else {
+                        return 'file or import not found';
                     }
-
-                    return 'successfully added controller import';
                 } catch (err) {
                     const msg = 'failed to add controller import';
 

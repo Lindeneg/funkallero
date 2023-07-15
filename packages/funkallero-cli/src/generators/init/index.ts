@@ -130,7 +130,6 @@ const initGenerator = createGenerator<InitGeneratorAnswers>({
 
             formatWithPrettier.prepare({
                 dirPath: cxt.projectRoot,
-                prettierConfigPath: cxt.hasProperty.prettier ? joinPath(cxt.projectRoot, '.prettierrc') : '',
             })
         );
     },

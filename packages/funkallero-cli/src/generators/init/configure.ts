@@ -70,17 +70,17 @@ const application = (configure: ConfigureModuleFn) => {
                 {}
             ),
             mod.application.templates.action.addFile(
-                joinPath(cxt.projectSrc, 'application', 'example', 'get-all-query.ts'),
+                joinPath(cxt.projectSrc, 'application', 'example', 'get-examples-query.ts'),
                 {
-                    actionClassName: 'GetAllQuery',
+                    actionClassName: 'GetExamplesQuery',
                     actionResult: "['data-1', 'data-2', 'data-3']",
                 }
             ),
             mod.application.templates.indexFile.addFile(joinPath(cxt.projectSrc, 'application'), {
                 exports: [
                     {
-                        name: 'GetAllQuery',
-                        path: './example/get-all-query',
+                        name: 'GetExamplesQuery',
+                        path: './example/get-examples-query',
                     },
                 ],
             })

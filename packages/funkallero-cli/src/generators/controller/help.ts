@@ -1,14 +1,17 @@
 const HELP = `Funkallero Controller Generator
 
-    $ funkallero controller ...NAME
-    
-    NAME:    Controller name
-    
-    Examples:
-    
-    $ funkallero controller some name
+Create a new API controller, places it in src/api/NAME-controller.ts and
+automatically imports it in main index file src/index.ts.
 
-    $ funkallero controller some other name
+$ funkallero controller ...NAME
+
+NAME: Controller name
+
+Examples:
+
+$ funkallero controller some name
+
+$ funkallero controller some other name
 `;
 
 export default HELP;

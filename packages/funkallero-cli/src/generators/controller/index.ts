@@ -1,11 +1,11 @@
-import { createGenerator, concatActions, formatWithPrettier } from '@lindeneg/scaffold-core';
+import { createGenerator } from '@lindeneg/scaffold-core';
 import { api } from '@/modules';
 import preparation from './preparation';
 import HELP from './help';
 import configureController from './configure-controller';
-import type { ActionGeneratorAnswers } from './preparation';
+import type { ControllerGeneratorAnswers } from './preparation';
 
-const actionGeneratorFactory = createGenerator<ActionGeneratorAnswers>({
+const controllerGenerator = createGenerator<ControllerGeneratorAnswers>({
     name: 'controller',
     formattedName: 'API Controller',
     description: 'creates an API controller',
@@ -42,14 +42,8 @@ const actionGeneratorFactory = createGenerator<ActionGeneratorAnswers>({
 
         configureController(configureModule);
 
-        return concatActions(
-            cxt.customActions.get(),
-
-            formatWithPrettier.prepare({
-                dirPath: cxt.apiPath,
-            })
-        );
+        return cxt.customActions.get();
     },
 });
 
-export default actionGeneratorFactory;
+export default controllerGenerator;

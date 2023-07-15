@@ -1,4 +1,4 @@
-import { createGenerator, concatActions, formatWithPrettier } from '@lindeneg/scaffold-core';
+import { createGenerator } from '@lindeneg/scaffold-core';
 import { application } from '@/modules';
 import preparation from './preparation';
 import actionHelpFactory from './action-help-factory';
@@ -72,13 +72,7 @@ const actionGeneratorFactory = (type: 'Command' | 'Query') =>
 
             actionConfigureFactory(type)(configureModule);
 
-            return concatActions(
-                cxt.customActions.get(),
-
-                formatWithPrettier.prepare({
-                    dirPath: cxt.applicationPath,
-                })
-            );
+            return cxt.customActions.get();
         },
     });
 
