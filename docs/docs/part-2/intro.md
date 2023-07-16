@@ -1,11 +1,11 @@
 ---
 sidebar_position: 1
-description: Introduction to advanced usage
+description: Introduction to part 2
 ---
 
 # Intro
 
-This section continues from where the [basic](/docs/category/funkallero---basic) section ended.
+This section continues from where the [part 1](/docs/category/tutorial---part-1) ended.
 
 ## Improvements
 

@@ -31,10 +31,12 @@ Also add fields to `createUserSchema` & `ICreateUserResponse`
 
 ```ts
 createUserSchema = {
+    ...,
     password: z.string().min(8).max(20),
 };
 
 ICreateUserResponse {
+    ...,
     token: string;
 }
 ```
@@ -133,7 +135,13 @@ const authenticatedPolicy: AuthHandler = async ({ authService }) => {
     return user !== null;
 };
 
-AuthorizationService.addPolicy(['authenticated', authenticatedPolicy]);
+const isMilesDavisPolicy: AuthHandler = async ({ authService }) => {
+    const user = await authService.getUserSafe();
+
+    return user !== null && user.name.toLowerCase() === 'miles davis';
+};
+
+AuthorizationService.addPolicy(['authenticated', authenticatedPolicy], ['name-is-miles-davis', isMilesDavisPolicy]);
 
 export default AuthorizationService;
 ```

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 6
-description: Build the project and start server
+description: Build the project
 ---
 
 # Build Project
@@ -12,8 +12,6 @@ Either setup your own build process, use the typescript compiler or follow the b
 ###### Rollup
 
 `yarn add -D rollup rollup-plugin-typescript2 rollup-plugin-cleaner @rollup/plugin-commonjs`
-
-`npm install --save-dev rollup rollup-plugin-typescript2 rollup-plugin-cleaner @rollup/plugin-commonjs`
 
 ###### rollup.config.mjs
 
@@ -59,5 +57,3 @@ export default {
 Build the project
 
 `yarn build`
-
-`npm run build`

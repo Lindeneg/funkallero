@@ -116,7 +116,7 @@ class CreateUserCommand extends BaseAction {
             id: user.id,
         };
 
-        return new MediatorResultSuccess(userResponse);
+        return new MediatorResultSuccess(userResponse, ACTION_RESULT.SUCCESS_CREATE);
     }
 }
 

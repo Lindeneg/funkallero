@@ -50,7 +50,7 @@ Build the project and start up the server.
 Lets test by creating an invalid user.
 
 ```bash
-curl http://localhost:3000/user -i -X POST
+curl http://localhost:3000/user -X POST
 ```
 
 ###### 400 Bad Request
@@ -66,7 +66,7 @@ Nice, lets try with the properties defined but with empty strings as values.
 
 ```bash
 curl http://localhost:3000/user \
--i -d '{"name":"", "email":""}' \
+-d '{"name":"", "email":""}' \
 -H "Content-Type: application/json" \
 -X POST
 ```
@@ -84,7 +84,7 @@ Great. Now for a valid user.
 
 ```bash
 curl http://localhost:3000/user \
--i -d '{"name":"miles davis", "email":"miles@davis.org"}' \
+-d '{"name":"miles davis", "email":"miles@davis.org"}' \
 -H "Content-Type: application/json" \
 -X POST
 ```
@@ -98,7 +98,7 @@ curl http://localhost:3000/user \
 Lets get the user for good measure.
 
 ```bash
-curl http://localhost:3000/user/GENERATED_ID -i
+curl http://localhost:3000/user/GENERATED_ID
 ```
 
 ###### 200 OK

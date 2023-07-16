@@ -35,10 +35,19 @@ Extend data context service with some simple functionality.
 
 ```ts
 import { randomUUID } from 'crypto';
-import { SingletonService, type IDataContextService } from '@lindeneg/funkallero';
-import User from '@/domain/user';
+import {
+    injectService,
+    SingletonService,
+    type ILoggerService,
+    type IDataContextService,
+} from '@lindeneg/funkallero';
+import SERVICE from '@/enums/service';
+import type User from '@/domain/user';
 
 class DataContextService extends SingletonService implements IDataContextService {
+    @injectService(SERVICE.LOGGER)
+    private readonly logger: ILoggerService;
+
     public readonly userRepository = new Map<User['id'], User>();
 
     public readonly createUser = (user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => {

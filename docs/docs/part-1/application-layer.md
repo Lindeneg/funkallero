@@ -39,8 +39,11 @@ export default GetUsersQuery;
 
 ###### src/application/index.ts
 
+:::info
+Now the import error in `src/services/mediator-service.ts` is gone
+:::
+
 ```ts
-// now the import error in src/services/mediator-service.ts is gone
 export { default as GetUsersQuery } from './user/get-users-query';
 ```
 

@@ -1,14 +1,12 @@
 ---
 sidebar_position: 1
-description: Introduction to advanced usage
+description: Introduction to part 3
 ---
 
 # Intro
 
-This section continues from where the [basic](/docs/category/funkallero---basic) section ended.
+This section continues from where the [part 2](/docs/category/tutorial---part-2) ended.
 
 ## Improvements
 
-It was a bit of work to not really achieve a whole lot. However, now we have the foundations to actually build something neat.
-
-Lets first continue with actually having something in the data context service.
+Lets look closer at authentication, middleware, response headers and extended/overriding the core components of Funkallero.

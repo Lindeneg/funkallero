@@ -16,10 +16,6 @@ A CLI tool for to initialize and manage Funkallero projects.
 
 ## Usage
 
-:::info
-In order to make the most out of this tool, follow the [recommended](/docs/part-1/base-project#structure) project structure.
-:::
-
 ### Init
 
 Initializes a new Funkallero project.
@@ -38,6 +34,10 @@ $ funkallero init my-project
 
 $ funkallero init my-project --auth --prisma --zod --npm
 ```
+
+:::info
+In order to make the most out of the next examples, follow the [recommended](/docs/part-1/base-project#structure) project structure.
+:::
 
 ### Command
 

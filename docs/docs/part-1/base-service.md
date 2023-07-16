@@ -38,12 +38,7 @@ export default SERVICE;
 ###### src/services/data-context-service.ts
 
 ```ts
-import {
-    injectService,
-    SingletonService,
-    type ILoggerService,
-    type IDataContextService,
-} from '@lindeneg/funkallero';
+import { injectService, SingletonService, type ILoggerService, type IDataContextService } from '@lindeneg/funkallero';
 import SERVICE from '@/enums/service';
 
 class DataContextService extends SingletonService implements IDataContextService {
@@ -54,14 +49,17 @@ class DataContextService extends SingletonService implements IDataContextService
 }
 
 export default DataContextService;
-
 ```
 
 ###### src/services/mediator-service.ts
 
+:::info
+This file will give an import error.. we'll fix that in next section
+:::
+
 ```ts
 import { MediatorService as BaseMediatorService } from '@lindeneg/funkallero';
-import * as application from '@/application'; // this will give an error, we'll fix that in the next section
+import * as application from '@/application';
 
 class MediatorService extends BaseMediatorService<typeof application> {
     constructor() {
@@ -85,12 +83,11 @@ import MediatorService from '@/services/mediator-service';
 import DataContextService from '@/services/data-context-service';
 
 Funkallero.create({
-    basePath: '/',
     setup(service) {
         service.registerSingletonService(SERVICE.MEDIATOR, MediatorService);
         service.registerSingletonService(SERVICE.DATA_CONTEXT, DataContextService);
     },
 }).then((app) => app.start());
-
 ```
+
 Lets look at a basic application layer.

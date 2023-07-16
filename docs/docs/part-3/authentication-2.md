@@ -9,7 +9,7 @@ description: Guarding routes part 2
 
 Update the create user action to satisfy the contract we updated in authentication part 1.
 
-Now, we should return a token that has encoded the id and email of the created user.
+Now, we should return a token that has encoded the id and email of the created user. That also means, we need to inject the `tokenService`.
 
 ###### src/application/user/create-user-command.ts
 
@@ -32,14 +32,14 @@ class CreateUserCommand extends BaseAction {
     public async execute(dto: ICreateUserDto) {
         const user = await this.dataContext.createUser(dto);
 
-        if (!user) return new MediatorResultFailure(ACTION_RESULT.INTERNAL_ERROR);
+        if (!user) return new MediatorResultFailure(ACTION_RESULT.ERROR_INTERNAL_ERROR);
 
         const userResponse: ICreateUserResponse = {
             id: user.id,
             token: await this.tokenService.createToken({ id: user.id, email: user.email }),
         };
 
-        return new MediatorResultSuccess(userResponse);
+        return new MediatorResultSuccess(userResponse, ACTION_RESULT.SUCCESS_CREATE);
     }
 }
 
@@ -191,16 +191,16 @@ Create a new user that is not Miles Davis
 ```bash
 curl http://localhost:3000/user \
 -d '{"name":"john doe", "email":"john@doe.org", "password": "some-password"}' \
--H "Content-Type: application/json" -X POST -o john.txt
+-H "Content-Type: application/json" -X POST -o john.json
 ```
 
-A new file is created `jonn.txt` that contains the response, including the generated token. We'll use that now.
+A new file is created `jonn.json` that contains the response, including the generated token. We'll use that now.
 
-Open the `john.txt` file and copy the token, send a request to the guarded endpoint again and include the token as a bearer.
+Open the `john.json` file and copy the token, send a request to the guarded endpoint again and include the token as a bearer.
 
 ```bash
 curl http://localhost:3000/auth/guard \
--H "Authorization: Bearer {token}" -X GET
+-H "Authorization: Bearer JOHN_TOKEN" -X GET
 ```
 
 ###### 200 OK
@@ -210,3 +210,39 @@ curl http://localhost:3000/auth/guard \
 ```
 
 Nice! It worked.
+
+Lets see how the other policy works. Reuse John's token.
+
+```bash
+curl http://localhost:3000/auth/miles \
+-H "Authorization: Bearer JOHN_TOKEN" -X GET
+```
+
+###### 401 Unauthorized
+
+```json
+{
+    "message": "The provided credentials are either invalid or has insufficient privilege to perform the requested action."
+}
+```
+
+Ok, lets create a new user, Miles Davis and use that token with the miles endpoint. We should see 200 OK response.
+
+```bash
+curl http://localhost:3000/user \
+-d '{"name":"Miles Davis", "email":"miles@davis.org", "password": "some-password"}' \
+-H "Content-Type: application/json" -X POST -o miles.json
+```
+
+A new file is created `miles.json` that contains the generated token. Use that now.
+
+```bash
+curl http://localhost:3000/auth/miles \
+-H "Authorization: Bearer MILES_TOKEN" -X GET
+```
+
+###### 200 OK
+
+```json
+{ "data": "you are miles davis" }
+```

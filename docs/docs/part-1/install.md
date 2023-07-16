@@ -7,11 +7,15 @@ description: Install dependencies
 
 Use [Funkallero CLI](/docs/cli/intro) or
 
-`yarn add @lindeneg/funkallero`
+```bash
+yarn add @lindeneg/funkallero
+```
 
-If TypeScript is used install types for express:
+If TypeScript is used install types:
 
-`yarn add -D @types/express`
+```bash
+yarn add -D typescript @types/node @types/express
+```
 
 And ensure these settings in `tsconfig`:
 

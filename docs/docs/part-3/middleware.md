@@ -1,6 +1,6 @@
 ---
 sidebar_position: 6
-description: Middleware services
+description: Create and use middleware services
 ---
 
-# Middleware
+# Middleware Services
