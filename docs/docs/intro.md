@@ -8,7 +8,9 @@ I quite like developing web APIs using mediator pattern, dependency injection an
 
 It's all just a bit of fun.. and I had loads of that!
 
-Since the framework is still in its infancy, features are missing, performance is not optimized and tests are lacking. Needless to say, this will be developed over time but for anything serious, please use [Express](https://expressjs.com) directly or another wrapper such as [NestJS](https://nestjs.com/).
+Since the framework is still in its infancy, features are missing, performance is not optimized and tests are lacking. The features being worked on at the moment are caching, views, versioning and benchmarks.
+
+Needless to say, for anything serious, please use [Express](https://expressjs.com) directly or [NestJS](https://nestjs.com/).
 
 ## Packages
 

@@ -5,7 +5,7 @@ description: Install dependencies
 
 # Install
 
-Use [Funkallero CLI](/docs/cli/manage-docs-versions) or
+Use [Funkallero CLI](/docs/cli/intro) or
 
 `yarn add @lindeneg/funkallero`
 
