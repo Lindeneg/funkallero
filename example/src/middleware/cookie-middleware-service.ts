@@ -10,9 +10,9 @@ import {
     type MediatorResult,
 } from '@lindeneg/funkallero';
 import { BaseTokenConfiguration } from '@lindeneg/funkallero-auth-service';
-import SERVICE from '../enums/service';
-import AUTH from '../enums/auth';
-import type IAuthModel from '../domain/auth-model';
+import SERVICE from '@/enums/service';
+import AUTH from '@/enums/auth';
+import type IAuthModel from '@/domain/auth-model';
 
 class CookieMiddlewareService extends MiddlewareSingletonService {
     @injectService(SERVICE.TOKEN)

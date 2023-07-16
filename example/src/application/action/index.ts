@@ -1,5 +1,5 @@
 import { MediatorAction } from '@lindeneg/funkallero';
-import type DataContextService from '../../services/data-context-service';
+import type DataContextService from '@/services/data-context-service';
 
 class Action extends MediatorAction<DataContextService> {
     protected createUpdatePayload<T extends Record<string, unknown>>(obj: T) {

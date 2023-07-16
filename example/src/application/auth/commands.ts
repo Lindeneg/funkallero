@@ -6,9 +6,9 @@ import {
     type ITokenService,
 } from '@lindeneg/funkallero';
 import Action from '../action';
-import SERVICE from '../../enums/service';
-import type { ILoginDto } from '../../dtos/login-dto';
-import type { ISignupDto } from '../../dtos/signup-dto';
+import SERVICE from '@/enums/service';
+import type { ILoginDto } from '@/dtos/login-dto';
+import type { ISignupDto } from '@/dtos/signup-dto';
 
 export class LoginCommand extends Action {
     @injectService(SERVICE.TOKEN)

@@ -5,7 +5,7 @@ import {
     type Response,
     type MediatorResult,
 } from '@lindeneg/funkallero';
-import SERVICE from '../enums/service';
+import SERVICE from '@/enums/service';
 
 class Test2MiddlewareService extends MiddlewareScopedService {
     @injectService(SERVICE.LOGGER)

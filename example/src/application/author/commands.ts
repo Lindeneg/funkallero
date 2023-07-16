@@ -1,6 +1,6 @@
 import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
 import Action from '../action';
-import type { IUpdateAuthorDto } from '../../dtos/update-author-dto';
+import type { IUpdateAuthorDto } from '@/dtos/update-author-dto';
 
 export class UpdateAuthorCommand extends Action {
     public async execute({ name, email, id }: IUpdateAuthorDto) {

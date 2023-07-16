@@ -1,5 +1,5 @@
 import { SingletonService, injectService, type ITokenService, type ILoggerService } from '@lindeneg/funkallero';
-import SERVICE from '../enums/service';
+import SERVICE from '@/enums/service';
 import type DataContextService from './data-context-service';
 
 interface ISeedOptions {
