@@ -1,6 +1,6 @@
 import type { Server as HttpsServer } from 'https';
 import type { Server as HttpServer } from 'http';
-import express, { type RequestHandler } from 'express';
+import express from 'express';
 import urlJoin from 'url-join';
 import {
     SERVICE,
@@ -12,11 +12,6 @@ import {
 } from '@lindeneg/funkallero-core';
 
 type Server = HttpServer | HttpsServer;
-
-const setJsonContentTypeMiddleware: RequestHandler = (_, res, next) => {
-    res.set('Content-Type', 'application/json');
-    next();
-};
 
 class BaseExpressService extends SingletonService implements IExpressService {
     @injectService(SERVICE.CONFIGURATION)
@@ -49,10 +44,6 @@ class BaseExpressService extends SingletonService implements IExpressService {
         this.server.listen(this.config.port, () => {
             this.logger.info(`Server listening on ${url}`);
         });
-    }
-
-    public useJsonContentType() {
-        this.app.use(setJsonContentTypeMiddleware);
     }
 }
 

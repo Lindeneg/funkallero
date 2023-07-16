@@ -2,6 +2,7 @@ const META_DATA = {
     SERVICE_INJECTION: 'funkallero:service-injection',
     ARGUMENT_INJECTION: 'funkallero:argument-injection',
     CONTROLLER_ROUTES: 'funkallero:controller-routes',
+    RESPONSE_HEADERS: 'funkallero:response-headers',
     CONTROLLER_PATH: 'funkallero:controller-path',
     MIDDLEWARE_AFTER: 'funkallero:middleware-after',
     MIDDLEWARE_BEFORE: 'funkallero:middleware-before',
