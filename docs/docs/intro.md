@@ -6,6 +6,8 @@ sidebar_position: 1
 
 I quite like developing web APIs using mediator pattern, dependency injection and command-query segregation. Funkallero is effectively a wrapper on top of [Express](https://expressjs.com) that enforces those patterns with strong type safety.
 
+It's all just a bit of fun.. and I had loads of that!
+
 Since the framework is still in its infancy, features are missing, performance is not optimized and tests are lacking. Needless to say, this will be developed over time but for anything serious, please use [Express](https://expressjs.com) directly or another wrapper such as [NestJS](https://nestjs.com/).
 
 ## Packages

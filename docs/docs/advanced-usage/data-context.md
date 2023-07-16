@@ -5,6 +5,10 @@ description: Data context layer
 
 # Data Context
 
+The [example app](https://github.com/Lindeneg/funkallero/blob/master/example/src/services/data-context-service.ts) uses `prisma`, which is an excellent `ORM`. The [e2e test app](https://github.com/Lindeneg/funkallero/blob/master/e2e/src/services/data-context-service.ts) uses an in-memory solution.
+
+For now lets make a simple implementation of the latter.
+
 ## Domain Layer
 
 Start by creating an entity.
@@ -27,19 +31,21 @@ export default User;
 
 Extend data context service with some simple functionality.
 
+###### src/services/data-context-service.ts
+
 ```ts
 import { randomUUID } from 'crypto';
 import { SingletonService, type IDataContextService } from '@lindeneg/funkallero';
-import User from '../domain/user';
+import User from '@/domain/user';
 
 class DataContextService extends SingletonService implements IDataContextService {
-    public readonly users = new Map<User['id'], User>();
+    public readonly userRepository = new Map<User['id'], User>();
 
     public readonly createUser = (user: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => {
         const id = randomUUID();
         const now = new Date();
         const createdUser = { ...user, id, createdAt: now, updatedAt: now };
-        this.users.set(id, createdUser);
+        this.userRepository.set(id, createdUser);
         return createdUser;
     };
 }

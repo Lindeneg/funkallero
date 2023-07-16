@@ -25,8 +25,8 @@ export default BaseAction;
 ###### src/application/user/get-users-query.ts
 
 ```ts
-import { ACTION_RESULT, MediatorResultSuccess } from '@lindeneg/funkallero';
-import BaseAction from '@/application/action';
+import { MediatorResultSuccess } from '@lindeneg/funkallero';
+import BaseAction from '@/application/base-action';
 
 class GetUsersQuery extends BaseAction {
     public async execute() {

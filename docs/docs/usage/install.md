@@ -7,11 +7,13 @@ description: Install dependencies
 
 Use [Funkallero CLI](/docs/cli/manage-docs-versions) or
 
-`npm install @lindeneg/funkallero`
-
 `yarn add @lindeneg/funkallero`
 
-If `TypeScript` is used, then ensure these settings in `tsconfig`:
+If TypeScript is used install types for express:
+
+`yarn add -D @types/express`
+
+And ensure these settings in `tsconfig`:
 
 ```json
 {
@@ -22,7 +24,7 @@ If `TypeScript` is used, then ensure these settings in `tsconfig`:
 }
 ```
 
-And **optionally** also
+**Optionally** also these settings:
 
 ```json
 {
@@ -33,5 +35,7 @@ And **optionally** also
     }
 }
 ```
+
+See here for an [example](https://github.com/Lindeneg/funkallero/blob/master/example/tsconfig.json) config.
 
 Next we'll setup basic project files.

@@ -23,7 +23,7 @@ Create `src/index.ts` if not already done.
 
 Funkallero exposes a static `create` method that takes in a configuration object with [these](https://github.com/Lindeneg/funkallero/blob/master/packages/funkallero-core/src/service/configuration-service.ts#L5-L25) options.
 
-The only required option is a `setup` function that is used to register services.
+The only required options are `basePath` and a `setup` function that is used to register services.
 
 ###### src/index.ts
 
@@ -31,7 +31,9 @@ The only required option is a `setup` function that is used to register services
 import Funkallero from '@lindeneg/funkallero';
 
 Funkallero.create({
+    basePath: '/',
     setup(service) {},
 }).then((app) => app.start());
 ```
+
 Next we'll look at some basic services.
