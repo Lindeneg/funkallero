@@ -37,7 +37,7 @@ abstract class BaseAuthorizationService<TAuthHandlerFn extends AuthorizationPoli
     protected readonly tokenService: ITokenService<any>;
 
     @injectService(SERVICE.LOGGER)
-    private readonly logger: ILoggerService;
+    protected readonly logger: ILoggerService;
 
     public static addPolicy(...policies: [name: string, handler: AuthorizationPolicyHandlerFn<any>][]) {
         policies.forEach(([name, handler]) => BaseAuthorizationService.policies.push({ name, handler }));

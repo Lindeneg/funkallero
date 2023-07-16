@@ -1,18 +1,18 @@
 import Funkallero, { LOG_LEVEL, BaseZodParserService, BaseLoggerServicePalette } from '@lindeneg/funkallero';
 import { BaseTokenService } from '@lindeneg/funkallero-auth-service';
-import SERVICE from './enums/service';
-import ExpressService from './services/express-service';
-import MediatorService from './services/mediator-service';
-import DataContextService from './services/data-context-service';
-import DataContextSeedService from './services/data-context-seed-service';
-import AuthenticationService from './services/authentication-service';
-import AuthorizationService from './services/authorization-service';
-import CookieMiddlewareService from './middleware/cookie-middleware-service';
-import Test1MiddlewareService from './middleware/test-1-middleware-service';
-import Test2MiddlewareService from './middleware/test-2-middleware-service';
-import './api/author-controller';
-import './api/book-controller';
-import './api/auth-controller';
+import SERVICE from '@/enums/service';
+import ExpressService from '@/services/express-service';
+import MediatorService from '@/services/mediator-service';
+import DataContextService from '@/services/data-context-service';
+import DataContextSeedService from '@/services/data-context-seed-service';
+import AuthenticationService from '@/services/authentication-service';
+import AuthorizationService from '@/services/authorization-service';
+import CookieMiddlewareService from '@/middleware/cookie-middleware-service';
+import Test1MiddlewareService from '@/middleware/test-1-middleware-service';
+import Test2MiddlewareService from '@/middleware/test-2-middleware-service';
+import '@/api/author-controller';
+import '@/api/book-controller';
+import '@/api/auth-controller';
 
 BaseLoggerServicePalette.useDefaultPalette();
 
@@ -23,20 +23,20 @@ Funkallero.create({
     // default: 3000
     port: 3000,
 
+    // default: null
+    globalHeaders: {
+        'Content-Type': 'application/json', // can easily be overwritten but nice default to have
+        'Custom-Header': 'Global-Custom-Header-Value', // can also be function that is given the request to which the response belongs
+    },
+
     // default: LOG_LEVEL.INFO
     logLevel: LOG_LEVEL.VERBOSE,
 
     // default: null
-    // https: async () => {
-    //     const [path, process, fs] = await Promise.all([import('path'), import('process'), import('fs/promises')]);
-    //     const getPath = (name: string) => path.join(process.cwd(), 'https', `${name}.pem`);
-
-    //     const [key, cert] = await Promise.all([
-    //         fs.readFile(getPath('key'), { encoding: 'utf-8' }),
-    //         fs.readFile(getPath('cert'), { encoding: 'utf-8' }),
-    //     ]);
-
-    //     return { key, cert };
+    // can also be a function
+    // https: {
+    //     key: 'path/to/key.pem',
+    //     cert: 'path/to/cert.pem',
     // },
 
     // default: {}

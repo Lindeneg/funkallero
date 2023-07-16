@@ -6,7 +6,7 @@ import {
     type Request,
     type MediatorResult,
 } from '@lindeneg/funkallero';
-import SERVICE from '../enums/service';
+import SERVICE from '@/enums/service';
 
 class Test1MiddlewareService extends MiddlewareSingletonService {
     @injectService(SERVICE.LOGGER)

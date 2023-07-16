@@ -10,7 +10,10 @@
         "strict": true,
         "skipLibCheck": true,
         "experimentalDecorators": true,
-        "strictPropertyInitialization": false
+        "strictPropertyInitialization": false,
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "include": ["./src"]
 }

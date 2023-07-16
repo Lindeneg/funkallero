@@ -6,7 +6,9 @@ import {
     SERVICE,
     HttpException,
     type IArgumentInjection,
+    type IResponseHeaderInjection,
     type ILoggerService,
+    type IConfigurationService,
     type IControllerService,
     type Constructor,
     type ControllerFn,
@@ -23,6 +25,7 @@ import RouteAuthHandler from './route-auth-handler';
 
 class RouteHandler {
     private readonly logger: ILoggerService;
+    private readonly config: IConfigurationService;
     private readonly CustomController: Constructor<IControllerService>;
     private readonly route: IRoute;
     private readonly routePath: string;
@@ -39,6 +42,7 @@ class RouteHandler {
         next: NextFunction
     ) {
         this.logger = serviceContainer.getService(SERVICE.LOGGER);
+        this.config = serviceContainer.getService(SERVICE.CONFIGURATION);
         this.CustomController = CustomController;
         this.route = route;
         this.routePath = routePath;
@@ -105,10 +109,49 @@ class RouteHandler {
                 result = await middlewareHandler.runAfterMiddleware(result);
             }
 
+            await this.setResponseHeaders(customController);
+
             await customController.handleResult(result);
         } catch (err) {
             this.next(err);
         }
+    }
+
+    private async setResponseHeaders(customController: IControllerService) {
+        const headers = await this.getResponseHeaders(customController);
+        const headerEntries = Object.entries(headers);
+
+        for (const [key, value] of headerEntries) {
+            const evaluatedValue = await this.getResponseHeaderValue(value);
+
+            devLogger('setting header', key, 'with value', evaluatedValue);
+
+            this.response.setHeader(key, evaluatedValue);
+        }
+    }
+
+    private async getResponseHeaders(customController: IControllerService) {
+        const controllerHeaders = Reflect.get(customController, META_DATA.RESPONSE_HEADERS) || {};
+        const routeHeaders = (controllerHeaders[this.route.handlerKey] || {}) as IResponseHeaderInjection;
+        const mergedHeaders = { ...routeHeaders };
+
+        if (this.config.globalHeaders) {
+            const globalHeaders = Object.entries(this.config.globalHeaders);
+            for (const [key, value] of globalHeaders) {
+                if (!mergedHeaders[key]) {
+                    mergedHeaders[key] = value;
+                }
+            }
+        }
+
+        return mergedHeaders;
+    }
+
+    private async getResponseHeaderValue(header: IResponseHeaderInjection[string]) {
+        if (typeof header === 'function') {
+            return header(this.request);
+        }
+        return header;
     }
 
     private getFilteredTarget<TTarget extends Record<string, any>>(target: TTarget, properties: string[]) {

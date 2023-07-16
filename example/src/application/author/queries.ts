@@ -1,6 +1,6 @@
 import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
 import Action from '../action';
-import type IGetAuthorResponse from '../../dtos/get-author-response';
+import type IGetAuthorResponse from '@/dtos/get-author-response';
 
 export class GetAuthorQuery extends Action {
     public async execute({ id }: Record<'id', string>) {

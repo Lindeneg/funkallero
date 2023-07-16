@@ -34,4 +34,8 @@ export interface IAuthPoliciesInjection {
     injectUser: string | IAuthPolicyInjectUserConfig | null;
 }
 
+export interface IResponseHeaderInjection {
+    [key: string]: string | ((request: Request) => Promisify<string>);
+}
+
 export type Promisify<T> = T | Promise<T>;

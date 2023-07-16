@@ -1,8 +1,8 @@
 import { before, after, body, controller, httpPost, type ParsedSchema } from '@lindeneg/funkallero';
-import SERVICE from '../enums/service';
 import Controller from './controller';
-import loginSchema from '../dtos/login-dto';
-import signupSchema from '../dtos/signup-dto';
+import SERVICE from '@/enums/service';
+import loginSchema from '@/dtos/login-dto';
+import signupSchema from '@/dtos/signup-dto';
 
 @controller()
 class AuthController extends Controller {
