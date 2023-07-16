@@ -49,22 +49,31 @@ Build the project and start up the server.
 
 Lets test by creating an invalid user.
 
-`curl http://localhost:3000/user -i -X POST`
+```bash
+curl http://localhost:3000/user -i -X POST
+```
+
+###### 400 Bad Request
 
 ```json
-400 Bad Request
 {
     "message": "The requested action could not be exercised due to malformed syntax.",
     "error": [{ "name": "Required", "email": "Required" }]
 }
 ```
 
-Nice, lets try with the properties defined but with an empty string as value.
+Nice, lets try with the properties defined but with empty strings as values.
 
-`curl http://localhost:3000/user -i -d '{"name":"", "email":""}' -H "Content-Type: application/json" -X POST`
+```bash
+curl http://localhost:3000/user \
+-i -d '{"name":"", "email":""}' \
+-H "Content-Type: application/json" \
+-X POST
+```
+
+###### 400 Bad Request
 
 ```json
-400 Bad Request
 {
     "message": "The requested action could not be exercised due to malformed syntax.",
     "error": [{ "name": "String must contain at least 2 character(s)", "email": "Invalid email" }]
@@ -73,16 +82,27 @@ Nice, lets try with the properties defined but with an empty string as value.
 
 Great. Now for a valid user.
 
-`curl http://localhost:3000/user -i -d '{"name":"miles davis", "email":"miles@davis.org"}' -H "Content-Type: application/json" -X POST`
-
-```json
-200 OK
-{ "data": { "id": "920e3ec0-6a5e-4fe0-ad2e-03f01bca96f2" } } // or whatever id is generated
+```bash
+curl http://localhost:3000/user \
+-i -d '{"name":"miles davis", "email":"miles@davis.org"}' \
+-H "Content-Type: application/json" \
+-X POST
 ```
 
-`curl http://localhost:3000/user/:id -i`
+###### 200 OK
 
 ```json
-200 OK
-{ "data": { "id": "920e3ec0-6a5e-4fe0-ad2e-03f01bca96f2", "name": "miles davis" } }
+{ "data": { "id": "GENERATED_ID" } }
+```
+
+Lets get the user for good measure.
+
+```bash
+curl http://localhost:3000/user/GENERATED_ID -i
+```
+
+###### 200 OK
+
+```json
+{ "data": { "id": "GENERATED_ID", "name": "miles davis" } }
 ```
