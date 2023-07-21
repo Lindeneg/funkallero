@@ -1,15 +1,13 @@
-name: E2E
+name: Benchmarks
 
 on:
-    push:
-        branches:
-            - master
     pull_request:
         branches:
-            - '**'
+            - master
+            - next
 
 jobs:
-    build:
+    benchmark:
         runs-on: ubuntu-latest
 
         steps:
@@ -20,9 +18,14 @@ jobs:
               with:
                   cache: 'yarn'
 
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
             - name: Bootstrap
-              run: yarn bootstrap:ci
+              run: yarn bootstrap:ci && yarn test:bench:install
+
             - name: Build
               run: yarn build core funkallero auth-service example && yarn build e2e
-            - name: Test
-              run: yarn test e2e
+
+            - name: Benchmark
+              run: yarn test:bench

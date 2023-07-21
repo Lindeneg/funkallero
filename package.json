@@ -13,7 +13,10 @@
         "start": "yarn cli start",
         "lint": "yarn cli lint",
         "test": "yarn cli test",
-        "test:e2e": "yarn build core funkallero auth-service e2e && yarn test e2e"
+        "test:bench": "npx -y start-server-and-test test:bench:start-server http://localhost:3000/api/authors test:bench:start-tests",
+        "test:bench:install": "pip3 install -r ./locust/requirements.txt",
+        "test:bench:start-server": "node ./e2e/dist/index.mjs",
+        "test:bench:start-tests": "bash ./scripts/bench.sh"
     },
     "workspaces": [
         "example",
