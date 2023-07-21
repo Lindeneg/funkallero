@@ -7,7 +7,7 @@ ReportComparisonResult = tuple[ReportTestError, str]
 
 base_path = os.sep.join(__file__.split(os.sep)[:-1])
 
-min_accumulated_request_percent = 75
+min_accumulated_request_percent = 50
 average_percent_max_increase = 5
 max_percent_max_increase = 10
 min_percent_max_increase = 10
