@@ -1,0 +1,29 @@
+name: Benchmarks
+
+on:
+    push:
+    pull_request:
+        branches:
+            - master
+            - next
+
+jobs:
+    benchmark:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
+            - name: Bootstrap
+            - run: yarn bootstrap:ci
+            - run: yarn test:bench:install
+
+            - name: Build
+            - run: yarn build core funkallero auth-service example
+            - run: yarn build e2e
+
+            - name: Benchmark
+            - run: yarn test:bench
