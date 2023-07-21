@@ -26,9 +26,8 @@ jobs:
                   cache: 'yarn'
 
             - name: Bootstrap
-            - run: yarn bootstrap:ci
+              run: yarn bootstrap:ci
             - name: Build
-            - run: yarn build core funkallero auth-service example
-            - run: yarn build e2e
+              run: yarn build core funkallero auth-service example && yarn build e2e
             - name: Test
-            - run: yarn test e2e
+              run: yarn test e2e

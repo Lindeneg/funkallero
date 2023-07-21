@@ -13,22 +13,19 @@ jobs:
         steps:
             - uses: actions/checkout@v3
 
-            - name: Use Node.js ${{ matrix.node-version }}
+            - name: Use Node.js
               uses: actions/setup-node@v3
               with:
-                  node-version: ${{ matrix.node-version }}
                   cache: 'yarn'
 
             - name: Setup Python
               uses: actions/setup-python@v4.7.0
 
             - name: Bootstrap
-            - run: yarn bootstrap:ci
-            - run: yarn test:bench:install
+              run: yarn bootstrap:ci && yarn test:bench:install
 
             - name: Build
-            - run: yarn build core funkallero auth-service example
-            - run: yarn build e2e
+              run: yarn build core funkallero auth-service example && yarn build e2e
 
             - name: Benchmark
-            - run: yarn test:bench
+              run: yarn test:bench
