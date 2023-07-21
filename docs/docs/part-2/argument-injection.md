@@ -89,7 +89,7 @@ curl http://localhost:3000/user \
 -X POST
 ```
 
-###### 200 OK
+###### 201 OK
 
 ```json
 { "data": { "id": "GENERATED_ID" } }

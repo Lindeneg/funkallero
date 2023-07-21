@@ -73,6 +73,6 @@ import '@/api/user-controller';
 
 ## Moving On
 
-There's more to do with controllers, such as specifying middleware, authorization policies or schema parsing, all via decorators. Both singletons and scoped services can also be injected into controllers.
+There's more to do with controllers, such as specifying middleware, authorization policies, schema parsing and response headers, all via decorators. Both singletons and scoped services can also be injected into controllers.
 
 However, lets build the project and make a request to the created endpoint and see if it works.

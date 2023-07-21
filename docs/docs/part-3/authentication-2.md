@@ -186,7 +186,7 @@ curl http://localhost:3000/auth/guard
 }
 ```
 
-Create a new user that is not Miles Davis
+Create a new user that is **not** Miles Davis
 
 ```bash
 curl http://localhost:3000/user \

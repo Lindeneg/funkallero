@@ -5,7 +5,7 @@ description: Get started with a base project
 
 # Base Project
 
-## Structure
+## Core Structure
 
 ```
 .
