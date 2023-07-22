@@ -9,6 +9,6 @@ class {{controllerName}}Controller extends BaseController {
 
     @httpGet({{#if routePath}}{{routePath}}{{/if}})
     public async {{handler}}() {
-        {{#if handlerReturn}}{{handlerReturn}}{{/if}}
+        {{#if handlerReturn}}return {{handlerReturn}}{{/if}}
     }
 }
