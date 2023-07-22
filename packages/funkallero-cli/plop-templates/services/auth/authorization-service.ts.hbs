@@ -1,0 +1,29 @@
+import { injectService } from '@lindeneg/funkallero';
+import { BaseAuthorizationService, type AuthorizationPolicyHandlerFn } from '@lindeneg/funkallero-auth-service';
+import SERVICE from '@/enums/service';
+import type DataContextService from '@/services/data-context-service';
+
+// switch out mock interface
+interface IAuthModel {}
+
+type AuthHandler = AuthorizationPolicyHandlerFn<{ dataContext: DataContextService }, IAuthModel>;
+
+class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
+    @injectService(SERVICE.DATA_CONTEXT)
+    private readonly dataContext: DataContextService;
+
+    protected async getCustomPolicyArgs() {
+        return {
+            dataContext: this.dataContext,
+        };
+    }
+}
+
+const authenticatedPolicy: AuthHandler = async ({ request, decodedToken, dataContext }) => {
+    // policy code..
+    return false;
+};
+
+AuthorizationService.addPolicy(['authenticated', authenticatedPolicy]);
+
+export default AuthorizationService;

@@ -1,0 +1,14 @@
+import { controller, httpGet, injectService, type IConfigurationService } from '@lindeneg/funkallero';
+import SERVICE from '@/enums/service';
+import BaseController from '@/api/base-controller';
+
+@controller({{#if controllerPath}}'{{controllerPath}}'{{/if}})
+class {{controllerName}}Controller extends BaseController {
+    @injectService(SERVICE.CONFIGURATION)
+    private readonly config: IConfigurationService;
+
+    @httpGet({{#if routePath}}{{routePath}}{{/if}})
+    public async {{handler}}() {
+        {{#if handlerReturn}}return {{handlerReturn}}{{/if}}
+    }
+}

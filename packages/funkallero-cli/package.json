@@ -1,0 +1,23 @@
+{
+    "name": "@lindeneg/funkallero-cli",
+    "description": "CLI for scaffolding Funkallero projects",
+    "repository": "git@github.com:Lindeneg/funkallero.git",
+    "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero-cli",
+    "author": "lindeneg <christian@lindeneg.org>",
+    "license": "MIT",
+    "version": "0.0.0",
+    "bin": {
+        "funkallero": "./index.mjs"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "start": "node ./index.mjs",
+        "dev": "rm -rf test-app && yarn run start init test-app --verbose",
+        "dev:dry": "yarn run dev --dry-run",
+        "lint": "prettier \"src/**\" --ignore-unknown --write",
+        "test": "echo Error: no test specified"
+    },
+    "dependencies": {
+        "@lindeneg/scaffold-core": "0.0.1"
+    }
+}
