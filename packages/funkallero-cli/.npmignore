@@ -1,4 +1,3 @@
-!dist
 !plopfile.mjs
 src
 rollup.config.js

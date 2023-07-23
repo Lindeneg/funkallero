@@ -1,6 +1,8 @@
-**[Read me](./packages/funkallero/README.md)**
+## [Documentation](https://lindeneg.github.io/funkallero/)
 
 ---
+
+#### Development
 
 ###### Clone project
 

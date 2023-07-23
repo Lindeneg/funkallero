@@ -20,7 +20,7 @@ const actionConfigureFactory = (type: 'Command' | 'Query') => (configure: Config
             exportPath = name;
         }
 
-        const exportString = `export { default as ${actionClassName}} from './${exportPath}';`;
+        const exportString = `export { default as ${actionClassName} } from './${exportPath}';`;
 
         logger.verbose({
             msg: 'Creating action',

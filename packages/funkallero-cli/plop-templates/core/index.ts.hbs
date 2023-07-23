@@ -1,11 +1,11 @@
 import Funkallero, { {{#if zod}}BaseZodParserService,{{/if}} BaseLoggerServicePalette, LOG_LEVEL } from '@lindeneg/funkallero';
 {{#if authentication}}import { BaseTokenService } from '@lindeneg/funkallero-auth-service';{{/if}}
-import SERVICE from './enums/service';
-import MediatorService from './services/mediator-service';
-import DataContextService from './services/data-context-service';
+import SERVICE from '@/enums/service';
+import MediatorService from '@/services/mediator-service';
+import DataContextService from '@/services/data-context-service';
 {{#if authentication}}
-import AuthenticationService from './services/authentication-service';
-import AuthorizationService from './services/authorization-service';
+import AuthenticationService from '@/services/authentication-service';
+import AuthorizationService from '@/services/authorization-service';
 {{/if}}
 {{controllerImport}}
 

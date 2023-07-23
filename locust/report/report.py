@@ -72,16 +72,13 @@ def get_reports() -> tuple[Report, Report]:
     current_raw_report = open_report(current_report_path)
     latest_raw_report = open_report(latest_report_path)
 
-    return [
-        Report(current_raw_report, "Current"),
-        Report(latest_raw_report, "Latest"),
-    ]
+    return Report(current_raw_report, "Current"), Report(latest_raw_report, "Latest")
 
 
 def get_percent_diff(old: float, new: float) -> tuple[float, str]:
     result = math.ceil(((new - old) / old) * 100)
     direction = "DECREASED" if result < 0 else "INCREASED"
-    return [abs(result), direction]
+    return abs(result), direction
 
 
 def get_column_result(
@@ -138,13 +135,13 @@ def get_report_comparison_result(
 ) -> ReportComparisonResult:
     assert_accumulated_requests_count(current, latest)
 
-    [avg_percent, avg_direction] = get_percent_diff(
+    avg_percent, avg_direction = get_percent_diff(
         current.average_response_time, latest.average_response_time
     )
-    [max_percent, max_direction] = get_percent_diff(
+    max_percent, max_direction = get_percent_diff(
         current.max_response_time, latest.max_response_time
     )
-    [min_percent, min_direction] = get_percent_diff(
+    min_percent, min_direction = get_percent_diff(
         current.min_response_time, latest.min_response_time
     )
 

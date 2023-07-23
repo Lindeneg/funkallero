@@ -7,7 +7,7 @@ from report import (
 
 if __name__ == "__main__":
     [current_report, latest_report] = get_reports()
-    [err, report_str] = get_report_comparison_result(current_report, latest_report)
+    err, report_str = get_report_comparison_result(current_report, latest_report)
 
     print(current_report)
     print(latest_report)
