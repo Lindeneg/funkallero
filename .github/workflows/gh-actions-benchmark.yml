@@ -1,0 +1,31 @@
+name: Benchmarks
+
+on:
+    pull_request:
+        branches:
+            - master
+            - next
+
+jobs:
+    benchmark:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  cache: 'yarn'
+
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
+            - name: Bootstrap
+              run: yarn bootstrap:ci && yarn test:bench:install
+
+            - name: Build
+              run: yarn build core funkallero auth-service example && yarn build e2e
+
+            - name: Benchmark
+              run: yarn test:bench

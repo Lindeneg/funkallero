@@ -67,11 +67,12 @@ abstract class FunkalleroBase implements IFunkalleroBase {
         const configService = serviceContainer.getService<any>(SERVICE.CONFIGURATION);
 
         configService.port = this.config.port || 3000;
-        configService.basePath = this.config.basePath || '';
+        configService.basePath = this.config.basePath || '/';
         configService.logLevel =
             !this.config.logLevel && this.config.logLevel !== LOG_LEVEL.ERROR ? LOG_LEVEL.INFO : this.config.logLevel;
         configService.https =
             typeof this.config.https === 'function' ? await this.config.https() : this.config.https || null;
+        configService.globalHeaders = this.config.globalHeaders || null;
         configService.meta = this.config.meta || {};
 
         const { type, injection, ...config } = configService;

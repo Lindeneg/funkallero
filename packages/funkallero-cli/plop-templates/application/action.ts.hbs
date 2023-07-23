@@ -1,0 +1,21 @@
+import { 
+    ACTION_RESULT, 
+    MediatorResultSuccess, 
+    MediatorResultFailure, 
+    injectService, 
+    type ILoggerService 
+} from '@lindeneg/funkallero';
+import SERVICE from '@/enums/service';
+import BaseAction from '@/application/base-action';
+
+class {{actionClassName}} extends BaseAction {
+    @injectService(SERVICE.LOGGER)
+    private readonly logger: ILoggerService;
+
+    public async execute() {
+
+        return new MediatorResultSuccess({{actionResult}});
+    }
+}
+
+export default {{actionClassName}};

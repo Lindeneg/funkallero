@@ -1,0 +1,9 @@
+import { {{BaseService}}, injectService, type ILoggerService } from '@lindeneg/funkallero';
+import SERVICE from '@/enums/service';
+
+class {{serviceName}}Service extends {{BaseService}} {
+    @injectService(SERVICE.LOGGER)
+    private readonly logger: ILoggerService;
+}
+
+export default {{serviceName}}Service;

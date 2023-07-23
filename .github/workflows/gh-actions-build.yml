@@ -1,28 +1,28 @@
-name: Node.js CI
+name: E2E
 
 on:
-  push:
-    branches:
-      - "master"
-  pull_request:
-    branches:
-      - "**"
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - '**'
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
+        steps:
+            - uses: actions/checkout@v3
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: "yarn"
-    - run: yarn bootstrap:ci
-    - run: yarn build core funkallero auth-service e2e
-    - run: yarn test e2e
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  cache: 'yarn'
+
+            - name: Bootstrap
+              run: yarn bootstrap:ci
+            - name: Build
+              run: yarn build core funkallero auth-service example && yarn build e2e
+            - name: Test
+              run: yarn test e2e

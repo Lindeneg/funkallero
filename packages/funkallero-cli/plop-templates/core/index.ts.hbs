@@ -1,0 +1,36 @@
+import Funkallero, { {{#if zod}}BaseZodParserService,{{/if}} BaseLoggerServicePalette, LOG_LEVEL } from '@lindeneg/funkallero';
+{{#if authentication}}import { BaseTokenService } from '@lindeneg/funkallero-auth-service';{{/if}}
+import SERVICE from '@/enums/service';
+import MediatorService from '@/services/mediator-service';
+import DataContextService from '@/services/data-context-service';
+{{#if authentication}}
+import AuthenticationService from '@/services/authentication-service';
+import AuthorizationService from '@/services/authorization-service';
+{{/if}}
+{{controllerImport}}
+
+BaseLoggerServicePalette.useDefaultPalette();
+
+Funkallero.create({
+    basePath: '/api',
+
+    logLevel: LOG_LEVEL.VERBOSE,
+
+    setup(service) {
+        service.registerSingletonService(SERVICE.MEDIATOR, MediatorService);
+        service.registerSingletonService(SERVICE.DATA_CONTEXT, DataContextService);
+
+        {{#if zod}}
+        service.registerSingletonService(SERVICE.SCHEMA_PARSER, BaseZodParserService);
+        {{/if}}
+
+        {{#if authentication}}
+        service.registerSingletonService(SERVICE.TOKEN, BaseTokenService);
+        service.registerScopedService(SERVICE.AUTHENTICATION, AuthenticationService);
+        service.registerScopedService(SERVICE.AUTHORIZATION, AuthorizationService);
+        {{/if}}
+    },
+
+    // optional function that is run after setup but before app start
+    async startup(service) {},
+}).then((app) => app.start());

@@ -8,9 +8,9 @@ import {
     auth,
     type ParsedSchema,
 } from '@lindeneg/funkallero';
-import { AUTH_POLICY } from '../enums/auth';
 import Controller from './controller';
-import updateAuthorSchema from '../dtos/update-author-dto';
+import { AUTH_POLICY } from '@/enums/auth';
+import updateAuthorSchema from '@/dtos/update-author-dto';
 
 // one can also just inject the authentication service itself
 // but the auth decorator is quite handy to just inject, for example, the userId when needed

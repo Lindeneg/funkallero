@@ -7,18 +7,24 @@ import {
     httpPatch,
     httpDelete,
     auth,
+    setHeaders,
     type ParsedSchema,
 } from '@lindeneg/funkallero';
-import { AUTH_POLICY } from '../enums/auth';
 import Controller from './controller';
-import createBookDtoSchema from '../dtos/create-book-dto';
-import updateBookDtoSchema from '../dtos/update-book-dto';
+import { AUTH_POLICY } from '@/enums/auth';
+import createBookDtoSchema from '@/dtos/create-book-dto';
+import updateBookDtoSchema from '@/dtos/update-book-dto';
 
 @controller('books')
-class BookCoreController extends Controller {
+class BookController extends Controller {
     private readonly userId: string;
 
     @httpGet()
+    @setHeaders({
+        'Custom-Header': 'Specific-Header-Value',
+        'TimeStamp-Header': () => Date.now().toString(),
+        'Request-ID': (req) => req.id,
+    })
     public getBooks() {
         return this.mediator.send('GetBooksQuery');
     }

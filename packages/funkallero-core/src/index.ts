@@ -7,6 +7,7 @@ export { default as META_DATA, type MetaDataUnion } from './enums/meta-data';
 export { default as INJECTABLE_ARG, type InjectableArgUnion } from './enums/injectable-arg';
 export { default as injectService } from './decorators/inject-service';
 export { default as injectArgFactory } from './decorators/inject-arg-factory';
+export { default as setHeaders } from './decorators/set-headers';
 export { after, before } from './decorators/middleware';
 export { default as devLogger } from './dev-logger';
 export {
@@ -81,6 +82,7 @@ export type {
     IArgumentInjection,
     IServiceInjection,
     IAuthPoliciesInjection,
+    IResponseHeaderInjection,
     ServiceInjectionContext,
     TransformFn,
     Promisify,

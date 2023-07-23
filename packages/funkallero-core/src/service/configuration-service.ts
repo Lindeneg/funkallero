@@ -1,5 +1,5 @@
 import type { LogLevelUnion } from '../enums/log-level';
-import type { Promisify } from '../types';
+import type { IResponseHeaderInjection, Promisify } from '../types';
 import type { PublicServiceGetter, PublicServiceRegister } from '../core/public-service';
 
 interface IConfigurationCallback {
@@ -21,6 +21,7 @@ interface IConfigurationService<THttps extends HttpsConfigUnion = HttpsConfigCor
     readonly port: number;
     readonly logLevel: LogLevelUnion;
     readonly https: THttps;
+    readonly globalHeaders: IResponseHeaderInjection | null;
     readonly meta: Record<string, any>;
 }
 

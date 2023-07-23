@@ -16,8 +16,8 @@
         "test:postman": "npx -y newman run tests/funkallero-test-suite.postman_collection.json"
     },
     "dependencies": {
-        "@lindeneg/funkallero": "0.0.3",
-        "@lindeneg/funkallero-auth-service": "0.0.3",
+        "@lindeneg/funkallero": "0.0.4",
+        "@lindeneg/funkallero-auth-service": "0.0.4",
         "cookie-parser": "1.4.6",
         "zod": "3.21.4"
     },

@@ -1,8 +1,8 @@
 import { injectService } from '@lindeneg/funkallero';
 import { BaseAuthorizationService, type AuthorizationPolicyHandlerFn } from '@lindeneg/funkallero-auth-service';
-import SERVICE from '../enums/service';
-import { AUTH_POLICY } from '../enums/auth';
-import type IAuthModel from '../domain/auth-model';
+import SERVICE from '@/enums/service';
+import { AUTH_POLICY } from '@/enums/auth';
+import type IAuthModel from '@/domain/auth-model';
 import type DataContextService from './data-context-service';
 
 type AuthHandler = AuthorizationPolicyHandlerFn<{ dataContext: DataContextService }, IAuthModel>;

@@ -1,7 +1,7 @@
 import type { Author } from '@prisma/client';
 import { BaseAuthenticationService } from '@lindeneg/funkallero-auth-service';
-import AUTH from '../enums/auth';
-import type IAuthModel from '../domain/auth-model';
+import AUTH from '@/enums/auth';
+import type IAuthModel from '@/domain/auth-model';
 import type DataContextService from './data-context-service';
 
 class AuthenticationService extends BaseAuthenticationService<Author, IAuthModel, DataContextService> {
