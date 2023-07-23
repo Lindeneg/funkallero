@@ -8,7 +8,7 @@ description: Install dependencies
 Start by installing `funkallero-cli`. A global install is recommended.
 
 ```bash
-yarn global add @lindeneg/funkallero-cli
+npm install -g @lindeneg/funkallero-cli
 ```
 
 ## Initialize
