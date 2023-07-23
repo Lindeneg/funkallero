@@ -150,8 +150,8 @@ However, it is possible to provide custom arguments via the method `getCustomPol
 ###### src/services/authorization-service.ts
 
 ```ts
+import { injectService } from '@lindeneg/funkallero';
 import {
-    injectService,
     BaseAuthorizationService,
     type AuthorizationPolicyHandlerFn,
 } from '@lindeneg/funkallero-auth-service';
@@ -174,7 +174,7 @@ class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
 
     protected async getCustomPolicyArgs() {
         return {
-            authService: this.authService,
+            authService: this.authService as AuthenticationService,
             dataContext: this.dataContext,
         };
     }

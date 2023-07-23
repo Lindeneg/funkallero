@@ -5,13 +5,11 @@ description: Time to create some contracts and some actions
 
 # Actions
 
-Lets put something in the business logic layer.
-
-We'll create three actions, `GetUserQuery`, `GetUsersQuery` and `CreateUserCommand`. Two queries and a single command.
+Create three actions, `GetUserQuery`, `GetUsersQuery` and `CreateUserCommand`. Two queries and a single command.
 
 ## DTOs & Response contracts
 
-Firstly, lets make questions such as _"what is the shape of incoming data?"_ and _"what is the shape of outgoing data"_ be easily answered.
+Firstly, make questions such as _"what is the shape of incoming data?"_ and _"what is the shape of outgoing data"_ be easily answered.
 
 Later on we'll look at enforcing those contracts.
 
@@ -53,7 +51,7 @@ export interface ICreateUserResponse {
 
 Utilize CLI to create actions and automatically export them.
 
-```sh
+```
 funkallero query get users --folder user
 
 funkallero query get user --folder user
@@ -64,11 +62,15 @@ funkallero command create user --folder user
 :::info
 After running the above commands, open up `src/api/example-controller.ts` and notice the type constraint
 of the first argument to `mediator.send` already includes the new actions.
+
+`this.mediator.send("NotApplicable");`
+
+Argument of type `"NotApplicable"` is not assignable to parameter of type `"GetExamplesQuery" | "GetUsersQuery" | "GetUserQuery" | "CreateUserCommand"`.
 :::
 
 ## Write Business Logic
 
-Lets put some appropiate logic into the new files.
+Write some appropiate logic in new files.
 
 ## Get Users Query
 
@@ -106,12 +108,24 @@ Find a user entity given an `id` and map it to the response contract.
 :::info
 After updating the code as shown below, open up `src/api/example-controller.ts` and notice that the type constraint
 of the second argument to `mediator.send` on `GetUserQuery` now is `IGetUserDto`.
+
+`this.mediator.send("GetUserQuery");`
+
+Expected 2 arguments, but got 1.
+
+`this.mediator.send("GetUserQuery", {});`
+
+Property `id` is missing in type `{}` but required in type `IGetUserDto`.
 :::
 
 ###### src/application/user/get-user-query.ts
 
 ```ts
-import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
+import {
+    ACTION_RESULT,
+    MediatorResultSuccess,
+    MediatorResultFailure,
+} from '@lindeneg/funkallero';
 import BaseAction from '@/application/base-action';
 import type { IGetUserDto, IGetUserResponse } from '@/contracts/get-user';
 
@@ -119,7 +133,8 @@ class GetUserQuery extends BaseAction {
     public async execute({ id }: IGetUserDto) {
         const user = this.dataContext.userRepository.get(id);
 
-        if (!user) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
+        if (!user)
+            return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
         const userResponse: IGetUserResponse = {
             id: user.id,
@@ -140,21 +155,32 @@ We'll look into validating the DTO later.. but not here in the application layer
 ###### src/application/user/create-user-command.ts
 
 ```ts
-import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
+import {
+    ACTION_RESULT,
+    MediatorResultSuccess,
+    MediatorResultFailure,
+} from '@lindeneg/funkallero';
 import BaseAction from '@/application/base-action';
-import type { ICreateUserDto, ICreateUserResponse } from '@/contracts/create-user';
+import type {
+    ICreateUserDto,
+    ICreateUserResponse,
+} from '@/contracts/create-user';
 
 class CreateUserCommand extends BaseAction {
     public async execute(dto: ICreateUserDto) {
-        const user = this.dataContext.createUser(dto);
+        const user = await this.dataContext.createUser(dto);
 
-        if (!user) return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
+        if (!user)
+            return new MediatorResultFailure(ACTION_RESULT.ERROR_NOT_FOUND);
 
         const userResponse: ICreateUserResponse = {
             id: user.id,
         };
 
-        return new MediatorResultSuccess(userResponse, ACTION_RESULT.SUCCESS_CREATE);
+        return new MediatorResultSuccess(
+            userResponse,
+            ACTION_RESULT.SUCCESS_CREATE
+        );
     }
 }
 

@@ -19,8 +19,10 @@ A bunch of defaults services are provided but any service can be extended/overwr
 
 At least two singleton services must always be registered, a `MediatorService` and a `DataContextService`.
 
-## Data Context Service
+Those two services were created by the `init` command before.
 
-The `init` command from the previous section, created those two services but the `DataContextService` is effectively empty.
+## Interfaces
 
-Lets do something about that in the next section.
+Known services are defined [here](https://github.com/Lindeneg/funkallero/tree/master/packages/funkallero-core/src/service).
+
+Known services with default implementation is defined [here](https://github.com/Lindeneg/funkallero/tree/master/packages/funkallero/src/service).

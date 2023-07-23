@@ -5,21 +5,17 @@ description: The first request
 
 # First Request
 
-Lets see if everything has been setup correctly.
+Check if everything has been setup correctly.
 
 ## Build Project
 
-First build project
-
-```sh
+```bash
 yarn build
 ```
 
 ## Start Server
 
-Then start server.
-
-```sh
+```bash
 yarn start
 ```
 
@@ -34,7 +30,7 @@ curl http://localhost:3000/api/example -X GET
 ###### 200 OK
 
 ```json
-{ "data": ["user-1", "user-2", "user-3"] }
+{ "data": ["data-1", "data-2", "data-3"] }
 ```
 
 ## Next Steps

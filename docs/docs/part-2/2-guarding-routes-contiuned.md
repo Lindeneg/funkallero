@@ -15,10 +15,9 @@ Now, we should return a token that has encoded the id and email of the created u
 
 ```ts
 import {
-    // diff-add-start
-    ACTION_RESULT,
+    // diff-add-next-line
     injectService,
-    // diff-add-end
+    ACTION_RESULT,
     MediatorResultSuccess,
     MediatorResultFailure,
     // diff-add-next-line
@@ -39,7 +38,6 @@ class CreateUserCommand extends BaseAction {
     // diff-add-end
 
     public async execute(dto: ICreateUserDto) {
-        // diff-add-next-line
         const user = await this.dataContext.createUser(dto);
 
         if (!user) {

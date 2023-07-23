@@ -109,20 +109,45 @@ Build the project again and start the server.
 Create Miles.
 
 ```bash
-curl http://localhost:3000/user \
+curl http://localhost:3000/api/user \
 -d '{"name":"Miles Davis", "email":"miles@davis.org", "password": "some-password"}' \
 -H "Content-Type: application/json" -X POST
 ```
 
 Use the token to send a request to guard endpoint. Watch the terminal where the server is running.
 
+On this endpoint, we'd expect `userId` to be defined but `user` to be undefined.
+
 ```bash
-curl http://localhost:3000/auth/guard \
+curl http://localhost:3000/api/auth/guard \
 -H "Authorization: Bearer MILES_TOKEN" -X GET
 ```
 
-stdout:
+##### stdout:
 
 ```
-Something
+user injection on /guard { userId: 'a4398777-0dad-49f8-a246-1a48c6b8d546', user: undefined }
+```
+
+Lets try the other one, where we'd expect `userId` to be undefined but `user` to be defined.
+
+```bash
+curl http://localhost:3000/api/auth/miles \
+-H "Authorization: Bearer MILES_TOKEN" -X GET
+```
+
+##### stdout:
+
+```
+user injection on /miles {
+  userId: undefined,
+  user: {
+    name: 'Miles Davis',
+    email: 'miles@davis.org',
+    password: HASHED_PASSWORD,
+    id: GENERATED_ID,
+    createdAt: DATETIME,
+    updatedAt: DATETIME
+  }
+}
 ```

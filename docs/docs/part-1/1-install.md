@@ -7,15 +7,15 @@ description: Install dependencies
 
 Start by installing `funkallero-cli`. A global install is recommended.
 
-```sh
+```bash
 yarn global add @lindeneg/funkallero-cli
 ```
 
 ## Initialize
 
-This creates a new folder `tutorial` and scaffolds a new project within.
+This creates a new folder `tutorial` and scaffolds a basic project within.
 
-```sh
+```
 funkallero init tutorial --yarn
 ```
 
@@ -23,7 +23,7 @@ funkallero init tutorial --yarn
 
 The contents of `src` folder within `tutorial`, will look as such:
 
-```sh
+```
 .
 └── src
     ├── index.ts         - Main File

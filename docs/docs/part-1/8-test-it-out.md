@@ -5,7 +5,21 @@ description: Test out the app so far
 
 # Test it out
 
-Build the project and start up the server.
+Start by building project again and starting server.
+
+## Build Project
+
+```bash
+yarn build
+```
+
+## Start Server
+
+```bash
+yarn start
+```
+
+## Requests
 
 Start by creating an invalid user.
 
@@ -36,7 +50,12 @@ curl http://localhost:3000/api/user \
 ```json
 {
     "message": "The requested action could not be exercised due to malformed syntax.",
-    "error": [{ "name": "String must contain at least 2 character(s)", "email": "Invalid email" }]
+    "error": [
+        {
+            "name": "String must contain at least 2 character(s)",
+            "email": "Invalid email"
+        }
+    ]
 }
 ```
 

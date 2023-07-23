@@ -31,7 +31,7 @@ setup(service) {
 
 ## Update DTO
 
-###### src/dtos/create-user.ts
+###### src/contracts/create-user.ts
 
 ```ts
 import { z } from 'zod';
@@ -54,7 +54,13 @@ export interface ICreateUserResponse {
 ###### src/api/user-controller.ts
 
 ```ts
-import { controller, httpGet, httpPost, params, body } from '@lindeneg/funkallero';
+import {
+    controller,
+    httpGet,
+    httpPost,
+    params,
+    body,
+} from '@lindeneg/funkallero';
 import BaseController from './base-controller';
 import { createUserSchema, type ICreateUserDto } from '@/contracts/create-user';
 

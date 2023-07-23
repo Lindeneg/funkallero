@@ -106,6 +106,10 @@ const config = {
                 darkTheme: darkCodeTheme,
                 magicComments: [
                     {
+                        className: 'code-block-error-line',
+                        line: 'error-next-line',
+                    },
+                    {
                         className: 'theme-code-block-highlighted-line',
                         line: 'highlight-next-line',
                         block: { start: 'highlight-start', end: 'highlight-end' },
