@@ -14,12 +14,15 @@ const config = {
     url: 'https://lindeneg.github.io',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
-    baseUrl: '/funkallero',
+    baseUrl: '/funkallero/',
+
+    deploymentBranch: 'gh-pages',
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
     organizationName: 'lindeneg', // Usually your GitHub org/user name.
-    projectName: 'funkallero', // Usually your repo name.
+    projectName: 'lindeneg.github.io', // Usually your repo name.
+    trailingSlash: false,
 
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
