@@ -24,8 +24,8 @@
         "generate:decrypt-https-key": "openssl rsa -in https/keytmp.pem -out https/key.pem && rm https/keytmp.pem"
     },
     "dependencies": {
-        "@lindeneg/funkallero": "0.0.3",
-        "@lindeneg/funkallero-auth-service": "0.0.3",
+        "@lindeneg/funkallero": "0.0.4",
+        "@lindeneg/funkallero-auth-service": "0.0.4",
         "@prisma/client": "4.16.2",
         "cookie-parser": "1.4.6",
         "zod": "3.21.4"
