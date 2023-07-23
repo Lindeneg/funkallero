@@ -24,6 +24,10 @@ export default createModule({
             type: 'dev',
         },
         {
+            name: '@types/express',
+            type: 'dev',
+        },
+        {
             name: 'typescript',
             type: 'dev',
         },
