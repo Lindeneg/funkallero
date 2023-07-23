@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 7
 description: Extract, validate and/or transform request context values
 ---
 
@@ -49,6 +49,32 @@ export interface ICreateUserResponse {
 }
 ```
 
-## Next up
+## Inject request context
 
-Update controllers and make use of the `zod` schemas.
+###### src/api/user-controller.ts
+
+```ts
+import { controller, httpGet, httpPost, params, body } from '@lindeneg/funkallero';
+import BaseController from './base-controller';
+import { createUserSchema, type ICreateUserDto } from '@/contracts/create-user';
+
+@controller('user')
+class UserController extends BaseController {
+    @httpGet()
+    public async getUsers() {
+        return this.mediator.send('GetUsersQuery');
+    }
+
+    @httpGet('/:id')
+    public async getUser(@params('id') id: string) {
+        return this.mediator.send('GetUserQuery', {
+            id,
+        });
+    }
+
+    @httpPost()
+    public async createUser(@body(createUserSchema) dto: ICreateUserDto) {
+        return this.mediator.send('CreateUserCommand', dto);
+    }
+}
+```

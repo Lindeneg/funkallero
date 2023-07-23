@@ -1,13 +1,19 @@
 ---
-sidebar_position: 4
-description: Extending user controller
+sidebar_position: 6
+description: Create user controller
 ---
 
-# Extending Controller
+# Controller
 
-Extend the controller with new routes _(naive implementation at first)_.
+Make use of new actions by creating a user controller.
 
-Notice the type safety in the mediator `send` calls inferred from the `execute` method of the given action name.
+```sh
+funkallero controller user
+```
+
+This creates a new file in the `api` folder.
+
+Consume the user actions via mediator. _(naive implementation at first)_.
 
 ###### src/api/user-controller.ts
 

@@ -1,15 +1,21 @@
 ---
-sidebar_position: 3
-description: More Actions
+sidebar_position: 5
+description: Time to create some contracts and some actions
 ---
 
-# More Actions
+# Actions
 
-Lets think about two new actions. `GetUserQuery` and `CreateUserCommand`. Lets also fix `GetUsersQuery` that was created in the basic section.
+Lets put something in the business logic layer.
+
+We'll create three actions, `GetUserQuery`, `GetUsersQuery` and `CreateUserCommand`. Two queries and a single command.
 
 ## DTOs & Response contracts
 
-###### src/dtos/get-user.ts
+Firstly, lets make questions such as _"what is the shape of incoming data?"_ and _"what is the shape of outgoing data"_ be easily answered.
+
+Later on we'll look at enforcing those contracts.
+
+###### src/contracts/get-user.ts
 
 ```ts
 import type User from '@/domain/user';
@@ -28,7 +34,7 @@ export interface IGetUsersResponse {
 }
 ```
 
-###### src/dtos/create-user.ts
+###### src/contracts/create-user.ts
 
 ```ts
 import type User from '@/domain/user';
@@ -43,14 +49,37 @@ export interface ICreateUserResponse {
 }
 ```
 
+## Create action files
+
+Utilize CLI to create actions and automatically export them.
+
+```sh
+funkallero query get users --folder user
+
+funkallero query get user --folder user
+
+funkallero command create user --folder user
+```
+
+:::info
+After running the above commands, open up `src/api/example-controller.ts` and notice the type constraint
+of the first argument to `mediator.send` already includes the new actions.
+:::
+
+## Write Business Logic
+
+Lets put some appropiate logic into the new files.
+
 ## Get Users Query
+
+Find all user entities, map them the response contract and return the result.
 
 ###### src/application/user/get-users-query.ts
 
 ```ts
 import { MediatorResultSuccess } from '@lindeneg/funkallero';
 import BaseAction from '@/application/base-action';
-import type { IGetUsersResponse } from '@/dtos/get-user';
+import type { IGetUsersResponse } from '@/contracts/get-user';
 
 class GetUsersQuery extends BaseAction {
     public async execute() {
@@ -72,12 +101,19 @@ export default GetUsersQuery;
 
 ## Get User Query
 
+Find a user entity given an `id` and map it to the response contract.
+
+:::info
+After updating the code as shown below, open up `src/api/example-controller.ts` and notice that the type constraint
+of the second argument to `mediator.send` on `GetUserQuery` now is `IGetUserDto`.
+:::
+
 ###### src/application/user/get-user-query.ts
 
 ```ts
 import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
 import BaseAction from '@/application/base-action';
-import type { IGetUserDto, IGetUserResponse } from '@/dtos/get-user';
+import type { IGetUserDto, IGetUserResponse } from '@/contracts/get-user';
 
 class GetUserQuery extends BaseAction {
     public async execute({ id }: IGetUserDto) {
@@ -99,12 +135,14 @@ export default GetUserQuery;
 
 ## Create User Command
 
+We'll look into validating the DTO later.. but not here in the application layer, we'll do it in the API layer.
+
 ###### src/application/user/create-user-command.ts
 
 ```ts
 import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
 import BaseAction from '@/application/base-action';
-import type { ICreateUserDto, ICreateUserResponse } from '@/dtos/create-user';
+import type { ICreateUserDto, ICreateUserResponse } from '@/contracts/create-user';
 
 class CreateUserCommand extends BaseAction {
     public async execute(dto: ICreateUserDto) {
@@ -121,13 +159,4 @@ class CreateUserCommand extends BaseAction {
 }
 
 export default CreateUserCommand;
-```
-
-## Export New Actions
-
-###### src/application/index.ts
-
-```ts
-export { default as GetUserQuery } from './user/get-user-query';
-export { default as CreateUserCommand } from './user/create-user-command';
 ```
