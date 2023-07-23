@@ -2,9 +2,8 @@
 
 A CLI tool for [Funkallero](https://github.com/lindeneg/funkallero/tree/master/packages/funkallero).
 
-Install with either:
+Install:
 
-`yarn global add @lindeneg/funkallero-cli`
 `npm install -g @lindeneg/funkallero-cli`
 
 and then use

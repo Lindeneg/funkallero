@@ -5,7 +5,7 @@
     "homepage": "https://github.com/lindeneg/funkallero/tree/master/packages/funkallero-cli",
     "author": "lindeneg <christian@lindeneg.org>",
     "license": "MIT",
-    "version": "0.0.0",
+    "version": "0.0.2",
     "bin": {
         "funkallero": "./index.mjs"
     },
