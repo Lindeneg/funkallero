@@ -104,16 +104,20 @@ const initGenerator = createGenerator<InitGeneratorAnswers>({
         if (cxt.hasProperty.zod) configure.zod(configureModule);
         if (cxt.hasProperty.auth) configure.auth(configureModule);
 
+        const paths = [
+            cxt.projectRoot,
+            cxt.projectSrc,
+            joinPath(cxt.projectSrc, 'api'),
+            joinPath(cxt.projectSrc, 'application'),
+            joinPath(cxt.projectSrc, 'services'),
+            joinPath(cxt.projectSrc, 'enums'),
+        ];
+
+        console.log(paths);
+
         return concatActions(
             createDirectory.prepare({
-                dirPaths: [
-                    cxt.projectRoot,
-                    cxt.projectSrc,
-                    joinPath(cxt.projectSrc, 'api'),
-                    joinPath(cxt.projectSrc, 'application'),
-                    joinPath(cxt.projectSrc, 'services'),
-                    joinPath(cxt.projectSrc, 'enums'),
-                ],
+                dirPaths: paths,
             }),
 
             cxt.customActions.get(),
