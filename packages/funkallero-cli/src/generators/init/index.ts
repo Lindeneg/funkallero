@@ -14,7 +14,7 @@ import {
 import * as mod from '@/modules';
 import HELP from './help';
 import preparation from './preparation';
-import type {InitGeneratorAnswers} from './preparation';
+import type { InitGeneratorAnswers } from './preparation';
 import configure from './configure';
 
 const initGenerator = createGenerator<InitGeneratorAnswers>({
