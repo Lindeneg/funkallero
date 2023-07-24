@@ -90,10 +90,10 @@
     validate-npm-package-name "^4.0.0"
     yargs-parser "20.2.4"
 
-"@lindeneg/scaffold-core@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@lindeneg/scaffold-core/-/scaffold-core-0.0.2.tgz#ccc4df545bc23ffb59e91f010154457faee89a92"
-  integrity sha512-C2RIV1rdc5Ga+vdJ5vYpFb2yJLaX9wcCq29Q9x5bwI8okYOAmCtr0qyoZQg0wXXidbaJtiElhBEr364NCEieoQ==
+"@lindeneg/scaffold-core@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@lindeneg/scaffold-core/-/scaffold-core-0.0.3.tgz#84f46b624758dfeedd1339f72b53420e9dcbb8d1"
+  integrity sha512-dcNqSoxQi+uWmgIIu4/xPLn4PvHNjiWs7xmEvFrDPZ/rFpypyoTSYS8XjAqqwcm8es7xTa6+VvLNp1CtBNoTVA==
   dependencies:
     chalk "5.2.0"
     handlebars "4.4.3"
