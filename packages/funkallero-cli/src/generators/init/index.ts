@@ -14,7 +14,7 @@ import {
 import * as mod from '@/modules';
 import HELP from './help';
 import preparation from './preparation';
-import type { InitGeneratorAnswers } from './preparation';
+import type {InitGeneratorAnswers} from './preparation';
 import configure from './configure';
 
 const initGenerator = createGenerator<InitGeneratorAnswers>({
@@ -104,20 +104,16 @@ const initGenerator = createGenerator<InitGeneratorAnswers>({
         if (cxt.hasProperty.zod) configure.zod(configureModule);
         if (cxt.hasProperty.auth) configure.auth(configureModule);
 
-        const paths = [
-            cxt.projectRoot,
-            cxt.projectSrc,
-            joinPath(cxt.projectSrc, 'api'),
-            joinPath(cxt.projectSrc, 'application'),
-            joinPath(cxt.projectSrc, 'services'),
-            joinPath(cxt.projectSrc, 'enums'),
-        ];
-
-        console.log(paths);
-
         return concatActions(
             createDirectory.prepare({
-                dirPaths: paths,
+                dirPaths: [
+                    cxt.projectRoot,
+                    cxt.projectSrc,
+                    joinPath(cxt.projectSrc, 'api'),
+                    joinPath(cxt.projectSrc, 'application'),
+                    joinPath(cxt.projectSrc, 'services'),
+                    joinPath(cxt.projectSrc, 'enums'),
+                ],
             }),
 
             cxt.customActions.get(),
