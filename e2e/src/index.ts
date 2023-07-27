@@ -1,5 +1,5 @@
 import Funkallero, { LOG_LEVEL, BaseZodParserService } from '@lindeneg/funkallero';
-import { BaseTokenService } from '@lindeneg/funkallero-auth-service';
+import { BaseTokenConfiguration, BaseTokenService } from '@lindeneg/funkallero-auth-service';
 
 import MediatorService from './services/mediator-service';
 import DataContextService from './services/data-context-service';
@@ -25,6 +25,8 @@ Funkallero.create({
     },
 
     setup(service) {
+        BaseTokenConfiguration.salt = 6;
+
         service.registerSingletonService(SERVICE.MEDIATOR, MediatorService);
         service.registerSingletonService(SERVICE.DATA_CONTEXT, DataContextService);
         service.registerSingletonService(SERVICE.EXPRESS, ExpressService);
@@ -41,4 +43,7 @@ Funkallero.create({
         const seedService = service.getSingletonService<DataContextSeedService>(SERVICE.DATA_CONTEXT_SEED);
         await seedService?.seed();
     },
-}).then((app) => app.start());
+}).then((app) => {
+    console.log('\nstarting e2e\n');
+    app.start();
+});
