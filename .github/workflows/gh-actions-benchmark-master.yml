@@ -1,0 +1,55 @@
+name: Benchmark Master
+
+on:
+    pull_request:
+        branches:
+            - master
+            - next
+
+jobs:
+    benchmark:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  ref: master
+
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  cache: 'yarn'
+
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
+            - name: Bootstrap Master
+              run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
+
+            - name: Build Master
+              run: yarn build core funkallero auth-service example && yarn build e2e express
+
+            - name: Report Current
+              run: yarn bench test e2e current
+
+            - uses: actions/checkout@v3
+
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  cache: 'yarn'
+
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
+            - name: Bootstrap Branch
+              run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
+
+            - name: Build Branch
+              run: yarn build core funkallero auth-service example && yarn build e2e express
+
+            - name: Report Latest
+              run: yarn bench test e2e latests
+
+            - name: Current <- Latest
+              run: yarn bench compare latest

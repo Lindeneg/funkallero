@@ -1,19 +1,18 @@
-import json, os, math
+import math, sys, json, os
 from typing import Union
 
 RawReport = list[dict[str, Union[int, float]]]
 ReportTestError = Union[str, None]
-ReportComparisonResult = tuple[ReportTestError, str]
+ReportComparisonResult = tuple[str, ReportTestError]
 
-base_path = os.sep.join(__file__.split(os.sep)[:-1])
+base_path = os.path.join(os.sep.join(__file__.split(os.sep)[:-1]), "report")
+is_express = sys.argv[1] == "express"
 
-min_accumulated_request_percent = 50
-average_percent_max_increase = 5
-max_percent_max_increase = 10
-min_percent_max_increase = 10
+min_accumulated_request_percent = 85 if is_express else 50
+average_percent_max_increase = 15 if is_express else 5
+max_percent_max_increase = 15 if is_express else 10
+min_percent_max_increase = 20 if is_express else 10
 
-current_report_path = os.path.join(base_path, "current.json")
-latest_report_path = os.path.join(base_path, "latest.json")
 
 green_check_mark = "\U00002705"
 red_cross_mark = "\U0000274C"
@@ -55,24 +54,6 @@ Requests:            : {self.accumulated_requests}
         self.average_response_time = round(
             self.accumulated_response_time / self.accumulated_requests, 2
         )
-
-
-def open_report(path: str) -> RawReport:
-    data = None
-
-    with open(path) as json_file:
-        data = json.load(json_file)
-
-    json_file.close()
-
-    return data
-
-
-def get_reports() -> tuple[Report, Report]:
-    current_raw_report = open_report(current_report_path)
-    latest_raw_report = open_report(latest_report_path)
-
-    return Report(current_raw_report, "Current"), Report(latest_raw_report, "Latest")
 
 
 def get_percent_diff(old: float, new: float) -> tuple[float, str]:
@@ -152,24 +133,55 @@ def get_report_comparison_result(
     )
 
     return [
-        err,
-        f"""Comparison report: 
+        f"""{current.name} <- {latest.name}: 
 Average response time: {avg_result["mark"]} {avg_direction} by {avg_percent}% {avg_result["msg"]}
 Max response time    : {max_result["mark"]} {max_direction} by {max_percent}% {max_result["msg"]}
 Min response time    : {min_result["mark"]} {min_direction} by {min_percent}% {min_result["msg"]}
 """,
+        err,
     ]
+
+
+def open_report(path: str) -> RawReport:
+    data = None
+
+    with open(path) as json_file:
+        data = json.load(json_file)
+
+    json_file.close()
+
+    return data
+
+
+def get_reports(report1: str, report2: str) -> tuple[Report, Report]:
+    raw_report_1 = open_report(os.path.join(base_path, f"{report1}.json"))
+    raw_report_2 = open_report(os.path.join(base_path, f"{report2}.json"))
+
+    return (
+        Report(raw_report_1, report1.capitalize()),
+        Report(raw_report_2, report2.capitalize()),
+    )
+
+
+def get_report_str():
+    report_names = ["express", "current"] if is_express else ["current", "latest"]
+
+    report_1, report_2 = get_reports(report_names[0], report_names[1])
+
+    print(report_1)
+    print(report_2)
+
+    report_str, err = get_report_comparison_result(report_1, report_2)
+
+    return report_str, err
 
 
 def process_success() -> None:
     print(f"Tests successfully passed {green_check_mark}")
-    os.remove(current_report_path)
-    os.rename(latest_report_path, current_report_path)
     exit(0)
 
 
 def process_failure(err: list[str]) -> None:
     print(f"Tests successfully failed {red_cross_mark}")
     print("\n".join(err))
-    os.remove(latest_report_path)
     exit(1)

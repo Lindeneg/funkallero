@@ -1,8 +1,6 @@
 node_modules
+dist
 coverage
 test-report.xml
-notes
-.env*
-!.env.example
-dist
 .idea
+https/*.pem

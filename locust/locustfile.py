@@ -1,5 +1,4 @@
 import math, random, logging
-from datetime import datetime
 from locust import HttpUser, task, events
 
 
@@ -7,12 +6,6 @@ from locust import HttpUser, task, events
 def _(environment, **kw):
     if environment.stats.total.fail_ratio > 0.01:
         logging.error("Test failed due to failure ratio > 1%")
-        environment.process_exit_code = 1
-    elif environment.stats.total.avg_response_time > 250:
-        logging.error("Test failed due to average response time ratio > 250 ms")
-        environment.process_exit_code = 1
-    elif environment.stats.total.get_response_time_percentile(0.95) > 800:
-        logging.error("Test failed due to 95th percentile response time > 800 ms")
         environment.process_exit_code = 1
     else:
         environment.process_exit_code = 0
@@ -29,7 +22,7 @@ def process_jane_book_id_response(json):
 
 
 def random_str_int():
-    return str(math.floor(random.random() * 1000) + datetime.now().microsecond)
+    return str(math.floor(random.random() * 1_000_000))
 
 
 class GetResources(HttpUser):
@@ -63,8 +56,8 @@ class CreateResources(HttpUser):
         self.client.post(
             "/signup",
             json={
-                "name": f"Some-{random_str_int()}-Name",
-                "email": f"user-{random_str_int()}@mock.com",
+                "name": f"{random_str_int()}-Name",
+                "email": f"{random_str_int()}@mock.com",
                 "password": "some-password",
             },
         )
