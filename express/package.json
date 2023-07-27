@@ -1,0 +1,28 @@
+{
+    "name": "@lindeneg/funkallero-express",
+    "private": true,
+    "description": "Benchmark comparison for funkallero",
+    "version": "0.0.0",
+    "repository": "git@github.com:lindeneg/funkallero.git",
+    "author": "Christian Lindeneg",
+    "license": "MIT",
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "scripts": {
+        "start": "node ./dist/index.mjs",
+        "build": "rollup -c",
+        "lint": "prettier \"src/**\" --ignore-unknown --write"
+    },
+    "devDependencies": {
+        "@types/bcryptjs": "2.4.2",
+        "@types/express": "4.17.17",
+        "@types/jsonwebtoken": "9.0.0"
+    },
+    "dependencies": {
+        "bcryptjs": "2.4.2",
+        "cookie-parser": "1.4.6",
+        "express": "4.18.2",
+        "jsonwebtoken": "9.0.0",
+        "zod": "3.21.4"
+    }
+}
