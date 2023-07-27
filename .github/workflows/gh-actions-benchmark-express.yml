@@ -8,12 +8,31 @@ on:
 jobs:
     benchmark:
         runs-on: ubuntu-latest
+
         steps:
             - uses: actions/checkout@v3
-            - uses: ./.github/workflows/gh-actions-benchmark.yml
-              name: Setup report from master
               with:
-                  ref_name: ${{ github.ref_name }}
-                  report_1: express
-                  report_2: current
-                  compare: express
+                  ref: ${{ github.ref_name }}
+
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  cache: 'yarn'
+
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
+            - name: Bootstrap
+              run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
+
+            - name: Build
+              run: yarn build core funkallero auth-service example && yarn build e2e express
+
+            - name: Report Express
+              run: yarn bench test express express
+
+            - name: Report Current
+              run: yarn bench test e2e current
+
+            - name: Express <- Current
+              run: yarn bench compare express

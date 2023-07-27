@@ -7,20 +7,51 @@ on:
             - next
 
 jobs:
-    current:
+    benchmark:
         runs-on: ubuntu-latest
+
         steps:
             - uses: actions/checkout@v3
-
-            - uses: ./.github/workflows/gh-actions-benchmark.yml
-              name: Setup report from master
               with:
-                  ref_name: master
-                  report_1: current
+                  ref: master
 
-            - uses: ./.github/workflows/gh-actions-benchmark.yml
-              name: Setup report from current branch
+            - name: Use Node.js
+              uses: actions/setup-node@v3
               with:
-                  ref_name: ${{ github.ref_name }}
-                  report_1: latest
-                  compare: latest
+                  cache: 'yarn'
+
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
+            - name: Bootstrap Master
+              run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
+
+            - name: Build Master
+              run: yarn build core funkallero auth-service example && yarn build e2e express
+
+            - name: Report Current
+              run: yarn bench test e2e current
+
+            - uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.ref_name }}
+
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  cache: 'yarn'
+
+            - name: Setup Python
+              uses: actions/setup-python@v4.7.0
+
+            - name: Bootstrap Branch
+              run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
+
+            - name: Build Branch
+              run: yarn build core funkallero auth-service example && yarn build e2e express
+
+            - name: Report Latest
+              run: yarn bench test e2e latests
+
+            - name: Current <- Latest
+              run: yarn bench compare latest
