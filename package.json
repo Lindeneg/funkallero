@@ -13,16 +13,17 @@
         "start": "yarn cli start",
         "lint": "yarn cli lint",
         "test": "yarn cli test",
+        "bench": "bash ./scripts/bench/main.sh",
+        "bench:current": "yarn bench test e2e current",
+        "bench:latest": "yarn bench test e2e latest && yarn bench compare latest",
+        "bench:express": "yarn bench test express express",
         "docs:start": "yarn --cwd ./docs start",
-        "docs:install": "yarn --cwd ./docs install",
-        "test:bench": "npx -y start-server-and-test test:bench:start-server http://localhost:3000/api/authors test:bench:start-tests",
-        "test:bench:install": "pip3 install -r ./locust/requirements.txt",
-        "test:bench:start-server": "node ./e2e/dist/index.mjs",
-        "test:bench:start-tests": "bash ./scripts/bench.sh"
+        "docs:install": "yarn --cwd ./docs install"
     },
     "workspaces": [
         "example",
         "e2e",
+        "express",
         "packages/*"
     ],
     "devDependencies": {

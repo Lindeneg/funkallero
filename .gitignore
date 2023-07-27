@@ -5,6 +5,4 @@ notes
 .env*
 !.env.example
 dist
-__pycache__
-locust/report/latest.json
 .idea
