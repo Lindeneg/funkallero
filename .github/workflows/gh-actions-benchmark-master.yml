@@ -33,8 +33,6 @@ jobs:
               run: yarn bench test e2e current
 
             - uses: actions/checkout@v3
-              with:
-                  ref: ${{ github.ref_name }}
 
             - name: Use Node.js
               uses: actions/setup-node@v3

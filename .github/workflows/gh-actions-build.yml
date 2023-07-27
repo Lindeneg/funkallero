@@ -9,7 +9,7 @@ on:
             - '**'
 
 jobs:
-    build:
+    E2E:
         runs-on: ubuntu-latest
 
         steps:
