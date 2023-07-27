@@ -1,10 +1,12 @@
-name: Benchmarks
+name: Benchmark
 
 on:
-    pull_request:
-        branches:
-            - master
-            - next
+    workflow_call:
+        inputs:
+            ref_name:
+                description: 'The name of the branch to benchmark'
+                type: string
+                required: true
 
 jobs:
     benchmark:
@@ -12,6 +14,8 @@ jobs:
 
         steps:
             - uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.inputs.ref_name }}
 
             - name: Use Node.js
               uses: actions/setup-node@v3
@@ -22,10 +26,7 @@ jobs:
               uses: actions/setup-python@v4.7.0
 
             - name: Bootstrap
-              run: yarn bootstrap:ci && yarn test:bench:install
+              run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build
-              run: yarn build core funkallero auth-service example && yarn build e2e
-
-            - name: Benchmark
-              run: yarn test:bench
+              run: yarn build core funkallero auth-service example && yarn build e2e express
