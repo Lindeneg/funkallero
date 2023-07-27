@@ -10,6 +10,8 @@ jobs:
     current:
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v3
+
             - uses: ./.github/workflows/gh-actions-benchmark.yml
               name: Setup report from master
               with:
