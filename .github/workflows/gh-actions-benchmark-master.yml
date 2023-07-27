@@ -1,0 +1,24 @@
+name: Benchmark Master
+
+on:
+    pull_request:
+        branches:
+            - master
+            - next
+
+jobs:
+    current:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: ./.github/workflows/gh-actions-benchmark.yml
+              name: Setup report from master
+              with:
+                  ref_name: master
+                  report_1: current
+
+            - uses: ./.github/workflows/gh-actions-benchmark.yml
+              name: Setup report from current branch
+              with:
+                  ref_name: ${{ github.ref_name }}
+                  report_1: latest
+                  compare: latest
