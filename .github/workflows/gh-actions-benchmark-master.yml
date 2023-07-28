@@ -4,7 +4,6 @@ on:
     pull_request:
         branches:
             - master
-            - next
 
 jobs:
     benchmark_base:
@@ -51,7 +50,7 @@ jobs:
               run: yarn build core funkallero auth-service example && yarn build e2e express
 
             - name: Report Latest
-              run: yarn bench test e2e latests
+              run: yarn bench test e2e latest
 
             - name: Current <- Latest
               run: yarn bench compare latest
