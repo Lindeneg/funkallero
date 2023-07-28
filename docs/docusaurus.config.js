@@ -80,10 +80,6 @@ const config = {
                                 href: 'https://github.com/facebook/docusaurus',
                             },
                             {
-                                label: 'unDraw',
-                                href: 'https://undraw.co',
-                            },
-                            {
                                 label: 'Express',
                                 href: 'https://expressjs.com',
                             },
