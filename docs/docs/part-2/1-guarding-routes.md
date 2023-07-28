@@ -162,7 +162,6 @@ import type DataContextService from './data-context-service';
 
 type CustomHandlerArgs = {
     authService: AuthenticationService;
-    dataContext: DataContextService;
 };
 
 type AuthHandler = AuthorizationPolicyHandlerFn<CustomHandlerArgs, AuthModel>;
@@ -175,28 +174,28 @@ class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
     protected async getCustomPolicyArgs() {
         return {
             authService: this.authService as AuthenticationService,
-            dataContext: this.dataContext,
         };
     }
 }
 
-// first way: utilize authService to verify the user
-const authenticatedPolicy: AuthHandler = async ({ authService, decodedToken }) => {
+const authenticatedPolicy: AuthHandler = async ({
+    authService,
+    decodedToken,
+}) => {
+    const user = await authService.getUserSafe();
+
+    return user !== null && user.email === decodedToken.email;
+};
+
+const isMilesDavisPolicy: AuthHandler = async ({
+    dataContext,
+    decodedToken,
+}) => {
     const user = await authService.getUserSafe();
 
     return (
-        user !== null && 
-        user.email === decodedToken.email
-    );
-};
-
-// second way: we extract user from data context using decoded token
-const isMilesDavisPolicy: AuthHandler = async ({ dataContext, decodedToken }) => {
-    const user = dataContext.userRepository.get(decodedToken.id);
-
-    return (
-        user !== null && 
-        user.email === decodedToken.email && 
+        user !== null &&
+        user.email === decodedToken.email &&
         user.name.toLowerCase() === 'miles davis'
     );
 };
