@@ -181,17 +181,24 @@ class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
 }
 
 // first way: utilize authService to verify the user
-const authenticatedPolicy: AuthHandler = async ({ authService }) => {
+const authenticatedPolicy: AuthHandler = async ({ authService, decodedToken }) => {
     const user = await authService.getUserSafe();
 
-    return user !== null;
+    return (
+        user !== null && 
+        user.email === decodedToken.email
+    );
 };
 
 // second way: we extract user from data context using decoded token
-const isMilesDavisPolicy: AuthHandler = async ({ authService }) => {
-    const user = await authService.getUserSafe();
+const isMilesDavisPolicy: AuthHandler = async ({ dataContext, decodedToken }) => {
+    const user = dataContext.userRepository.get(decodedToken.id);
 
-    return user !== null && user.name.toLowerCase() === 'miles davis';
+    return (
+        user !== null && 
+        user.email === decodedToken.email && 
+        user.name.toLowerCase() === 'miles davis'
+    );
 };
 
 AuthorizationService.addPolicy(
