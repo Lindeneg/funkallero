@@ -6,7 +6,7 @@ on:
             - master
 
 jobs:
-    benchmark:
+    benchmark_express:
         runs-on: ubuntu-latest
 
         steps:
