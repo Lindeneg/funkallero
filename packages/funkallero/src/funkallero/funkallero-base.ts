@@ -36,7 +36,7 @@ abstract class FunkalleroBase implements IFunkalleroBase {
     protected configureController(app: Express, CustomController: Constructor<IControllerService>) {
         const routes: IRoute[] = Reflect.get(CustomController.prototype, META_DATA.CONTROLLER_ROUTES);
         const controllerPath: string = Reflect.get(CustomController, META_DATA.CONTROLLER_PATH);
-        const basePath = urlJoin(this.config?.basePath || '', controllerPath);
+        const basePath = urlJoin(this.config?.basePath || '/', controllerPath);
 
         devLogger(`configuring ${CustomController.name} with baseRoute ${basePath}`);
 
