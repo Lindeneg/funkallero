@@ -88,7 +88,7 @@ curl http://localhost:3000/api/auth/miles \
 }
 ```
 
-Ok, lets create a new user, Miles Davis and use that token with the miles endpoint. We should see 200 OK response.
+Ok, lets create a new user, Miles Davis and use that token with the miles endpoint. We should see 201 OK response.
 
 ```bash
 curl http://localhost:3000/api/user \

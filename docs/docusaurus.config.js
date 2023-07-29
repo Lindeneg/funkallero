@@ -55,6 +55,11 @@ const config = {
         ({
             navbar: {
                 title: 'Funkallero',
+                logo: {
+                    alt: '',
+                    src: '/img/none.ico',
+                    href: '/funkallero/docs/intro',
+                },
                 items: [
                     {
                         type: 'docSidebar',
@@ -78,10 +83,6 @@ const config = {
                             {
                                 label: 'Docusaurus',
                                 href: 'https://github.com/facebook/docusaurus',
-                            },
-                            {
-                                label: 'unDraw',
-                                href: 'https://undraw.co',
                             },
                             {
                                 label: 'Express',
