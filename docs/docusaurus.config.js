@@ -55,6 +55,11 @@ const config = {
         ({
             navbar: {
                 title: 'Funkallero',
+                logo: {
+                    alt: '',
+                    src: '/img/none.ico',
+                    href: '/funkallero/docs/intro',
+                },
                 items: [
                     {
                         type: 'docSidebar',
