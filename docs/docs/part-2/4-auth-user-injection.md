@@ -89,7 +89,7 @@ class AuthController extends BaseController {
     public async mustBeMilesDavis() {
         // diff-add-start
         this.logger.info({
-            msg: 'user injection on /guard',
+            msg: 'user injection on /miles',
             // should be undefined
             userId: this.userId,
             // should be user entity

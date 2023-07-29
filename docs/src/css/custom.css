@@ -29,7 +29,7 @@
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-.code-block-diff-add {
+/* .code-block-diff-add {
     background-color: #92ffa1;
     margin: 0 calc(-1 * var(--ifm-pre-padding));
     padding: 0 var(--ifm-pre-padding);
@@ -39,4 +39,4 @@
     background-color: #ff000020;
     margin: 0 calc(-1 * var(--ifm-pre-padding));
     padding: 0 var(--ifm-pre-padding);
-}
+} */
