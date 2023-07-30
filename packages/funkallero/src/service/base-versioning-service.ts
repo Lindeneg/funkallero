@@ -17,7 +17,7 @@ import {
 } from '@lindeneg/funkallero-core';
 
 class BaseVersioningService extends SingletonService implements IVersioningService {
-    private static readonly controllerVersioningCache: Map<string, IVersioningContext> = new Map();
+    private static readonly controllerVersioningCache: Map<string, IVersioningContext | HttpException> = new Map();
 
     @injectService(SERVICE.CONFIGURATION)
     private readonly config: IConfigurationService;
@@ -63,9 +63,7 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
 
         devLogger('header versioning result', cacheKey, result);
 
-        if (!(result instanceof HttpException)) {
-            BaseVersioningService.controllerVersioningCache.set(cacheKey, result);
-        }
+        BaseVersioningService.controllerVersioningCache.set(cacheKey, result);
 
         return result;
     }
