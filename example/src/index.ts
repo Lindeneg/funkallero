@@ -30,8 +30,9 @@ Funkallero.create({
         'Custom-Header': 'Global-Custom-Header-Value', // can also be function that is given the request to which the response belongs
     },
 
+    // default: null
     versioning: {
-        type: 'header',
+        type: 'header', // can also be url
         headerName: 'api-version',
     },
 
