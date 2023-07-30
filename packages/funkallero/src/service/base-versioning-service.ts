@@ -97,12 +97,14 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
             }
         }
 
+        const version = route.version || controllerVs;
+
         return {
             routePath: route.path,
             basePath: urlJoin(basePath, controllerPath),
             version:
-                this.config.versioning?.type === 'header'
-                    ? `${this.config.versioning.headerName}=>${route.version || controllerVs}`
+                this.config.versioning?.type === 'header' && version
+                    ? `${this.config.versioning.headerName}=>${version}`
                     : undefined,
         };
     }
