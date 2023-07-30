@@ -13,6 +13,7 @@ import Test2MiddlewareService from '@/middleware/test-2-middleware-service';
 import '@/api/author-controller';
 import '@/api/book-controller';
 import '@/api/auth-controller';
+import '@/api/versioning-example-controller';
 
 BaseLoggerServicePalette.useDefaultPalette();
 
@@ -27,6 +28,11 @@ Funkallero.create({
     globalHeaders: {
         'Content-Type': 'application/json', // can easily be overwritten but nice default to have
         'Custom-Header': 'Global-Custom-Header-Value', // can also be function that is given the request to which the response belongs
+    },
+
+    versioning: {
+        type: 'header',
+        headerName: 'api-version',
     },
 
     // default: LOG_LEVEL.INFO
