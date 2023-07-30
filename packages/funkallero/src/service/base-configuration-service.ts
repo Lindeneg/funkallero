@@ -5,6 +5,7 @@ class BaseConfigurationService extends SingletonService implements IConfiguratio
     public readonly basePath: IConfigurationService['basePath'];
     public readonly logLevel: IConfigurationService['logLevel'];
     public readonly https: IConfigurationService['https'];
+    public readonly versioning: IConfigurationService['versioning'];
     public readonly globalHeaders: IConfigurationService['globalHeaders'];
     public readonly meta: IConfigurationService['meta'];
 }
