@@ -15,13 +15,15 @@ import Test2MiddlewareService from '../../example/src/middleware/test-2-middlewa
 import '../../example/src/api/author-controller';
 import '../../example/src/api/book-controller';
 import '../../example/src/api/auth-controller';
+import '../../example/src/api/versioning-example-controller';
 
 Funkallero.create({
     basePath: '/api',
     port: 3000,
     logLevel: LOG_LEVEL.SILENT,
-    meta: {
-        someApiKey: 'some-test-api-key',
+    versioning: {
+        type: 'header',
+        headerName: 'api-version',
     },
 
     setup(service) {

@@ -4,6 +4,7 @@ const META_DATA = {
     CONTROLLER_ROUTES: 'funkallero:controller-routes',
     RESPONSE_HEADERS: 'funkallero:response-headers',
     CONTROLLER_PATH: 'funkallero:controller-path',
+    CONTROLLER_VERSION: 'funkallero:controller-version',
     MIDDLEWARE_AFTER: 'funkallero:middleware-after',
     MIDDLEWARE_BEFORE: 'funkallero:middleware-before',
     AUTHORIZATION_POLICIES: 'funkallero:authorization-policies',

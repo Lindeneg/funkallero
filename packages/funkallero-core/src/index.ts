@@ -60,6 +60,11 @@ export type { default as IAuthenticationService } from './service/authentication
 export type { default as ITokenService } from './service/token-service';
 export type { default as IAuthorizationService } from './service/authorization-service';
 export type {
+    default as IVersioningService,
+    IVersioningPathContext,
+    IVersioningContext,
+} from './service/versioning-service';
+export type {
     default as IConfigurationService,
     IFunkalleroConfiguration,
     IFunkalleroPartialConfiguration,

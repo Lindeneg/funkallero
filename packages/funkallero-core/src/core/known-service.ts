@@ -1,5 +1,5 @@
-import SCOPED_SERVICE from '../enums/scoped-service';
-import SINGLETON_SERVICE from '../enums/singleton-service';
+import type SCOPED_SERVICE from '../enums/scoped-service';
+import type SINGLETON_SERVICE from '../enums/singleton-service';
 import type IAuthenticationService from '../service/authentication-service';
 import type IExpressService from '../service/express-service';
 import type IDataContextService from '../service/data-context-service';
@@ -10,6 +10,7 @@ import type IAuthorizationService from '../service/authorization-service';
 import type IExpressErrorHandlerService from '../service/express-error-handler-service';
 import type ITokenService from '../service/token-service';
 import type ISchemaParserService from '../service/schema-parser-service';
+import type IVersioningService from '../service/versioning-service';
 import type { Constructor } from '../types';
 
 type KnownSingletonService<TKey, TIsRegister> = TKey extends typeof SINGLETON_SERVICE.EXPRESS
@@ -44,6 +45,10 @@ type KnownSingletonService<TKey, TIsRegister> = TKey extends typeof SINGLETON_SE
     ? TIsRegister extends true
         ? Constructor<ITokenService>
         : ITokenService
+    : TKey extends typeof SINGLETON_SERVICE.VERSIONING
+    ? TIsRegister extends true
+        ? Constructor<IVersioningService>
+        : IVersioningService
     : null;
 
 type KnownScopedService<TKey> = TKey extends typeof SCOPED_SERVICE.AUTHORIZATION

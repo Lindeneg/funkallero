@@ -7,12 +7,16 @@ import ScopedService from './scoped-service';
 
 export type ControllerFn = (...args: any[]) => Promise<MediatorResult>;
 
-export type ControllerSettings = RouterOptions;
+export type ControllerSettings = {
+    options?: RouterOptions;
+    version?: string;
+};
 
 export interface IRoute {
     method: HttpMethodUnion;
     path: string;
     handlerKey: string;
+    version: string | null;
     routerOptions?: RouterOptions;
 }
 

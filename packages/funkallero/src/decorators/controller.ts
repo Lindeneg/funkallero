@@ -1,4 +1,3 @@
-import type { RouterOptions } from 'express';
 import {
     META_DATA,
     HTTP_METHOD,
@@ -10,16 +9,12 @@ import {
 } from '@lindeneg/funkallero-core';
 import controllerContainer from '../container/controller-container';
 
-const createRoute = (
-    method: HttpMethodUnion,
-    path: string,
-    handlerKey: string,
-    routerOptions?: RouterOptions
-): IRoute => ({
+const createRoute = (method: HttpMethodUnion, path: string, handlerKey: string, opts?: ControllerSettings): IRoute => ({
     method,
     path,
     handlerKey,
-    routerOptions,
+    version: opts?.version || null,
+    routerOptions: opts?.options,
 });
 
 const routeDecoratorFactory = (route: string, method: HttpMethodUnion, opts?: ControllerSettings) => {
@@ -37,10 +32,13 @@ const routeDecoratorFactory = (route: string, method: HttpMethodUnion, opts?: Co
     };
 };
 
-export function controller<T extends Constructor<IControllerService>>(basePath = '') {
+export function controller<T extends Constructor<IControllerService>>(basePath = '', version: string | null = null) {
     return function (target: T) {
         Reflect.defineProperty(target, META_DATA.CONTROLLER_PATH, {
             get: () => basePath,
+        });
+        Reflect.defineProperty(target, META_DATA.CONTROLLER_VERSION, {
+            get: () => version,
         });
         controllerContainer.register(target);
     };
