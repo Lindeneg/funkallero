@@ -34,14 +34,19 @@ class VersioningV2Controller extends Controller {
 }
 
 @controller()
-class VersioningVNController extends Controller {
-    @httpGet('/test', { version: 'v3' })
+class VersioningController extends Controller {
+    @httpGet('/test')
     public async test() {
+        return new MediatorResultSuccess('No Version');
+    }
+
+    @httpGet('/test', { version: 'v3' })
+    public async test3() {
         return new MediatorResultSuccess('v3');
     }
 
     @httpGet('/test2', { version: 'v4' })
-    public async test2() {
+    public async test4() {
         return new MediatorResultSuccess('v4');
     }
 }

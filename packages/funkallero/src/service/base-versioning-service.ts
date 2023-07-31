@@ -26,7 +26,7 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
         CustomController: Constructor<IControllerService>,
         customControllerPath: string,
         customControllerVersion: string | null,
-        requestedVersion: string,
+        requestedVersion: string | null,
         route: IRoute,
         routes: IRoute[]
     ): IVersioningContext | HttpException {
@@ -42,7 +42,8 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
             routes,
             route,
             requestedVersion,
-            customControllerVersion === requestedVersion
+            customControllerVersion === requestedVersion,
+            customControllerVersion
         );
 
         let result: IVersioningContext | HttpException;
@@ -114,21 +115,25 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
     private matchRoute(
         routes: IRoute[],
         originRoute: IRoute,
-        requestedVersion: string,
-        controllerVersionMatch: boolean
+        requestedVersion: string | null,
+        controllerVersionMatch: boolean,
+        controllerVersion: string | null
     ) {
-        return routes.find(
-            (route) =>
-                this.cmpStrWithoutForwardSlash(route.path, originRoute.path) &&
-                route.method === originRoute.method &&
-                (route.version === requestedVersion || (!route.version && controllerVersionMatch))
-        );
+        return routes.find((route) => {
+            const pathMatch = this.cmpStrWithoutForwardSlash(route.path, originRoute.path);
+            const methodMatch = route.method === originRoute.method;
+            const noVersions = !route.version && !requestedVersion && !controllerVersion;
+            const versionRouteMatch = route.version !== null && route.version === requestedVersion;
+            const pureControllerMatch = !route.version && controllerVersionMatch;
+
+            return pathMatch && methodMatch && (noVersions || versionRouteMatch || pureControllerMatch);
+        });
     }
 
     private findRouteFromForeignControllers(
         CustomController: Constructor<IControllerService>,
         customControllerPath: string,
-        requestedVersion: string,
+        requestedVersion: string | null,
         route: IRoute
     ) {
         const controllers = controllerContainer.getAll();
@@ -148,7 +153,13 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
 
             const currentRoutes: IRoute[] = Reflect.get(CurrentController.prototype, META_DATA.CONTROLLER_ROUTES);
 
-            const matchedRoute = this.matchRoute(currentRoutes, route, requestedVersion, controllerVersionMatch);
+            const matchedRoute = this.matchRoute(
+                currentRoutes,
+                route,
+                requestedVersion,
+                controllerVersionMatch,
+                controllerVersion
+            );
 
             if (matchedRoute) {
                 return {

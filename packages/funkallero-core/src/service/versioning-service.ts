@@ -23,7 +23,7 @@ interface IVersioningService {
         CustomController: Constructor<IControllerService>,
         customControllerPath: string,
         customControllerVersion: string | null,
-        requestedVersion: string,
+        requestedVersion: string | null,
         route: IRoute,
         routes: IRoute[]
     ): Promisify<IVersioningContext | HttpException>;

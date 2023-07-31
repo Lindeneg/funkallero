@@ -125,11 +125,7 @@ abstract class FunkalleroBase implements IFunkalleroBase {
         versioningService: IVersioningService
     ) {
         router[route.method](routePath, async (request, response, next) => {
-            if (
-                !this.config.versioning ||
-                this.config.versioning.type !== 'header' ||
-                (!customControllerVersion && !route.version)
-            ) {
+            if (!this.config.versioning || this.config.versioning.type !== 'header') {
                 return new RouteHandler(
                     CustomController,
                     route,
@@ -142,15 +138,11 @@ abstract class FunkalleroBase implements IFunkalleroBase {
 
             const version = request.headers[this.config.versioning.headerName];
 
-            if (!version) {
-                return next(HttpException.unprocessable(`header '${this.config.versioning.headerName}' not found`));
-            }
-
             const result = await versioningService.getContextFromHeaderVersioning(
                 CustomController,
                 customControllerPath,
                 customControllerVersion,
-                version.toString(),
+                version?.toString() || null,
                 route,
                 routes
             );
