@@ -43,7 +43,7 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build
-              run: yarn build core funkallero auth-service example && yarn build e2e express
+              run: yarn build core funkallero auth-service e2e express
 
             - name: Report ${{ github.event.inputs.report_1 }}
               run: yarn bench:${{ github.event.inputs.report_1 }}
