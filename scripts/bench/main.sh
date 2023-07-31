@@ -3,8 +3,6 @@
 MAIN_CMD="npx -y start-server-and-test"
 BASE_URL="http://localhost:3000/api/books"
 RUN_CMD="bash ./scripts/bench/run.sh"
-TEST_RESULT=1
-COMPARE_RESULT=1
 
 function run_test {
     if [ -z $1 ]; then
@@ -21,7 +19,7 @@ function run_test {
     
     $CMD
     
-    TEST_RESULT=$?
+    exit $?
 }
 
 function run_compare {
@@ -34,15 +32,13 @@ function run_compare {
     
     $CMD
     
-    COMPARE_RESULT=$?
+    exit $?
 }
 
 if [ "$1" == "compare" ]; then
     run_compare $2
-    exit $COMPARE_RESULT
 elif [ "$1" == "test" ]; then
     run_test $2 $3
-    exit $TEST_RESULT
 else
     echo "please provide either test or compare"
     exit 1
