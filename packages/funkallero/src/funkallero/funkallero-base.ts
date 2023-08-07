@@ -68,7 +68,7 @@ abstract class FunkalleroBase implements IFunkalleroBase {
                 versioningService
             );
 
-            devLogger(`resolved basePath for ${CustomController.name} is ${basePath}`);
+            devLogger(`resolved basePath for ${CustomController.name} on ${route.handlerKey} is ${basePath}`);
 
             const versionString = version ? `WITH ${version}` : '';
 
