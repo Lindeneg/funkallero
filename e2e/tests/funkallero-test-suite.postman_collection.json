@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "454c7a03-d6e0-4823-8dc6-cfb2ce869dfa",
+		"_postman_id": "b53543e4-7ca6-41a2-90d2-6ea942b183c9",
 		"name": "Funkallero E2E Test Suite",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "14852340"
@@ -1666,7 +1666,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v1\");\r",
+									"    pm.expect(response.data).eq(\"v1 - a\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1715,7 +1715,7 @@
 					},
 					"response": []
 				},
-                {
+				{
 					"name": "GetTestNoVersion",
 					"event": [
 						{
@@ -1783,7 +1783,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v1\");\r",
+									"    pm.expect(response.data).eq(\"v1 - b\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1846,7 +1846,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v2\");\r",
+									"    pm.expect(response.data).eq(\"v2 - d\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1909,7 +1909,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v3\");\r",
+									"    pm.expect(response.data).eq(\"v3 - f\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1972,7 +1972,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v2\");\r",
+									"    pm.expect(response.data).eq(\"v2 - e\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -2035,7 +2035,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v3\");\r",
+									"    pm.expect(response.data).eq(\"v3 - c\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -2098,7 +2098,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v4\");\r",
+									"    pm.expect(response.data).eq(\"v4 - g\");\r",
 									"});\r",
 									"\r",
 									"\r",
