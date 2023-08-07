@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 2
 description: Set global and route specific response headers
 ---
 

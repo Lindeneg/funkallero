@@ -1,6 +1,6 @@
 ---
-sidebar_position: 7
-description: Set global and route specific response headers
+sidebar_position: 3
+description: Set API versioning strategy
 ---
 
 # Versioning
