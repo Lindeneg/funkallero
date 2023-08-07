@@ -34,7 +34,6 @@ export {
     BaseMediatorAction,
     MediatorResultSuccess,
     MediatorResultFailure,
-    type default as IMediatorService,
     type IMediatorResultSuccess,
     type IMediatorResultFailure,
     type MediatorResult,
@@ -42,6 +41,7 @@ export {
     type MediatorSendParameters,
     type MediatorActionsConstraint,
 } from './service/mediator-service';
+export type { default as IMediatorService } from './service/mediator-service';
 export type { default as IBaseService } from './service/base-service';
 export type { default as IDataContextService } from './service/data-context-service';
 export type {
