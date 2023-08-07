@@ -6,17 +6,17 @@ import Controller from './controller';
 class VersioningV1Controller extends Controller {
     @httpGet('/test')
     public async test() {
-        return new MediatorResultSuccess('v1');
+        return new MediatorResultSuccess('v1 - a');
     }
 
     @httpGet('/test2')
     public async test2() {
-        return new MediatorResultSuccess('v1');
+        return new MediatorResultSuccess('v1 - b');
     }
 
     @httpGet('/test2', { version: 'v3' })
     public async test2v3() {
-        return new MediatorResultSuccess('v3');
+        return new MediatorResultSuccess('v3 - c');
     }
 }
 
@@ -24,12 +24,12 @@ class VersioningV1Controller extends Controller {
 class VersioningV2Controller extends Controller {
     @httpGet('/test')
     public async test() {
-        return new MediatorResultSuccess('v2');
+        return new MediatorResultSuccess('v2 - d');
     }
 
     @httpGet('/test2')
     public async test2() {
-        return new MediatorResultSuccess('v2');
+        return new MediatorResultSuccess('v2 - e');
     }
 }
 
@@ -42,11 +42,11 @@ class VersioningController extends Controller {
 
     @httpGet('/test', { version: 'v3' })
     public async test3() {
-        return new MediatorResultSuccess('v3');
+        return new MediatorResultSuccess('v3 - f');
     }
 
     @httpGet('/test2', { version: 'v4' })
     public async test4() {
-        return new MediatorResultSuccess('v4');
+        return new MediatorResultSuccess('v4 - g');
     }
 }
