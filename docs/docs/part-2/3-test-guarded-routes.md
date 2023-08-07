@@ -11,19 +11,6 @@ Start by building project again and starting server.
 
 ## Build Project
 
-:::info
-It is recommended to mark consumed libraries as `external` in `rollup.config.js`:
-
-```js
-{
-    ...,
-    external: ["@lindeneg/funkallero", "@lindeneg/funkallero-auth-service", "zod"],
-    ...
-}
-```
-
-:::
-
 ```bash
 yarn build
 ```
