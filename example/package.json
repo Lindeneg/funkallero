@@ -11,6 +11,7 @@
     "module": "./dist/index.mjs",
     "scripts": {
         "start": "node ./dist/index.mjs",
+        "dev": "npx -y concurrently \"yarn build:main --watch\" \"yarn build:lib --watch\" \"npx -y nodemon ./dist/index.mjs --dev\"",
         "build": "bash ./build.sh",
         "build:all": "yarn build:main && yarn build:lib",
         "build:main": "rollup -c",
