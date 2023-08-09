@@ -10,6 +10,13 @@ export {
     type BaseLoggerPalette,
 } from './service/base-logger-service';
 export { default as BaseZodParserService, type ParsedSchema } from './service/base-zod-parser-service';
+export {
+    default as BaseHandlebarTemplateService,
+    createHandlebarTemplate,
+    type TemplateEntry,
+    type TemplateEntries,
+    type Templates,
+} from './service/base-handlebar-template-service';
 export { default as MediatorAction } from './mediator-action';
 export { default as auth } from './decorators//auth';
 export { controller, httpGet, httpPost, httpPut, httpPatch, httpDelete, view } from './decorators/controller';
