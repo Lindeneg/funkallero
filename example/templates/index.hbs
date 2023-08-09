@@ -1,0 +1,19 @@
+<html lang='en'>
+{{> head 
+    title="Funkallero UI Example" 
+    description="Funkallero is an abstraction on top of Express"
+    css=(funkCsvArray "/css/core.css")
+    js=(funkCsvArray "/js/core.js")
+}}
+<body>
+    <nav>
+         <ul>
+            <li><a href="/">Home2</a></li>
+            <li><a href="/create">Create</a></li>
+            <li style="float:right" ><a class="active" href="/logout">Logout</a></li>
+        </ul> 
+    </nav>
+    <h1>hello={{hello}}</h1>
+    <h1>there={{there}}</h1>
+</body>
+</html>

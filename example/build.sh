@@ -7,10 +7,10 @@ function generate {
 }
 
 function build {
-    result="yarn rl"
-
+    result="yarn build:all"
+    
     $result
-
+    
     failure=$?
 }
 
@@ -18,9 +18,9 @@ build
 
 if [ "$failure" -ne 0 ]; then
     generate
-
+    
     build
-
+    
     exit $failure
 fi
 
