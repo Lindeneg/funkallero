@@ -20,6 +20,7 @@
     },
     "workspaces": [
         "example",
+        "ui-example",
         "e2e",
         "express",
         "packages/*"
