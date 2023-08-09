@@ -21,6 +21,7 @@ const createRoute = (method: HttpMethodUnion, path: string, handlerKey: string, 
     handlerKey,
     version: opts?.version || null,
     basePath: getRouteBasePath(opts?.basePath),
+    html: opts?.html || false,
     routerOptions: opts?.options,
 });
 
@@ -69,4 +70,14 @@ export function httpPatch(route = '', opts?: ControllerSettings) {
 
 export function httpDelete(route = '', opts?: ControllerSettings) {
     return routeDecoratorFactory(route, HTTP_METHOD.DELETE, opts);
+}
+
+export function view(
+    route = '',
+    opts: ControllerSettings = {
+        basePath: false,
+        html: true,
+    }
+) {
+    return routeDecoratorFactory(route, HTTP_METHOD.GET, opts);
 }

@@ -115,7 +115,9 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
         requestedVersion: string | null,
         route: IRoute
     ) {
-        return `${CustomController.name}-${customControllerPath}-${requestedVersion}-${route.path}-${route.method}-${route.basePath}-${route.version}-${customControllerVersion}`;
+        return `${CustomController.name}-${customControllerPath}-${requestedVersion}-${!!route.html}-${route.path}-${
+            route.method
+        }-${route.basePath}-${route.version}-${customControllerVersion}`;
     }
 
     private getBasePath(route: IRoute) {

@@ -23,7 +23,7 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
             return this.handleError(result.error);
         }
 
-        if (result.context === ACTION_RESULT.CONTEXT_WRITE) {
+        if (this.request._funkallero?.html || result.context === ACTION_RESULT.CONTEXT_WRITE) {
             this.handleWrite(result);
         } else {
             const hasPayload = !!result.value;

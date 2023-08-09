@@ -15,17 +15,26 @@ class BaseRequestErrorHandlerService extends SingletonService implements IExpres
     public handler(...[err, req, res, next]: ExpressErrorHandlerFnArgs) {
         if (res.headersSent) return next(err);
 
+        const errCode = err?.statusCode || 500;
+        const isHtmlResponse = !!req._funkallero?.html;
+
         this.logger.error({
-            msg: `${err?.statusCode || 500} ${req.method.toUpperCase()}: ${req.originalUrl}`,
+            msg: `${errCode} ${req.method.toUpperCase()}: ${req.originalUrl}`,
             source: 'BaseRequestErrorHandlerService',
             requestId: req.id,
+            isHtmlResponse,
             error: err,
         });
 
+        if (isHtmlResponse) {
+            this.logger.info('sending html error response on ' + req.id);
+            return res.status(errCode).send(`<h1>${errCode} Something went wrong. Please try again.</h1>`);
+        }
+
         if (err instanceof HttpException) {
-            res.status(err.statusCode).json(err.toResponse());
+            res.status(errCode).json(err.toResponse());
         } else {
-            res.status(500).json({
+            res.status(errCode).json({
                 message: 'Something went wrong. Please try again.',
             });
         }

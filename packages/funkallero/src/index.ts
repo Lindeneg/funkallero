@@ -12,7 +12,7 @@ export {
 export { default as BaseZodParserService, type ParsedSchema } from './service/base-zod-parser-service';
 export { default as MediatorAction } from './mediator-action';
 export { default as auth } from './decorators//auth';
-export { controller, httpGet, httpPost, httpPut, httpPatch, httpDelete } from './decorators/controller';
+export { controller, httpGet, httpPost, httpPut, httpPatch, httpDelete, view } from './decorators/controller';
 export { body, query, params, headers } from './decorators/inject-arg';
 export {
     after,
