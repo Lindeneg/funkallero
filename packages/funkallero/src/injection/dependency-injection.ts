@@ -6,7 +6,7 @@ import {
     type IServiceInjection,
 } from '@lindeneg/funkallero-core';
 
-const baseInjectionRegex = /^Base[a-zA-Z]+Service|Action$/;
+const baseInjectionRegex = /^Base[a-zA-Z]+Service|Action|Controller$/;
 
 export interface IDependencyInjection {
     inject(): Promise<any>;
@@ -45,16 +45,17 @@ abstract class DependencyInjection implements IDependencyInjection {
     private getBaseServiceInjection(Service: Constructor<IBaseService>) {
         const serviceInjections = Reflect.get(Service.prototype, META_DATA.SERVICE_INJECTION);
         const keys = serviceInjections ? Object.keys(serviceInjections) : [];
+        const injections = [];
         for (const key of keys) {
             if (baseInjectionRegex.test(key)) {
                 const baseInjections = this.getSpecificInjections(Service, key);
 
                 devLogger('found base injection for target', Service.name, baseInjections);
 
-                return baseInjections;
+                injections.push(...baseInjections);
             }
         }
-        return [];
+        return injections;
     }
 
     private getSpecificInjections(Service: Constructor<IBaseService>, name?: string) {
