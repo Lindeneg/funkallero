@@ -15,7 +15,7 @@ import '@/api/author-controller';
 import '@/api/book-controller';
 import '@/api/auth-controller';
 import '@/api/versioning-example-controller';
-import '@/views/home-controller';
+import '@/views';
 
 BaseLoggerServicePalette.useDefaultPalette();
 
@@ -83,7 +83,7 @@ Funkallero.create({
 
         if (process.env.NODE_ENV !== 'production') {
             await service.getSingletonService<DataContextSeedService>(SERVICE.DATA_CONTEXT_SEED)?.seed({
-                reset: true,
+                reset: false,
             });
         }
     },

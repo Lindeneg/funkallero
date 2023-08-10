@@ -4,4 +4,4 @@ coverage
 test-report.xml
 .idea
 https/*.pem
-public/js
+public/js/*.js

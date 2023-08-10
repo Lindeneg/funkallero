@@ -1,14 +1,28 @@
 import Handlebars from 'handlebars';
 import { BaseHandlebarTemplateService, createHandlebarTemplate } from '@lindeneg/funkallero';
 import TEMPLATE_NAME from '@/enums/template-name';
+import type IGetBookResponse from '@/dtos/get-book-response';
 
 const TEMPLATES = {
     [TEMPLATE_NAME.HEAD]: createHandlebarTemplate<never>({
-        path: 'templates/head.hbs',
+        path: 'templates/partials/head.hbs',
         partial: true,
     }),
-    [TEMPLATE_NAME.HOME]: createHandlebarTemplate<{ hello: string; there: number }>({
-        path: 'templates/index.hbs',
+    [TEMPLATE_NAME.NAV]: createHandlebarTemplate<never>({
+        path: 'templates/partials/nav.hbs',
+        partial: true,
+    }),
+    [TEMPLATE_NAME.HOME]: createHandlebarTemplate<{ isLoggedIn: boolean; books: IGetBookResponse[] }>({
+        path: 'templates/pages/index.hbs',
+    }),
+    [TEMPLATE_NAME.CREATE]: createHandlebarTemplate<never>({
+        path: 'templates/pages/create.hbs',
+    }),
+    [TEMPLATE_NAME.LOGIN]: createHandlebarTemplate<{ mode: 'Login' | 'Signup' }>({
+        path: 'templates/pages/login.hbs',
+    }),
+    [TEMPLATE_NAME.LOGOUT]: createHandlebarTemplate<never>({
+        path: 'templates/pages/index.hbs',
     }),
 } as const;
 

@@ -1,0 +1,31 @@
+<html lang='en'>
+{{> head 
+    title="Funkallero UI Login" 
+    description="Login page for Funkallero"
+    pureCss=true
+}}
+
+<body>
+    <header>
+    {{> nav page=mode }}
+
+    </header>
+    <hr />
+    <section class="login-section">
+        <h1>Funkallero {{mode}}</h1>
+        <form class="pure-form">
+            <fieldset>
+                {{#if (isStrEqual mode "signup")}}
+                <input id="name-field" type="text" placeholder="Name" />
+                {{/if}}
+                <input id="email-field" type="email" placeholder="Email" />
+                <input id="password-field" type="password" placeholder="Password" />
+                <button id="login-button" type="button" class="pure-button pure-button-primary">{{mode}}</button>
+            </fieldset>
+        </form>
+        <div id="error-div"></div>
+    </section>
+    <script src='/js/core.js'></script>
+    <script src='/js/login.js'></script>
+</body>
+</html>

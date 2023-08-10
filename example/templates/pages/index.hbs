@@ -1,0 +1,39 @@
+<html lang='en'>
+{{> head 
+    title="Funkallero UI Example" 
+    description="Funkallero is an abstraction on top of Express"
+    pureCss=true
+}}
+
+<body>
+    <header>
+    {{> nav
+        page="Home"
+        loggedIn=isLoggedIn
+    }}
+
+    </header>
+    <hr />
+    <section class="book-section">
+        <h1>Books</h1>
+        <table class="pure-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each books}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.author.name}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>
