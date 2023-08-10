@@ -26,7 +26,7 @@ const TEMPLATES = {
         path: 'templates/pages/login.hbs',
     }),
     [TEMPLATE_NAME.LOGOUT]: createHandlebarTemplate<never>({
-        path: 'templates/pages/index.hbs',
+        path: 'templates/pages/logout.hbs',
     }),
 } as const;
 

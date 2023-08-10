@@ -1,8 +1,20 @@
-import { before, after, body, controller, httpPost, type ParsedSchema } from '@lindeneg/funkallero';
+import {
+    ACTION_RESULT,
+    MediatorResultSuccess,
+    setHeaders,
+    before,
+    after,
+    body,
+    controller,
+    httpPost,
+    httpGet,
+    type ParsedSchema,
+} from '@lindeneg/funkallero';
 import Controller from './controller';
 import SERVICE from '@/enums/service';
 import loginSchema from '@/dtos/login-dto';
 import signupSchema from '@/dtos/signup-dto';
+import AUTH from '@/enums/auth';
 
 @controller()
 class AuthController extends Controller {
@@ -10,6 +22,14 @@ class AuthController extends Controller {
     @after(SERVICE.COOKIE_MIDDLEWARE)
     public async login(@body(loginSchema) loginDto: ParsedSchema<typeof loginSchema>) {
         return this.mediator.send('LoginCommand', loginDto);
+    }
+
+    @httpGet('/logout')
+    @setHeaders({
+        'Set-Cookie': `${AUTH.COOKIE_NAME}=; Path=/; Max-Age=0;`,
+    })
+    public async logout() {
+        return new MediatorResultSuccess(ACTION_RESULT.UNIT);
     }
 
     @httpPost('/signup')
