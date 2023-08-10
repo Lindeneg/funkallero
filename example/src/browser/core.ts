@@ -46,3 +46,13 @@ const postJson = async (path: string, body: RequestInit['body'], onSuccess: (res
 const patchJson = async (path: string, body: RequestInit['body'], onSuccess: (response: Response) => void) => {
     return sendRequest(path, 'PATCH', { 'Content-Type': 'application/json' }, body, onSuccess);
 };
+
+(() => {
+    const logoutBtn = document.getElementById('logout-btn');
+
+    if (!logoutBtn) return;
+
+    logoutBtn.addEventListener('click', () => {
+        window.location.href = '/logout';
+    });
+})();
