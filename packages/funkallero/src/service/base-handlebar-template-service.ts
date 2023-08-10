@@ -43,6 +43,10 @@ const STANDARD_HELPERS = {
     funkCsvArray: function (str: string): string[] {
         return str.split(',');
     },
+    isStrEqual: function (s1: string, s2: string, ignoreCaps = false): boolean {
+        if (ignoreCaps) return s1.toLowerCase() === s2.toLowerCase();
+        return s1 === s2;
+    },
 };
 
 abstract class BaseHandlebarTemplateService<TEntries extends TemplateEntries> extends SingletonService {
@@ -55,6 +59,9 @@ abstract class BaseHandlebarTemplateService<TEntries extends TemplateEntries> ex
     protected templates: Templates<TEntries>;
 
     protected readonly TEMPLATES: TEntries;
+    protected readonly PARTIALS: {
+        [TKey in keyof TEntries]: TEntries[TKey]['partial'] extends true ? TEntries[TKey] : never;
+    };
     protected readonly enableStandardHelpers: boolean;
     protected readonly Handlebars: typeof Handlebars;
 
@@ -63,6 +70,12 @@ abstract class BaseHandlebarTemplateService<TEntries extends TemplateEntries> ex
 
         this.Handlebars = handlebars;
         this.TEMPLATES = TEMPLATES;
+        this.PARTIALS = Object.entries(TEMPLATES).reduce((acc, [key, value]) => {
+            if (value.partial) {
+                acc[key] = value;
+            }
+            return acc;
+        }, {} as any);
         this.enableStandardHelpers = enableStandardHelpers;
         this.templates = {} as Templates<TEntries>;
     }
@@ -74,7 +87,7 @@ abstract class BaseHandlebarTemplateService<TEntries extends TemplateEntries> ex
 
             if (!template) return;
 
-            if ((value as any).partial) {
+            if (value.partial) {
                 this.Handlebars.registerPartial(key, template);
             }
 
@@ -108,9 +121,25 @@ abstract class BaseHandlebarTemplateService<TEntries extends TemplateEntries> ex
     protected async handleDevRender<TKey extends keyof Templates<TEntries>>(
         ...[key, props]: RenderArgs<TEntries, TKey>
     ): Promise<string | null> {
-        const template = await this.loadTemplate(this.TEMPLATES[key].path);
+        const target = this.TEMPLATES[key];
+
+        if (!target) return null;
+
+        const template = await this.loadTemplate(target.path);
 
         if (!template) return null;
+
+        await Promise.all(
+            Object.entries(this.PARTIALS).map(async ([key, value]) => {
+                if (!value) return;
+
+                const partial = await this.loadTemplate(value.path);
+
+                if (!partial) return;
+
+                this.Handlebars.registerPartial(key, partial);
+            })
+        );
 
         return this.Handlebars.compile(template)(props);
     }
