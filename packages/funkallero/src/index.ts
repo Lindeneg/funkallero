@@ -1,4 +1,5 @@
 export { default as default } from './funkallero';
+export { default as BaseConfigurationService } from './service/base-configuration-service';
 export { default as ControllerService } from './service/base-controller-service';
 export { default as MediatorService } from './service/base-mediator-service';
 export { default as BaseExpressService } from './service/base-express-service';
