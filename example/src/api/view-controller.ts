@@ -13,7 +13,7 @@ class ViewController extends Controller {
     public async index(@query() query: Record<string, string>) {
         return this.mediator.send('GetIndexPage', {
             query,
-            userId: await this.authenticationService.getUserIdSafe(),
+            userId: await this.authenticationService.getUserIdSafe(), // will be null if user is not authenticated
         });
     }
 

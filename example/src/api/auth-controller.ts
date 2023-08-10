@@ -12,9 +12,9 @@ import {
 } from '@lindeneg/funkallero';
 import Controller from './controller';
 import SERVICE from '@/enums/service';
+import AUTH from '@/enums/auth';
 import loginSchema from '@/dtos/login-dto';
 import signupSchema from '@/dtos/signup-dto';
-import AUTH from '@/enums/auth';
 
 @controller()
 class AuthController extends Controller {

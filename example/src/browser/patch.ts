@@ -17,8 +17,8 @@
             <button id="cancel-button" type="button" class="pure-button pure-button-secondary">Cancel</button>
         </div>
     </fieldset>
-<div id="error-div"></div>
-</form>`;
+</form>
+<div id="error-div"></div>`;
     };
 
     const setUpdateSectionListeners = (
@@ -31,15 +31,15 @@
         const cancelButton = section.querySelector('#cancel-button');
 
         updateButton?.addEventListener('click', () => {
-            const name = getInputFieldValue(section.querySelector('#name-field'));
-            const description = getInputFieldValue(section.querySelector('#description-field'));
+            const name = window.funkalleroCore.getInputFieldValue(section.querySelector('#name-field'));
+            const description = window.funkalleroCore.getInputFieldValue(section.querySelector('#description-field'));
 
             if (name === originalName && description === originalDescription) {
-                setError('Please make a change to a field..');
+                window.funkalleroCore.setError('Please make a change to a field..');
                 return;
             }
 
-            return patchJson('/books/' + bookId, JSON.stringify({ name, description }), () => {
+            return window.funkalleroCore.patchJson('/books/' + bookId, JSON.stringify({ name, description }), () => {
                 window.location.href = '/';
             });
         });
@@ -62,32 +62,28 @@
     };
 
     const remove = async (bookId: string) => {
-        return sendRequest('/books/' + bookId, 'DELETE', undefined, undefined, () => {
+        return window.funkalleroCore.sendRequest('/books/' + bookId, 'DELETE', undefined, undefined, () => {
             window.location.href = '/';
         });
     };
 
-    const main = () => {
-        const actionElements = document.querySelectorAll('.update,.delete');
+    const actionElements = document.querySelectorAll('.update,.delete');
 
-        actionElements.forEach((element) => {
-            element.addEventListener('click', ({ target }: any) => {
-                const isUpdate = target.classList.contains('update');
-                const bookId = target.parentNode.getAttribute('data-book-id');
+    actionElements.forEach((element) => {
+        element.addEventListener('click', ({ target }: any) => {
+            const isUpdate = target.classList.contains('update');
+            const bookId = target.parentNode.getAttribute('data-book-id');
 
-                if (!isUpdate) return remove(bookId);
+            if (!isUpdate) return remove(bookId);
 
-                const updateSection = document.getElementById('update-book-section');
+            const updateSection = document.getElementById('update-book-section');
 
-                if (!updateSection) return;
+            if (!updateSection) return;
 
-                const name = target.parentNode.getAttribute('data-book-name');
-                const description = target.parentNode.getAttribute('data-book-description');
+            const name = target.parentNode.getAttribute('data-book-name');
+            const description = target.parentNode.getAttribute('data-book-description');
 
-                setUpdateSectionTemplate(bookId, name, description);
-            });
+            setUpdateSectionTemplate(bookId, name, description);
         });
-    };
-
-    main();
+    });
 })();

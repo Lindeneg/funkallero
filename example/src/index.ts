@@ -17,6 +17,8 @@ import '@/api/book-controller';
 import '@/api/auth-controller';
 import '@/api/versioning-example-controller';
 
+const isDev = process.argv.includes('--dev');
+
 BaseLoggerServicePalette.useDefaultPalette();
 
 Funkallero.create({
@@ -41,18 +43,11 @@ Funkallero.create({
     // default: LOG_LEVEL.INFO
     logLevel: LOG_LEVEL.VERBOSE,
 
-    // default: null
-    // can also be a function
-    // https: {
-    //     key: 'path/to/key.pem',
-    //     cert: 'path/to/cert.pem',
-    // },
-
     // default: {}
     // this object will, among other things, be available in the configuration service
     meta: {
         someApiKey: 'some-test-api-key', // or more realistically: process.env.SOME_API_KEY,
-        isDev: process.argv.includes('--dev'),
+        isDev,
     },
 
     setup(service) {
@@ -83,7 +78,7 @@ Funkallero.create({
 
         if (process.env.NODE_ENV !== 'production') {
             await service.getSingletonService<DataContextSeedService>(SERVICE.DATA_CONTEXT_SEED)?.seed({
-                reset: false,
+                reset: !isDev, // do not reset db on hot reloads if dev mode is active
             });
         }
     },
