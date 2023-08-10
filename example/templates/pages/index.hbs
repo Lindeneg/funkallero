@@ -22,6 +22,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Author</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,10 +31,15 @@
                     <td>{{this.name}}</td>
                     <td>{{this.description}}</td>
                     <td>{{this.author.name}}</td>
+                    <td data-book-id="{{this.id}}" data-book-name="{{this.name}}" data-book-description="{{this.description}}">{{#if (isStrEqual ../userId this.author.id)}}<span class="update" >Update</span> | <span class="delete">Delete</span>{{else}}-{{/if}}</td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
     </section>
+    <section id="update-book-section" class="book-section">
+    </section>
+    <script src='/js/core.js'></script>
+    <script src='/js/patch.js'></script>
 </body>
 </html>

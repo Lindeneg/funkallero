@@ -42,3 +42,7 @@ const sendRequest = async (
 const postJson = async (path: string, body: RequestInit['body'], onSuccess: (response: Response) => void) => {
     return sendRequest(path, 'POST', { 'Content-Type': 'application/json' }, body, onSuccess);
 };
+
+const patchJson = async (path: string, body: RequestInit['body'], onSuccess: (response: Response) => void) => {
+    return sendRequest(path, 'PATCH', { 'Content-Type': 'application/json' }, body, onSuccess);
+};

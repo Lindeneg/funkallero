@@ -22,3 +22,21 @@
     justify-content: center;
     padding: 10px;
 }
+
+.update,
+.delete {
+    cursor: pointer;
+}
+
+.update:hover,
+.delete:hover {
+    text-decoration: underline;
+}
+
+.delete:hover {
+    color: red;
+}
+
+hr {
+    width: 100%;
+}

@@ -12,7 +12,11 @@ const TEMPLATES = {
         path: 'templates/partials/nav.hbs',
         partial: true,
     }),
-    [TEMPLATE_NAME.HOME]: createHandlebarTemplate<{ isLoggedIn: boolean; books: IGetBookResponse[] }>({
+    [TEMPLATE_NAME.HOME]: createHandlebarTemplate<{
+        isLoggedIn: boolean;
+        userId: string | null;
+        books: IGetBookResponse[];
+    }>({
         path: 'templates/pages/index.hbs',
     }),
     [TEMPLATE_NAME.CREATE]: createHandlebarTemplate<never>({

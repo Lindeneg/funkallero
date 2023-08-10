@@ -35,6 +35,7 @@ export class GetIndexPage extends BaseViewAction {
 
         const template = await this.templateService.render(TEMPLATE_NAME.HOME, {
             books,
+            userId: userId || '',
             isLoggedIn: userId !== null,
         });
 

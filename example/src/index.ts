@@ -11,11 +11,11 @@ import TemplateService from '@/services/template-service';
 import CookieMiddlewareService from '@/middleware/cookie-middleware-service';
 import Test1MiddlewareService from '@/middleware/test-1-middleware-service';
 import Test2MiddlewareService from '@/middleware/test-2-middleware-service';
+import '@/api/view-controller';
 import '@/api/author-controller';
 import '@/api/book-controller';
 import '@/api/auth-controller';
 import '@/api/versioning-example-controller';
-import '@/views';
 
 BaseLoggerServicePalette.useDefaultPalette();
 
