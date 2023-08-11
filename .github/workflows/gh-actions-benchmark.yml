@@ -24,7 +24,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
               with:
-                  ref: ${{ github.event.inputs.ref_name }}
+                  ref: ${{ inputs.ref_name }}
 
             - name: Use Node.js
               uses: actions/setup-node@v3
@@ -43,10 +43,10 @@ jobs:
             - name: Migrate
               run: yarn cli migrate example
 
-            - name: Report ${{ github.event.inputs.report }}
-              run: yarn bench test ${{ github.event.inputs.start }} ${{ github.event.inputs.report }}
+            - name: Report ${{ inputs.report }}
+              run: yarn bench test ${{ inputs.start }} ${{ inputs.report }}
 
             - uses: actions/upload-artifact@master
               with:
-                  name: ${{ github.event.inputs.report }}
-                  path: ./locust/report/${{ github.event.inputs.report }}.json
+                  name: ${{ inputs.report }}
+                  path: ./locust/report/${{ inputs.report }}.json
