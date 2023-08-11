@@ -9,15 +9,15 @@ function run_test {
         echo please provide start argument
         exit 1
     fi
-
+    
     if [ -z $2 ]; then
         echo please provide report name
         exit 1
     fi
-
+    
     local CMD="$MAIN_CMD \"yarn start $1\" $BASE_URL \"$RUN_CMD $2\""
     
-    $CMD
+    $CMD >> /dev/null 2>&1
     
     exit $?
 }
@@ -27,7 +27,7 @@ function run_compare {
         echo please provide report to compare
         exit 1
     fi
-
+    
     local CMD="python3 ./locust/process_reports.py $1"
     
     $CMD
@@ -37,7 +37,7 @@ function run_compare {
 
 if [ "$1" == "compare" ]; then
     run_compare $2
-elif [ "$1" == "test" ]; then
+    elif [ "$1" == "test" ]; then
     run_test $2 $3
 else
     echo "please provide either test or compare"
