@@ -60,7 +60,7 @@ class RouteHandler {
         const hasAuthPolicies = authInjection.policies.length > 0;
 
         this.logger.info({
-            msg: `${this.route.method.toUpperCase()} ${this.routePath}`,
+            msg: `${this.route.method.toUpperCase()} ${this.routePath || '/'}`,
             source: this.CustomController.name,
             requestId: this.request.id,
             hasAuthPolicies,
@@ -130,7 +130,9 @@ class RouteHandler {
 
             this.response.setHeader(key, evaluatedValue);
 
-            if (key === 'Content-Type' && evaluatedValue === 'text/html') {
+            const htmlHeaderMatch = evaluatedValue.match(/^text\/html/);
+
+            if (key === 'Content-Type' && htmlHeaderMatch && htmlHeaderMatch[1]) {
                 didHtmlHeader = true;
                 hasContentTypeHtml = true;
             }
@@ -138,7 +140,7 @@ class RouteHandler {
 
         if (hasContentTypeHtml) {
             if (!didHtmlHeader) {
-                this.response.setHeader('Content-Type', 'text/html');
+                this.response.setHeader('Content-Type', 'text/html; charset=utf-8');
             }
 
             this.request._funkallero = {

@@ -72,7 +72,9 @@ abstract class FunkalleroBase implements IFunkalleroBase {
 
             const versionString = version ? `WITH ${version}` : '';
 
-            logger.info(`${route.method.toUpperCase()} ${urlJoin(basePath, routePath)} ${versionString}`);
+            const loggedRoutePath = !basePath && !routePath ? '/' : urlJoin(basePath, routePath);
+
+            logger.info(`${route.method.toUpperCase()} ${loggedRoutePath} ${versionString}`);
 
             app.use(basePath, router);
         }
