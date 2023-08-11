@@ -18,6 +18,7 @@ import '@/api/auth-controller';
 import '@/api/versioning-example-controller';
 
 const isDev = process.argv.includes('--dev');
+const isTest = process.argv.includes('--test');
 
 BaseLoggerServicePalette.useDefaultPalette();
 
@@ -41,7 +42,7 @@ Funkallero.create({
     },
 
     // default: LOG_LEVEL.INFO
-    logLevel: LOG_LEVEL.INFO,
+    logLevel: isTest ? LOG_LEVEL.SILENT : LOG_LEVEL.INFO,
 
     // default: {}
     // this object will, among other things, be available in the configuration service
