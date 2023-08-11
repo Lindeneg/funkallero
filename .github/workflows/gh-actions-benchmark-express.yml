@@ -36,11 +36,13 @@ jobs:
               uses: actions/download-artifact@master
               with:
                   name: express
+                  path: ./locust/report
 
             - name: Get Current report
               uses: actions/download-artifact@master
               with:
                   name: current
+                  path: ./locust/report
 
             - name: Express <- Current
               run: yarn bench compare express
