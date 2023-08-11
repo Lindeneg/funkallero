@@ -11,7 +11,7 @@ export default () => {
             format: 'esm',
             exports: 'named',
         },
-        external: ['bcryptjs', 'express', 'jsonwebtoken', 'zod'],
+        external: ['bcryptjs', 'express', 'jsonwebtoken', 'zod', '@prisma/client'],
         plugins: [
             cleaner({
                 targets: ['./dist'],

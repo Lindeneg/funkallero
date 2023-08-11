@@ -1,5 +1,5 @@
 import Funkallero, { LOG_LEVEL, BaseZodParserService, BaseLoggerServicePalette } from '@lindeneg/funkallero';
-import { BaseTokenService } from '@lindeneg/funkallero-auth-service';
+import { BaseTokenConfiguration, BaseTokenService } from '@lindeneg/funkallero-auth-service';
 import SERVICE from '@/enums/service';
 import ExpressService from '@/services/express-service';
 import MediatorService from '@/services/mediator-service';
@@ -42,7 +42,7 @@ Funkallero.create({
     },
 
     // default: LOG_LEVEL.INFO
-    logLevel: isTest ? LOG_LEVEL.SILENT : LOG_LEVEL.INFO,
+    logLevel: LOG_LEVEL.VERBOSE,
 
     // default: {}
     // this object will, among other things, be available in the configuration service
@@ -52,6 +52,8 @@ Funkallero.create({
     },
 
     setup(service) {
+        BaseTokenConfiguration.salt = 6; // default is 10
+
         // mediator and data-context services are always required
         service.registerSingletonService(SERVICE.MEDIATOR, MediatorService);
         service.registerSingletonService(SERVICE.DATA_CONTEXT, DataContextService);
