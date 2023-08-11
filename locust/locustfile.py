@@ -18,7 +18,7 @@ class State:
 
 def process_jane_book_id_response(json):
     if State.jane_book_id is None:
-        State.jane_book_id = json["data"]["id"]
+        State.jane_book_id = json["id"]
 
 
 def random_str_int():
