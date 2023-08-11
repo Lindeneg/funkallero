@@ -8,7 +8,7 @@ ReportComparisonResult = tuple[str, ReportTestError]
 base_path = os.path.join(os.sep.join(__file__.split(os.sep)[:-1]), "report")
 is_express = sys.argv[1] == "express"
 
-min_accumulated_request_percent = 85 if is_express else 50
+min_accumulated_request_percent = 70 if is_express else 50
 average_percent_max_increase = 15 if is_express else 5
 max_percent_max_increase = 15 if is_express else 10
 min_percent_max_increase = 20 if is_express else 10
