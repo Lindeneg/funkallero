@@ -20,9 +20,7 @@ const getBooks: RequestHandler = async (req, res, next) => {
             },
         });
 
-        res.status(200).json({
-            books,
-        });
+        res.status(200).json(books);
     } catch (err) {
         next(HttpException.internal(null, err));
     }

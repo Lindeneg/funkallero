@@ -63,7 +63,7 @@ def get_percent_diff(old: float, new: float) -> tuple[float, str]:
 
 
 def get_column_result(
-    target: tuple[float, str], boundary: int, name: str, errors: list[str]
+    target: tuple[float, str], boundary: Union[int, None], name: str, errors: list[str]
 ) -> dict[str, str]:
     result = {
         "mark": "",
@@ -71,12 +71,12 @@ def get_column_result(
     }
 
     did_increase = target[1] == "INCREASED"
-    if did_increase and target[0] > boundary:
+    if did_increase and boundary and target[0] > boundary:
         errors.append(f"{name} increased by over {boundary}%")
         result["mark"] = red_cross_mark
     else:
-        result["mark"] = green_check_mark
-        result["msg"] = "within acceptable range" if did_increase else ""
+        result["mark"] = green_check_mark if boundary else "  "
+        result["msg"] = "within acceptable range" if did_increase and boundary else ""
 
     return result
 
@@ -90,10 +90,10 @@ def process_comparison_result(
         avg, average_percent_max_increase, "Average response time", errors
     )
     max_result = get_column_result(
-        max, max_percent_max_increase, "Max response time", errors
+        max, None, "Max response time", errors  # None -> max_percent_max_increase
     )
     min_result = get_column_result(
-        min, min_percent_max_increase, "Min response time", errors
+        min, None, "Min response time", errors  # None -> min_percent_max_increase
     )
 
     return [
@@ -114,7 +114,7 @@ def assert_accumulated_requests_count(current: Report, latest: Report) -> None:
 def get_report_comparison_result(
     current: Report, latest: Report
 ) -> ReportComparisonResult:
-    #assert_accumulated_requests_count(current, latest)
+    assert_accumulated_requests_count(current, latest)
 
     avg_percent, avg_direction = get_percent_diff(
         current.average_response_time, latest.average_response_time

@@ -21,6 +21,7 @@ const isDev = process.argv.includes('--dev');
 const isTest = process.argv.includes('--test');
 
 BaseLoggerServicePalette.useDefaultPalette();
+BaseTokenConfiguration.salt = 6; // default is 10
 
 Funkallero.create({
     // default: ''
@@ -52,8 +53,6 @@ Funkallero.create({
     },
 
     setup(service) {
-        BaseTokenConfiguration.salt = 6; // default is 10
-
         // mediator and data-context services are always required
         service.registerSingletonService(SERVICE.MEDIATOR, MediatorService);
         service.registerSingletonService(SERVICE.DATA_CONTEXT, DataContextService);

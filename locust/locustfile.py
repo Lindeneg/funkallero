@@ -2,12 +2,6 @@ import math, random, logging
 from locust import HttpUser, task, events
 import logging
 
-log = logging.getLogger()
-log.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-fh = logging.FileHandler("locust.log")
-fh.setLevel(logging.DEBUG)
-
 
 @events.quitting.add_listener
 def _(environment, **kw):
@@ -35,7 +29,7 @@ class GetResources(HttpUser):
         if response.ok and State.jane_book_id is None:
             json = response.json()
 
-            for _, v in enumerate(json["books"]):
+            for _, v in enumerate(json):
                 if v["author"]["name"] == "Jane":
                     State.jane_book_id = v["id"]
                     break
