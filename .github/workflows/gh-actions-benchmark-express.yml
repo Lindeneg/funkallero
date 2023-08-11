@@ -6,15 +6,14 @@ on:
             - master
 
 jobs:
-    # benchmark_express:
-    #     uses: ./.github/workflows/gh-actions-benchmark.yml
-    #     with:
-    #         ref_name: ${{ github.ref }}
-    #         start: express
-    #         report: express
+    benchmark_express:
+        uses: ./.github/workflows/gh-actions-benchmark.yml
+        with:
+            ref_name: ${{ github.ref }}
+            start: express
+            report: express
 
     benchmark_example:
-        #needs: benchmark_express
         uses: ./.github/workflows/gh-actions-benchmark.yml
         with:
             ref_name: ${{ github.ref }}
@@ -22,7 +21,7 @@ jobs:
             report: current
 
     compare:
-        needs: benchmark_example #[benchmark_express, benchmark_example]
+        needs: [benchmark_express, benchmark_example]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
