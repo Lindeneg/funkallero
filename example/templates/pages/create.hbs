@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang='en'>
+{{> head 
+    title="Funkallero Create Page" 
+    description="Create a new book tied to a user"
+    pureCss=true
+}}
+
+<body>
+    <header>
+    {{> nav
+        page="Create"
+        loggedIn=true
+    }}
+
+    </header>
+    <hr />
+    <section class="create-section">
+        <h1>Create Book</h1>
+        <form class="pure-form pure-form-aligned">
+            <fieldset>
+                <div class="pure-control-group">
+                    <label for="aligned-name">Book Name</label>
+                    <input type="text" id="name-field" placeholder="Name" />
+                </div>
+                <div class="pure-control-group">
+                    <label for="aligned-description">Book Description</label>
+                    <input type="text" id="description-field" placeholder="Description" />
+                </div>
+                <div class="pure-controls">
+                    <button id="create-button" type="button" class="pure-button pure-button-primary">Create Book</button>
+                </div>
+            </fieldset>
+        </form>
+        <div id="error-div"></div>
+    </section>
+    <script src='/js/core.js'></script>
+    <script src='/js/create.js'></script>
+</body>
+</html>

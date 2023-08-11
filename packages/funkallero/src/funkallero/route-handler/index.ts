@@ -60,7 +60,7 @@ class RouteHandler {
         const hasAuthPolicies = authInjection.policies.length > 0;
 
         this.logger.info({
-            msg: `${this.route.method.toUpperCase()} ${this.routePath}`,
+            msg: `${this.route.method.toUpperCase()} ${this.routePath || '/'}`,
             source: this.CustomController.name,
             requestId: this.request.id,
             hasAuthPolicies,
@@ -78,6 +78,8 @@ class RouteHandler {
                 response: this.response,
             }
         ).inject();
+
+        await this.setResponseHeaders(customController);
 
         try {
             if (hasAuthPolicies) {
@@ -109,8 +111,6 @@ class RouteHandler {
                 result = await middlewareHandler.runAfterMiddleware(result);
             }
 
-            await this.setResponseHeaders(customController);
-
             await customController.handleResult(result);
         } catch (err) {
             this.next(err);
@@ -120,6 +120,8 @@ class RouteHandler {
     private async setResponseHeaders(customController: IControllerService) {
         const headers = await this.getResponseHeaders(customController);
         const headerEntries = Object.entries(headers);
+        let hasContentTypeHtml = this.route.html || false;
+        let didHtmlHeader = false;
 
         for (const [key, value] of headerEntries) {
             const evaluatedValue = await this.getResponseHeaderValue(value);
@@ -127,6 +129,23 @@ class RouteHandler {
             devLogger('setting header', key, 'with value', evaluatedValue);
 
             this.response.setHeader(key, evaluatedValue);
+
+            const htmlHeaderMatch = evaluatedValue.match(/^text\/html/);
+
+            if (key === 'Content-Type' && htmlHeaderMatch && htmlHeaderMatch[1]) {
+                didHtmlHeader = true;
+                hasContentTypeHtml = true;
+            }
+        }
+
+        if (hasContentTypeHtml) {
+            if (!didHtmlHeader) {
+                this.response.setHeader('Content-Type', 'text/html; charset=utf-8');
+            }
+
+            this.request._funkallero = {
+                html: true,
+            };
         }
     }
 

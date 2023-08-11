@@ -5,6 +5,7 @@ import {
     HttpException,
     ControllerService,
     type MediatorResult,
+    type MediatorResultSuccess,
     type ILoggerService,
 } from '@lindeneg/funkallero-core';
 import type BaseMediatorService from './base-mediator-service';
@@ -22,34 +23,44 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
             return this.handleError(result.error);
         }
 
-        const hasPayload = !!result.value;
+        if (this.request._funkallero?.html || result.context === ACTION_RESULT.CONTEXT_WRITE) {
+            this.handleWrite(result);
+        } else {
+            const hasPayload = !!result.value;
 
-        let statusCode: number = 200;
+            let statusCode: number = 200;
 
-        if (result.context === ACTION_RESULT.SUCCESS_CREATE) {
-            statusCode = 201;
-        }
+            if (result.context === ACTION_RESULT.SUCCESS_CREATE) {
+                statusCode = 201;
+            }
 
-        if (
-            !hasPayload &&
-            (result.context === ACTION_RESULT.SUCCESS_UPDATE || result.context === ACTION_RESULT.SUCCESS_DELETE)
-        ) {
-            statusCode = 204;
-        }
+            if (
+                !hasPayload &&
+                (result.context === ACTION_RESULT.SUCCESS_UPDATE || result.context === ACTION_RESULT.SUCCESS_DELETE)
+            ) {
+                statusCode = 204;
+            }
 
-        this.logger.verbose({
-            msg: 'request handled successfully',
-            statusCode,
-            requestId: this.request.id,
-        });
+            this.logger.verbose({
+                msg: 'request handled successfully',
+                statusCode,
+                requestId: this.request.id,
+            });
 
-        this.response.status(statusCode);
+            this.response.status(statusCode);
 
-        if (hasPayload) {
-            this.response.json({ data: result.value });
+            if (hasPayload) {
+                this.response.json(result.value);
+            }
         }
 
         this.response.end();
+    }
+
+    public handleWrite<TResult>(result: MediatorResultSuccess<TResult>): void {
+        if (result.value) {
+            this.response.write(result.value);
+        }
     }
 
     private async handleError(err: string) {

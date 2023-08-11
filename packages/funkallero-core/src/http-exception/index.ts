@@ -1,3 +1,5 @@
+import type { Promisify } from '../types';
+
 const MESSAGES = {
     malformedBody: 'The requested action could not be exercised due to malformed syntax.',
     unauthorized:
@@ -12,6 +14,27 @@ const MESSAGES = {
 interface IErrorResponse {
     message: string;
     error?: unknown;
+}
+
+export type GetHttpExceptionHtmlFn = (message: string, statusCode: number) => Promisify<string>;
+
+export class HttpExceptionHtml {
+    public static getHtml: GetHttpExceptionHtmlFn = HttpExceptionHtml.getHtmlDefault;
+
+    private static getHtmlDefault(message: string, statusCode: number): string {
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${statusCode}</title>
+</head>
+<body>
+    <h2>${statusCode} - An Error Occurred</h2>
+    <p>${message}</p>
+</body>
+</html>`;
+    }
 }
 
 class HttpException extends Error {
@@ -35,6 +58,10 @@ class HttpException extends Error {
         }
 
         return response;
+    }
+
+    public toHtml(): Promisify<string> {
+        return HttpExceptionHtml.getHtml(this.message, this.statusCode);
     }
 
     public static malformedBody(message: string | null = null, error?: IErrorResponse['error']) {

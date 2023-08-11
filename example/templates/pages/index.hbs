@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang='en'>
+{{> head 
+    title="Funkallero UI Example" 
+    description="Funkallero is an abstraction on top of Express"
+    pureCss=true
+}}
+
+<body>
+    <header>
+    {{> nav
+        page="Home"
+        loggedIn=isLoggedIn
+    }}
+
+    </header>
+    <hr />
+    <section class="book-section">
+        <h1>Books</h1>
+        <table class="pure-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Author</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each books}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.author.name}}</td>
+                    <td data-book-id="{{this.id}}" data-book-name="{{this.name}}" data-book-description="{{this.description}}">{{#if (isStrEqual ../userId this.author.id)}}<span class="update" >Update</span> | <span class="delete">Delete</span>{{else}}-{{/if}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </section>
+    <section id="update-book-section" class="book-section">
+    </section>
+    <script src='/js/core.js'></script>
+    <script src='/js/patch.js'></script>
+</body>
+</html>

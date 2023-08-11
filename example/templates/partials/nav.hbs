@@ -1,0 +1,22 @@
+<nav>
+    <div class="pure-menu pure-menu-horizontal nav-wrapper">
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item {{#if (isStrEqual page "Home")}}pure-menu-selected{{/if}}">
+                <a href="/" class="pure-menu-link">Home</a>
+            </li>
+            {{#if loggedIn}}
+            <li class="pure-menu-item {{#if (isStrEqual page "Create")}}pure-menu-selected{{/if}}">
+                <a href="/create" class="pure-menu-link">Create</a>
+            </li>
+            {{else}}
+            <li class="pure-menu-item {{#if (isStrEqual page "Login")}}pure-menu-selected{{/if}}">
+                <a href="/login" class="pure-menu-link">Login</a>
+            </li>
+            <li class="pure-menu-item {{#if (isStrEqual page "Signup")}}pure-menu-selected{{/if}}">
+                <a href="/signup" class="pure-menu-link">Signup</a>
+            </li>
+            {{/if}}
+        </ul>
+        {{#if loggedIn}}<button id="logout-btn" class="pure-button">Logout</button>{{/if}}
+    </div>
+</nav>

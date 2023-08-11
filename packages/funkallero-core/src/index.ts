@@ -15,7 +15,7 @@ export {
     isKnownScopedServiceType,
     isKnownSingletonServiceType,
 } from './core/is-service-type';
-export { default as HttpException } from './http-exception';
+export { default as HttpException, HttpExceptionHtml, type GetHttpExceptionHtmlFn } from './http-exception';
 export { default as ScopedService, type IScopedService } from './service/scoped-service';
 export { default as SingletonService, type ISingletonService } from './service/singleton-service';
 export { default as MiddlewareScopedService, type IMiddlewareScopedService } from './service/middleware-scoped-service';

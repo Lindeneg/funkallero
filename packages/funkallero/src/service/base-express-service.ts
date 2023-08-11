@@ -1,10 +1,10 @@
 import type { Server as HttpsServer } from 'https';
 import type { Server as HttpServer } from 'http';
 import express from 'express';
-import urlJoin from 'url-join';
 import {
     SERVICE,
     injectService,
+    HttpException,
     SingletonService,
     type IExpressService,
     type ILoggerService,
@@ -39,10 +39,20 @@ class BaseExpressService extends SingletonService implements IExpressService {
     }
 
     public startup(): void | Promise<void> {
-        const url = urlJoin(`${this.protocol}://localhost:${this.config.port}`, this.config.basePath);
+        const url = `${this.protocol}://localhost:${this.config.port}`;
 
         this.server.listen(this.config.port, () => {
             this.logger.info(`Server listening on ${url}`);
+        });
+    }
+
+    public onLastRouteAdded() {
+        this.app.use((req, _, next) => {
+            if (!!this.config.basePath && !req.path.startsWith(this.config.basePath)) {
+                (req as any)._funkallero = { html: true };
+            }
+
+            next(HttpException.notFound());
         });
     }
 }

@@ -9,14 +9,18 @@ export type ControllerFn = (...args: any[]) => Promise<MediatorResult>;
 
 export type ControllerSettings = {
     options?: RouterOptions;
+    basePath?: string | false;
+    html?: boolean;
     version?: string;
 };
 
 export interface IRoute {
     method: HttpMethodUnion;
     path: string;
+    html?: boolean;
     handlerKey: string;
     version: string | null;
+    basePath: string | null;
     routerOptions?: RouterOptions;
 }
 

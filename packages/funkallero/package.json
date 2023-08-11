@@ -29,6 +29,7 @@
     },
     "devDependencies": {
         "@types/express": "4.17.17",
+        "@types/handlebars": "4.1.0",
         "zod": "3.21.4"
     },
     "dependencies": {

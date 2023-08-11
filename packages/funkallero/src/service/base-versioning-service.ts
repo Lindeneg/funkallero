@@ -30,7 +30,13 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
         route: IRoute,
         routes: IRoute[]
     ): IVersioningContext | HttpException {
-        const cacheKey = `${CustomController.name}-${customControllerPath}-${requestedVersion}-${route.path}-${route.method}-${route.version}-${customControllerVersion}`;
+        const cacheKey = this.generateCacheKey(
+            CustomController,
+            customControllerPath,
+            customControllerVersion,
+            requestedVersion,
+            route
+        );
         const cached = BaseVersioningService.controllerVersioningCache.get(cacheKey);
 
         if (cached) {
@@ -38,13 +44,7 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
             return cached;
         }
 
-        const matchedRoute = this.matchRoute(
-            routes,
-            route,
-            requestedVersion,
-            customControllerVersion === requestedVersion,
-            customControllerVersion
-        );
+        const matchedRoute = this.matchRoute(routes, route, requestedVersion, customControllerVersion);
 
         let result: IVersioningContext | HttpException;
 
@@ -74,7 +74,7 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
         controllerPath: string,
         controllerVersion: string | null
     ): IVersioningPathContext {
-        const basePath = this.config?.basePath || '/';
+        const basePath = this.getBasePath(route);
         const controllerVs = controllerVersion || '';
 
         if (this.config.versioning?.type === 'url') {
@@ -108,6 +108,23 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
         };
     }
 
+    private generateCacheKey(
+        CustomController: Constructor<IControllerService>,
+        customControllerPath: string,
+        customControllerVersion: string | null,
+        requestedVersion: string | null,
+        route: IRoute
+    ) {
+        return `${CustomController.name}-${customControllerPath}-${requestedVersion}-${!!route.html}-${route.path}-${
+            route.method
+        }-${route.basePath}-${route.version}-${customControllerVersion}`;
+    }
+
+    private getBasePath(route: IRoute) {
+        if (route.basePath !== null) return route.basePath || '/';
+        return this.config?.basePath || '/';
+    }
+
     private cmpStrWithoutForwardSlash(s1: string, s2: string): boolean {
         return s1.replaceAll('/', '') === s2.replaceAll('/', '');
     }
@@ -116,17 +133,19 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
         routes: IRoute[],
         originRoute: IRoute,
         requestedVersion: string | null,
-        controllerVersionMatch: boolean,
         controllerVersion: string | null
     ) {
         return routes.find((route) => {
             const pathMatch = this.cmpStrWithoutForwardSlash(route.path, originRoute.path);
+            const basePathMatch = route.basePath === originRoute.basePath;
             const methodMatch = route.method === originRoute.method;
             const noVersions = !route.version && !requestedVersion && !controllerVersion;
             const versionRouteMatch = route.version !== null && route.version === requestedVersion;
-            const pureControllerMatch = !route.version && controllerVersionMatch;
+            const pureControllerMatch = !route.version && controllerVersion === requestedVersion;
 
-            return pathMatch && methodMatch && (noVersions || versionRouteMatch || pureControllerMatch);
+            return (
+                pathMatch && methodMatch && basePathMatch && (noVersions || versionRouteMatch || pureControllerMatch)
+            );
         });
     }
 
@@ -148,18 +167,9 @@ class BaseVersioningService extends SingletonService implements IVersioningServi
             }
 
             const controllerVersion: string | null = Reflect.get(CurrentController, META_DATA.CONTROLLER_VERSION);
-
-            const controllerVersionMatch = controllerVersion === requestedVersion;
-
             const currentRoutes: IRoute[] = Reflect.get(CurrentController.prototype, META_DATA.CONTROLLER_ROUTES);
 
-            const matchedRoute = this.matchRoute(
-                currentRoutes,
-                route,
-                requestedVersion,
-                controllerVersionMatch,
-                controllerVersion
-            );
+            const matchedRoute = this.matchRoute(currentRoutes, route, requestedVersion, controllerVersion);
 
             if (matchedRoute) {
                 return {

@@ -17,6 +17,8 @@ export default () => {
             '@lindeneg/funkallero-prisma-service',
             '@lindeneg/funkallero-zod-service',
             '@prisma/client',
+            'express',
+            'handlebars',
             'zod',
             'cookie-parser',
         ],

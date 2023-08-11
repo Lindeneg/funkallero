@@ -26,10 +26,10 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build Master
-              run: yarn build core funkallero auth-service e2e express
+              run: yarn build core funkallero auth-service example express
 
             - name: Report Current
-              run: yarn bench test e2e current
+              run: yarn bench test example current
 
             - uses: actions/checkout@v3
               with:
@@ -47,10 +47,10 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build Branch
-              run: yarn build core funkallero auth-service e2e express
+              run: yarn build core funkallero auth-service example express
 
             - name: Report Latest
-              run: yarn bench test e2e latest
+              run: yarn bench test example latest
 
             - name: Current <- Latest
               run: yarn bench compare latest

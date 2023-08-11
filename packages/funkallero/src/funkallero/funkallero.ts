@@ -51,6 +51,8 @@ class Funkallero extends FunkalleroBase {
 
         await Promise.all(controllers.map((Controller) => configureController(Controller)));
 
+        if (expressService.onLastRouteAdded) await expressService.onLastRouteAdded();
+
         app.use((err: any, req: any, res: any, next: any) => {
             const errorHandlerService = serviceContainer.getService(SERVICE.ERROR_HANDLER);
             errorHandlerService.handler(err, req, res, next);

@@ -7,13 +7,18 @@ import DataContextService from '@/services/data-context-service';
 import DataContextSeedService from '@/services/data-context-seed-service';
 import AuthenticationService from '@/services/authentication-service';
 import AuthorizationService from '@/services/authorization-service';
+import TemplateService from '@/services/template-service';
 import CookieMiddlewareService from '@/middleware/cookie-middleware-service';
 import Test1MiddlewareService from '@/middleware/test-1-middleware-service';
 import Test2MiddlewareService from '@/middleware/test-2-middleware-service';
+import '@/api/view-controller';
 import '@/api/author-controller';
 import '@/api/book-controller';
 import '@/api/auth-controller';
 import '@/api/versioning-example-controller';
+
+const isDev = process.argv.includes('--dev');
+const isTest = process.argv.includes('--test');
 
 BaseLoggerServicePalette.useDefaultPalette();
 
@@ -37,19 +42,13 @@ Funkallero.create({
     },
 
     // default: LOG_LEVEL.INFO
-    logLevel: LOG_LEVEL.VERBOSE,
-
-    // default: null
-    // can also be a function
-    // https: {
-    //     key: 'path/to/key.pem',
-    //     cert: 'path/to/cert.pem',
-    // },
+    logLevel: isTest ? LOG_LEVEL.SILENT : LOG_LEVEL.INFO,
 
     // default: {}
     // this object will, among other things, be available in the configuration service
     meta: {
-        someApiKey: 'some-test-api-key', // or more realistically: process.env.SOME_API_KEY
+        someApiKey: 'some-test-api-key', // or more realistically: process.env.SOME_API_KEY,
+        isDev,
     },
 
     setup(service) {
@@ -58,6 +57,7 @@ Funkallero.create({
         service.registerSingletonService(SERVICE.DATA_CONTEXT, DataContextService);
 
         // optional singleton services
+        service.registerSingletonService(SERVICE.TEMPLATE, TemplateService);
         service.registerSingletonService(SERVICE.EXPRESS, ExpressService);
         service.registerSingletonService(SERVICE.TOKEN, BaseTokenService);
         service.registerSingletonService(SERVICE.SCHEMA_PARSER, BaseZodParserService);
@@ -75,10 +75,11 @@ Funkallero.create({
 
     // optional function that is run after setup but before app start
     async startup(service) {
+        await service.getSingletonService<TemplateService>(SERVICE.TEMPLATE)?.initializeTemplates();
+
         if (process.env.NODE_ENV !== 'production') {
-            const seedService = service.getSingletonService<DataContextSeedService>(SERVICE.DATA_CONTEXT_SEED);
-            await seedService?.seed({
-                reset: true,
+            await service.getSingletonService<DataContextSeedService>(SERVICE.DATA_CONTEXT_SEED)?.seed({
+                reset: !isDev, // do not reset db on hot reloads if dev mode is active
             });
         }
     },

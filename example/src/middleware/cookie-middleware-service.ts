@@ -31,13 +31,9 @@ class CookieMiddlewareService extends MiddlewareSingletonService {
     }
 
     private createCookieString(token: string) {
-        const cookieExpire = new Date(Date.now() + BaseTokenConfiguration.expiresIn);
-
         const secure = this.config.https !== null ? 'Secure=true;' : '';
 
-        return `${AUTH.COOKIE_NAME}=${token}; Max-Age=${
-            BaseTokenConfiguration.expiresIn / 1000
-        }; Path=/; Expires=${cookieExpire}; SameSite=Strict; ${secure} HttpOnly=true;`;
+        return `${AUTH.COOKIE_NAME}=${token}; Max-Age=${BaseTokenConfiguration.expiresIn}; Path=/; SameSite=Strict; ${secure} HttpOnly=true;`;
     }
 }
 

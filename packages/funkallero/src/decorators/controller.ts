@@ -9,11 +9,19 @@ import {
 } from '@lindeneg/funkallero-core';
 import controllerContainer from '../container/controller-container';
 
+const getRouteBasePath = (basePathOpt: ControllerSettings['basePath']) => {
+    if (basePathOpt === false) return '/';
+    if (typeof basePathOpt === 'string') return basePathOpt;
+    return null;
+};
+
 const createRoute = (method: HttpMethodUnion, path: string, handlerKey: string, opts?: ControllerSettings): IRoute => ({
     method,
     path,
     handlerKey,
     version: opts?.version || null,
+    basePath: getRouteBasePath(opts?.basePath),
+    html: opts?.html || false,
     routerOptions: opts?.options,
 });
 
@@ -62,4 +70,14 @@ export function httpPatch(route = '', opts?: ControllerSettings) {
 
 export function httpDelete(route = '', opts?: ControllerSettings) {
     return routeDecoratorFactory(route, HTTP_METHOD.DELETE, opts);
+}
+
+export function view(
+    route = '',
+    opts: ControllerSettings = {
+        basePath: false,
+        html: true,
+    }
+) {
+    return routeDecoratorFactory(route, HTTP_METHOD.GET, opts);
 }
