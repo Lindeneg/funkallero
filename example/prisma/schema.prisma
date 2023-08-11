@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
     provider = "sqlite"
-    url      = "file:./funkallero.db"
+    url      = "file:./funkallero.db?socket_timeout=10&connection_limit=1"
 }
 
 model Author {

@@ -42,7 +42,7 @@ Funkallero.create({
     },
 
     // default: LOG_LEVEL.INFO
-    logLevel: LOG_LEVEL.VERBOSE,
+    logLevel: isTest ? LOG_LEVEL.SILENT : LOG_LEVEL.VERBOSE,
 
     // default: {}
     // this object will, among other things, be available in the configuration service

@@ -16,11 +16,6 @@ class State:
     jane_book_id = None
 
 
-def process_jane_book_id_response(json):
-    if State.jane_book_id is None:
-        State.jane_book_id = json["id"]
-
-
 def random_str_int():
     return str(math.floor(random.random() * 1_000_000))
 
@@ -28,7 +23,15 @@ def random_str_int():
 class GetResources(HttpUser):
     @task
     def get_books(self):
-        self.client.get("/books")
+        response = self.client.get("/books")
+
+        if State.jane_book_id is None:
+            json = response.json()
+
+            for _, v in enumerate(json):
+                if v["author"]["name"] == "Jane":
+                    State.jane_book_id = v["id"]
+                    break
 
 
 class CreateResources(HttpUser):
@@ -44,20 +47,19 @@ class CreateResources(HttpUser):
     @task
     def create_jane_book(self):
         if State.jane_token is not None:
-            response = self.client.post(
+            self.client.post(
                 "/books",
                 json={"name": "Some Title", "description": "Some Description"},
                 cookies={"funkallero-auth-cookie": State.jane_token},
             )
-            process_jane_book_id_response(response.json())
 
     @task
     def create_random_user(self):
         self.client.post(
             "/signup",
             json={
-                "name": f"{random_str_int()}-Name",
-                "email": f"{random_str_int()}@mock.com",
+                "name": f"{random_str_int()}-{random_str_int()}",
+                "email": f"{random_str_int()}@s{random_str_int()}.com",
                 "password": "some-password",
             },
         )
@@ -69,6 +71,6 @@ class UpdateResources(HttpUser):
         if State.jane_book_id is not None and State.jane_token is not None:
             self.client.patch(
                 "/books/" + State.jane_book_id,
-                json={"description": "New Description " + random_str_int()},
+                json={"description": "New Description"},
                 cookies={"funkallero-auth-cookie": State.jane_token},
             )

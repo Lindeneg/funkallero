@@ -15,7 +15,7 @@ function run_test {
         exit 1
     fi
     
-    local CMD="$MAIN_CMD \"yarn start $1 --test\" $BASE_URL \"$RUN_CMD $2\""
+    local CMD="$MAIN_CMD \"yarn cli start:test $1\" $BASE_URL \"$RUN_CMD $2\""
     
     $CMD
     
