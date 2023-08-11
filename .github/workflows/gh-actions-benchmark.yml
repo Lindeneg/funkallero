@@ -7,17 +7,12 @@ on:
                 description: 'The name of the branch to benchmark'
                 type: string
                 required: true
-            report_1:
-                description: 'The name of first report'
+            start:
+                description: 'Start command'
                 type: string
                 required: true
-            report_2:
-                description: 'Optional Report name of second report'
-                type: string
-                required: false
-                default: ''
-            compare:
-                description: 'Optional comparison'
+            report:
+                description: 'Report name'
                 type: string
                 required: false
                 default: ''
@@ -43,15 +38,15 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build
-              run: yarn build core funkallero auth-service e2e express
+              run: yarn build core funkallero auth-service example express
 
-            - name: Report ${{ github.event.inputs.report_1 }}
-              run: yarn bench:${{ github.event.inputs.report_1 }}
+            - name: Migrate
+              run: yarn cli migrate example
 
-            - name: Report ${{ github.event.inputs.report_2 }}
-              if: ${{ github.event.inputs.report_2 != '' }}
-              run: yarn bench:${{ github.event.inputs.report_2 }}
+            - name: Report ${{ github.event.inputs.report }}
+              run: yarn bench test ${{ github.event.inputs.start }} ${{ github.event.inputs.report }}
 
-            - name: Result
-              if: ${{ github.event.inputs.compare != '' }}
-              run: yarn bench compare ${{ github.event.inputs.compare }}
+            - uses: actions/upload-artifact@master
+              with:
+                  name: ${{ github.event.inputs.report }}
+                  path: ./locust/report/${{ github.event.inputs.report }}.json
