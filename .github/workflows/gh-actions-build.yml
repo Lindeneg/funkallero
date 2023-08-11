@@ -23,6 +23,8 @@ jobs:
             - name: Bootstrap
               run: yarn bootstrap:ci
             - name: Build
-              run: yarn build core funkallero auth-service e2e
+              run: yarn build core funkallero auth-service example
+            - name: Migrate
+              run: yarn cli migrate example
             - name: Test
-              run: yarn test e2e
+              run: yarn test example

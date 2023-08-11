@@ -24,13 +24,16 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build
-              run: yarn build core funkallero auth-service e2e express
+              run: yarn build core funkallero auth-service example express
+
+            - name: Migrate
+              run: yarn cli migrate example
 
             - name: Report Express
               run: yarn bench test express express
 
             - name: Report Current
-              run: yarn bench test e2e current
+              run: yarn bench test example current
 
             - name: Express <- Current
               run: yarn bench compare express

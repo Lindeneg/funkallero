@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b53543e4-7ca6-41a2-90d2-6ea942b183c9",
+		"_postman_id": "d1899150-970d-4aad-9851-60e69a3f0688",
 		"name": "Funkallero E2E Test Suite",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "14852340"
@@ -20,7 +20,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const authors = pm.response.json().data;\r",
+									"const authors = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains all authors', function() {\r",
 									"    pm.expect(authors.length).eq(3);\r",
@@ -76,7 +76,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const author = pm.response.json().data;\r",
+									"const author = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains author jane', function() {\r",
 									"    pm.expect(author.name).eq(\"Jane\");\r",
@@ -192,7 +192,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const books = pm.response.json().data;\r",
+									"const books = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains all books', function() {\r",
 									"    pm.expect(books.length).eq(6);\r",
@@ -249,7 +249,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const book = pm.response.json().data;\r",
+									"const book = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains a book from author jane', function() {\r",
 									"    pm.expect(book.name).match(/Book.+/);\r",
@@ -807,7 +807,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const book = pm.response.json().data;\r",
+									"const book = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains updated book from author jane', function() {\r",
 									"    pm.expect(book.name).match(/Book.+/);\r",
@@ -993,7 +993,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const books = pm.response.json().data;\r",
+									"const books = pm.response.json();\r",
 									"\r",
 									"pm.test('Response does not contain deleted book', function() {\r",
 									"    pm.expect(books.length).eq(5);\r",
@@ -1221,7 +1221,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const authors = pm.response.json().data;\r",
+									"const authors = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains new author', function() {\r",
 									"    const cl = authors.find(e => e.name === \"christian\");\r",
@@ -1383,7 +1383,7 @@
 									"\r",
 									"pm.test(\"Status code is 201\", function() {\r",
 									"    pm.response.to.have.status(201);\r",
-									"    pm.collectionVariables.set(\"clBookId\", response.data.id);\r",
+									"    pm.collectionVariables.set(\"clBookId\", response.id);\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1440,7 +1440,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"const books = pm.response.json().data;\r",
+									"const books = pm.response.json();\r",
 									"const clBookId = pm.collectionVariables.get(\"clBookId\");\r",
 									"\r",
 									"pm.test('Response contains new book', function() {\r",
@@ -1666,7 +1666,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v1 - a\");\r",
+									"    pm.expect(response).eq(\"v1 - a\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1729,7 +1729,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains no version', function() {\r",
-									"    pm.expect(response.data).eq(\"No Version\");\r",
+									"    pm.expect(response).eq(\"No Version\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1783,7 +1783,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v1 - b\");\r",
+									"    pm.expect(response).eq(\"v1 - b\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1846,7 +1846,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v2 - d\");\r",
+									"    pm.expect(response).eq(\"v2 - d\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1909,7 +1909,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v3 - f\");\r",
+									"    pm.expect(response).eq(\"v3 - f\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -1972,7 +1972,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v2 - e\");\r",
+									"    pm.expect(response).eq(\"v2 - e\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -2035,7 +2035,7 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v3 - c\");\r",
+									"    pm.expect(response).eq(\"v3 - c\");\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -2098,11 +2098,11 @@
 									"const response = pm.response.json();\r",
 									"\r",
 									"pm.test('Response contains correct version', function() {\r",
-									"    pm.expect(response.data).eq(\"v4 - g\");\r",
+									"    pm.expect(response).eq(\"v4 - g\");\r",
 									"});\r",
 									"\r",
 									"\r",
-									"postman.setNextRequest(null);"
+									"postman.setNextRequest(\"ViewLogout\");"
 								],
 								"type": "text/javascript"
 							}
@@ -2143,6 +2143,173 @@
 							"path": [
 								"test2"
 							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Views",
+			"item": [
+				{
+					"name": "ViewLogout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"ViewIndexNotLoggedIn\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ViewIndexNotLoggedIn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const contentType = pm.response.headers.get('Content-Type');\r",
+									"\r",
+									"pm.test('Response contains html content type', function() {\r",
+									"    pm.expect(contentType).eq(\"text/html\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Response contains login button', function() {\r",
+									"    pm.expect(pm.response.text()).contains('<a href=\"/login\" class=\"pure-menu-link\">Login</a>');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"postman.setNextRequest(\"ViewLogin\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ViewLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"postman.setNextRequest(\"ViewIndexLoggedIn\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"jane@example.com\",\r\n    \"password\": \"jane-mock\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ViewIndexLoggedIn",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const contentType = pm.response.headers.get('Content-Type');\r",
+									"const text = pm.response.text();\r",
+									"\r",
+									"pm.test('Response contains html content type', function() {\r",
+									"    pm.expect(contentType).eq(\"text/html\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Response does not contain login button', function() {\r",
+									"    pm.expect(text).not.contains('<a href=\"/login\" class=\"pure-menu-link\">Login</a>');\r",
+									"});\r",
+									"\r",
+									"pm.test('Response contains logout button', function() {\r",
+									"    pm.expect(text).contains('<button id=\"logout-btn\" class=\"pure-button\">Logout</button>');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"postman.setNextRequest(null);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000"
 						}
 					},
 					"response": []

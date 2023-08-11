@@ -18,7 +18,7 @@
         "build:lib": "tsc -p tsconfig.browser.json",
         "lint": "prettier \"src/**\" --ignore-unknown --write",
         "test": "npx -y start-server-and-test start http://localhost:3000/api/authors test:postman",
-        "test:postman": "npx -y newman run ../e2e/tests/funkallero-test-suite.postman_collection.json",
+        "test:postman": "npx -y newman run tests/funkallero-test-suite.postman_collection.json",
         "studio": "npx -y prisma studio",
         "migrate": "npx -y prisma migrate dev",
         "setup-https": "yarn run generate:https-creds && yarn run generate:decrypt-https-key",

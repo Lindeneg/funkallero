@@ -41,7 +41,7 @@ Funkallero.create({
     },
 
     // default: LOG_LEVEL.INFO
-    logLevel: LOG_LEVEL.VERBOSE,
+    logLevel: LOG_LEVEL.INFO,
 
     // default: {}
     // this object will, among other things, be available in the configuration service

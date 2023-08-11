@@ -54,19 +54,18 @@ class DataContextSeedService extends SingletonService {
     }
 
     private async seedAuthorWithBooks(name: string, email: string, books: Array<[string, string]>) {
-        await this.dataContext.exec(async (p) => {
-            return p.author.create({
+        return this.dataContext.exec(async (p) => {
+            const author = await p.author.create({
                 data: {
                     name,
                     email,
                     password: await this.tokenService.hashPassword(`${name.toLowerCase()}-mock`),
-                    books: {
-                        createMany: {
-                            data: books.map(([name, description]) => ({ name, description })),
-                        },
-                    },
                 },
             });
+
+            return Promise.all(
+                books.map(([name, description]) => p.book.create({ data: { name, description, authorId: author.id } }))
+            );
         });
     }
 
