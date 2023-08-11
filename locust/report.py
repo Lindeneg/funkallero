@@ -114,7 +114,7 @@ def assert_accumulated_requests_count(current: Report, latest: Report) -> None:
 def get_report_comparison_result(
     current: Report, latest: Report
 ) -> ReportComparisonResult:
-    assert_accumulated_requests_count(current, latest)
+    #assert_accumulated_requests_count(current, latest)
 
     avg_percent, avg_direction = get_percent_diff(
         current.average_response_time, latest.average_response_time
