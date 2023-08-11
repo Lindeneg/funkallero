@@ -3,6 +3,7 @@ import {
     SingletonService,
     HttpException,
     injectService,
+    type Response,
     type IExpressErrorhandlerService,
     type ExpressErrorHandlerFnArgs,
     type ILoggerService,
@@ -26,18 +27,27 @@ class BaseRequestErrorHandlerService extends SingletonService implements IExpres
             error: err,
         });
 
-        if (isHtmlResponse) {
-            this.logger.info('sending html error response on ' + req.id);
-            return res.status(errCode).send(`<h1>${errCode} Something went wrong. Please try again.</h1>`);
+        if (isHtmlResponse) return this.handleHtmlResponse(err, res, errCode);
+
+        return this.handleJsonResponse(err, res, errCode);
+    }
+
+    private async handleHtmlResponse(err: any, res: Response, errCode: number) {
+        if (err instanceof HttpException) {
+            return res.status(errCode).send(await err.toHtml());
         }
 
+        return res.status(errCode).send(`<h1>${errCode} Something went wrong..</h1>`);
+    }
+
+    private handleJsonResponse(err: any, res: Response, errCode: number) {
         if (err instanceof HttpException) {
-            res.status(errCode).json(err.toResponse());
-        } else {
-            res.status(errCode).json({
-                message: 'Something went wrong. Please try again.',
-            });
+            return res.status(errCode).json(err.toResponse());
         }
+
+        return res.status(errCode).json({
+            message: 'Something went wrong. Please try again.',
+        });
     }
 }
 
