@@ -37,9 +37,7 @@ const signup: RequestHandler = async (req, res, next) => {
         setAuthCookieOnResponse(res, token);
 
         res.status(201).json({
-            data: {
-                id: createdAuthor.id,
-            },
+            id: createdAuthor.id,
         });
     } catch (err) {
         next(HttpException.internal(null, err));

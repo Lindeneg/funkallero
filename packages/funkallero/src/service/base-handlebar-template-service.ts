@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import Handlebars from 'handlebars';
+import type Handlebars from 'handlebars';
 import {
     SERVICE,
     injectService,
