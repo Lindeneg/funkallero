@@ -46,7 +46,7 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build
-              run: yarn build core funkallero auth-service express
+              run: yarn build ${{ inputs.dependencies }}
 
             - name: Optional Commands
               if: ${{ inputs.optionalCommands != '' }}
