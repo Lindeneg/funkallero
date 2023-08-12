@@ -20,7 +20,7 @@ jobs:
             ref_name: ${{ github.ref }}
             start: example
             report: current
-            dependencies: core funkallero auth-service
+            dependencies: core funkallero auth-service example
             optionalCommands: yarn cli build:mock example
 
     compare:
