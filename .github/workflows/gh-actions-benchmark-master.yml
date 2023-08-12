@@ -12,7 +12,7 @@ jobs:
             ref_name: master
             start: example
             report: current
-            dependencies: core funkallero auth-service example
+            dependencies: core funkallero auth-service
             optionalCommands: yarn cli build:mock example
 
     benchmark_latest:
@@ -21,7 +21,7 @@ jobs:
             ref_name: ${{ github.ref }}
             start: example
             report: latest
-            dependencies: core funkallero auth-service example
+            dependencies: core funkallero auth-service
             optionalCommands: yarn cli build:mock example
 
     compare:

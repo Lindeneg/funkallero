@@ -20,7 +20,7 @@ jobs:
             ref_name: ${{ github.ref }}
             start: example
             report: current
-            dependencies: core funkallero auth-service example
+            dependencies: core funkallero auth-service
             optionalCommands: yarn cli build:mock example
 
     compare:
@@ -31,9 +31,6 @@ jobs:
 
             - name: Setup Python
               uses: actions/setup-python@v4.7.0
-
-            - name: Install Locust
-              run: pip3 install -r ./locust/requirements.txt
 
             - name: Get Express report
               uses: actions/download-artifact@master
