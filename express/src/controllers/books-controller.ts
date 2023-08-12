@@ -1,26 +1,29 @@
 import type { RequestHandler } from 'express';
-import prisma from '../data-context';
 import HttpException from '../http-exception';
+import dataContext from '../data-context';
 import updateBookDtoSchema from '../dtos/update-book-dto';
 import createBookDtoSchema from '../dtos/create-book-dto';
 
 const getBooks: RequestHandler = async (req, res, next) => {
     try {
-        const books = await prisma.book.findMany({
-            select: {
-                id: true,
-                name: true,
-                description: true,
-                author: {
-                    select: {
-                        id: true,
-                        name: true,
-                    },
-                },
-            },
-        });
+        const books = await dataContext.Book.getAll();
 
-        res.status(200).json(books);
+        const booksResponse = await Promise.all(
+            books.map(async (book) => {
+                const author = await dataContext.Author.get(book.authorId);
+
+                const bookDto = {
+                    id: book.id,
+                    name: book.name,
+                    description: book.description,
+                    author: { id: author?.id || '', name: author?.name || '' },
+                };
+
+                return bookDto;
+            })
+        );
+
+        res.status(200).json(booksResponse);
     } catch (err) {
         next(HttpException.internal(null, err));
     }
@@ -36,21 +39,20 @@ const createBook: RequestHandler = async (req, res, next) => {
 
         const { name, description } = dto.data;
 
-        const book = await prisma.book.create({
-            data: {
-                name,
-                description,
-                authorId: req.userData?.id || '',
-            },
-            select: {
-                id: true,
-            },
-        });
+        const book = dataContext.Book.new();
 
-        if (!book) return next(HttpException.internal());
+        book.name = name;
+        book.description = description;
+        book.authorId = req.userData?.id || '';
+        book.createdAt = new Date();
+        book.updatedAt = new Date();
+
+        const createdBook = await dataContext.Book.create(book);
+
+        if (!createdBook) return next(HttpException.internal());
 
         const createBookResponse = {
-            id: book.id,
+            id: createdBook.id,
         };
 
         res.status(201).json(createBookResponse);
@@ -61,9 +63,9 @@ const createBook: RequestHandler = async (req, res, next) => {
 
 const updateBook: RequestHandler = async (req, res, next) => {
     try {
-        const id = req.params.id;
+        const bookId = req.params.id;
 
-        const book = await prisma.book.findUnique({ where: { id } });
+        const book = await dataContext.Book.get(bookId);
 
         if (!book) return next(HttpException.notFound());
 
@@ -77,15 +79,13 @@ const updateBook: RequestHandler = async (req, res, next) => {
 
         const { name, description } = dto.data;
 
-        await prisma.book.update({
-            where: {
-                id: book.id,
-            },
-            data: {
-                name: name ?? book.description,
-                description: description ?? book.description,
-            },
-        });
+        book.name = name ?? book.description;
+        book.description = description ?? book.description;
+        book.updatedAt = new Date();
+
+        const updatedBook = await dataContext.Book.update(bookId, book);
+
+        if (!updatedBook) return next(HttpException.internal());
 
         res.status(204).end();
     } catch (err) {

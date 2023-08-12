@@ -10,7 +10,7 @@
     "module": "./dist/index.mjs",
     "scripts": {
         "start": "node ./dist/index.mjs",
-        "start:test": "yarn start",
+        "start:mock": "yarn start",
         "build": "rollup -c",
         "lint": "prettier \"src/**\" --ignore-unknown --write"
     },

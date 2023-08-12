@@ -5,16 +5,26 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default () => {
     return {
-        input: './src/index.ts',
+        input: './src/__mock__/index.ts',
         output: {
-            file: './dist/index.mjs',
+            file: './__mock__/index.mjs',
             format: 'esm',
             exports: 'named',
         },
-        external: ['bcryptjs', 'express', 'jsonwebtoken', 'zod'],
+        external: [
+            '@lindeneg/funkallero',
+            '@lindeneg/funkallero-auth-service',
+            '@lindeneg/funkallero-prisma-service',
+            '@lindeneg/funkallero-zod-service',
+            '@prisma/client',
+            'express',
+            'handlebars',
+            'zod',
+            'cookie-parser',
+        ],
         plugins: [
             cleaner({
-                targets: ['./dist'],
+                targets: ['./__mock__'],
             }),
             nodeResolve({
                 preferBuiltins: true,

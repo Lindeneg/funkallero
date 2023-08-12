@@ -3,7 +3,6 @@ import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth-router';
 import booksRouter from './routes/books-router';
 import HttpException from './http-exception';
-import DBSeed from './data-context/seed';
 
 const app: Express = express();
 
@@ -30,8 +29,6 @@ app.use((error: HttpException | any, req: Request, res: Response, next: NextFunc
         });
     }
 });
-
-await new DBSeed().seed({ reset: true });
 
 app.listen(3000, () => {
     console.log('\nstarting express\n');

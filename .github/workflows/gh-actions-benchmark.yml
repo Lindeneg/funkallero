@@ -14,6 +14,14 @@ on:
             report:
                 description: 'Report name'
                 type: string
+                required: true
+            dependencies:
+                description: 'Dependencies'
+                type: string
+                required: true
+            optionalCommands:
+                description: 'Optional Commands'
+                type: string
                 required: false
                 default: ''
 
@@ -38,10 +46,11 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build
-              run: yarn build core funkallero auth-service example express
+              run: yarn build core funkallero auth-service express
 
-            - name: Migrate
-              run: yarn cli migrate example
+            - name: Optional Commands
+              if: ${{ inputs.optionalCommands != '' }}
+              run: ${{ inputs.optionalCommands }}
 
             - name: Report ${{ inputs.report }}
               run: yarn bench test ${{ inputs.start }} ${{ inputs.report }}

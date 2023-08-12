@@ -11,9 +11,11 @@
     "module": "./dist/index.mjs",
     "scripts": {
         "start": "node ./dist/index.mjs",
+        "start:mock": "node ./__mock__/index.mjs",
         "start:test": "yarn start --test",
         "dev": "npx -y concurrently \"yarn build:main --watch\" \"yarn build:lib --watch\" \"npx -y nodemon ./dist/index.mjs --dev\"",
         "build": "bash ./build.sh",
+        "build:mock": "rollup -c rollup.config.mock.mjs",
         "build:all": "yarn build:main && yarn build:lib",
         "build:main": "rollup -c",
         "build:lib": "tsc -p tsconfig.browser.json",
