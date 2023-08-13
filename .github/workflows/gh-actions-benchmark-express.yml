@@ -23,7 +23,7 @@ jobs:
             dependencies: core funkallero auth-service
             optionalCommands: yarn cli build:mock example
 
-    compare:
+    compare_express:
         needs: [benchmark_express, benchmark_example]
         runs-on: ubuntu-latest
         steps:
