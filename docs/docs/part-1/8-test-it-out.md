@@ -71,7 +71,7 @@ curl http://localhost:3000/api/user \
 ###### 201 OK
 
 ```json
-{ "data": { "id": "GENERATED_ID" } }
+{ "id": "GENERATED_ID" }
 ```
 
 Lets get the user for good measure.
@@ -83,7 +83,7 @@ curl http://localhost:3000/api/user/GENERATED_ID -X GET
 ###### 200 OK
 
 ```json
-{ "data": { "id": "GENERATED_ID", "name": "miles davis" } }
+{ "id": "GENERATED_ID", "name": "miles davis" }
 ```
 
 ## Next Steps

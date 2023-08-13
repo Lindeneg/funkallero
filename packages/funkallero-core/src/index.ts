@@ -15,7 +15,7 @@ export {
     isKnownScopedServiceType,
     isKnownSingletonServiceType,
 } from './core/is-service-type';
-export { default as HttpException } from './http-exception';
+export { default as HttpException, HttpExceptionHtml, type GetHttpExceptionHtmlFn } from './http-exception';
 export { default as ScopedService, type IScopedService } from './service/scoped-service';
 export { default as SingletonService, type ISingletonService } from './service/singleton-service';
 export { default as MiddlewareScopedService, type IMiddlewareScopedService } from './service/middleware-scoped-service';
@@ -34,7 +34,6 @@ export {
     BaseMediatorAction,
     MediatorResultSuccess,
     MediatorResultFailure,
-    type default as IMediatorService,
     type IMediatorResultSuccess,
     type IMediatorResultFailure,
     type MediatorResult,
@@ -42,6 +41,7 @@ export {
     type MediatorSendParameters,
     type MediatorActionsConstraint,
 } from './service/mediator-service';
+export type { default as IMediatorService } from './service/mediator-service';
 export type { default as IBaseService } from './service/base-service';
 export type { default as IDataContextService } from './service/data-context-service';
 export type {
@@ -59,6 +59,11 @@ export type { default as IExpressService } from './service/express-service';
 export type { default as IAuthenticationService } from './service/authentication-service';
 export type { default as ITokenService } from './service/token-service';
 export type { default as IAuthorizationService } from './service/authorization-service';
+export type {
+    default as IVersioningService,
+    IVersioningPathContext,
+    IVersioningContext,
+} from './service/versioning-service';
 export type {
     default as IConfigurationService,
     IFunkalleroConfiguration,

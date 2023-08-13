@@ -1,7 +1,7 @@
 import type { Promisify } from '../types';
 
 interface IAuthorizationService {
-    isAuthorized(policyName: string): Promisify<boolean>;
+    isAuthorized(contextKey: string): Promisify<boolean>;
 }
 
 export default IAuthorizationService;

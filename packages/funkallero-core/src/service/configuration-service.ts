@@ -16,12 +16,24 @@ type HttpsConfigCore = IHttpsConfiguration | null;
 type HttpsConfigFn = () => Promisify<IHttpsConfiguration>;
 type HttpsConfigUnion = HttpsConfigCore | HttpsConfigFn;
 
+interface IVersioningConfigUrl {
+    type: 'url';
+}
+
+interface IVersioningConfigHeader {
+    type: 'header';
+    headerName: string;
+}
+
+type VersioningConfig = IVersioningConfigUrl | IVersioningConfigHeader;
+
 interface IConfigurationService<THttps extends HttpsConfigUnion = HttpsConfigCore> {
     readonly basePath: string;
     readonly port: number;
     readonly logLevel: LogLevelUnion;
     readonly https: THttps;
     readonly globalHeaders: IResponseHeaderInjection | null;
+    readonly versioning: VersioningConfig | null;
     readonly meta: Record<string, any>;
 }
 

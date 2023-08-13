@@ -37,9 +37,7 @@ const signup: RequestHandler = async (req, res, next) => {
         setAuthCookieOnResponse(res, token);
 
         res.status(201).json({
-            data: {
-                id: createdAuthor.id,
-            },
+            id: createdAuthor.id,
         });
     } catch (err) {
         next(HttpException.internal(null, err));
@@ -64,6 +62,7 @@ const login: RequestHandler = async (req, res, next) => {
     if (!isValidPassword) return next(HttpException.notFound());
 
     const token = await createToken({ id: author.id, name: author.name });
+
     setAuthCookieOnResponse(res, token);
 
     res.status(204).end();

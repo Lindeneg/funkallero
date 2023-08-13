@@ -5,7 +5,7 @@ description: Put something in data context
 
 # Data Context
 
-The [example app](https://github.com/Lindeneg/funkallero/blob/master/example/src/services/data-context-service.ts) uses `prisma`, which is an excellent `ORM`. The [e2e test app](https://github.com/Lindeneg/funkallero/blob/master/e2e/src/services/data-context-service.ts) uses an in-memory solution.
+The [example app](https://github.com/Lindeneg/funkallero/blob/master/example/src/services/data-context-service.ts) uses `prisma`, which is an excellent `ORM`. The [benchmark app](https://github.com/Lindeneg/funkallero/blob/master/example/__mock__/services/data-context-service.ts) uses an in-memory solution.
 
 For now lets make a **simple** implementation of the latter.
 

@@ -45,9 +45,13 @@ class Funkallero extends FunkalleroBase {
             throw new NoControllersFoundError();
         }
 
-        for (const CustomController of controllers) {
-            this.configureController(app, CustomController);
-        }
+        const logger = serviceContainer.getService(SERVICE.LOGGER);
+        const versioning = serviceContainer.getService(SERVICE.VERSIONING);
+        const configureController = this.configureController.bind(this, app, logger, versioning);
+
+        await Promise.all(controllers.map((Controller) => configureController(Controller)));
+
+        if (expressService.onLastRouteAdded) await expressService.onLastRouteAdded();
 
         app.use((err: any, req: any, res: any, next: any) => {
             const errorHandlerService = serviceContainer.getService(SERVICE.ERROR_HANDLER);

@@ -150,47 +150,39 @@ However, it is possible to provide custom arguments via the method `getCustomPol
 ###### src/services/authorization-service.ts
 
 ```ts
-import { injectService } from '@lindeneg/funkallero';
 import {
     BaseAuthorizationService,
     type AuthorizationPolicyHandlerFn,
 } from '@lindeneg/funkallero-auth-service';
-import SERVICE from '@/enums/service';
 import type AuthModel from '@/domain/auth-model';
 import type AuthenticationService from './authentication-service';
-import type DataContextService from './data-context-service';
 
 type CustomHandlerArgs = {
     authService: AuthenticationService;
-    dataContext: DataContextService;
 };
 
 type AuthHandler = AuthorizationPolicyHandlerFn<CustomHandlerArgs, AuthModel>;
 
 // BaseAuthorizationService is a scoped service
-class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
-    @injectService(SERVICE.DATA_CONTEXT)
-    private readonly dataContext: DataContextService;
-
+class AuthorizationService extends BaseAuthorizationService<AuthHandler, AuthenticationService> {
     protected async getCustomPolicyArgs() {
         return {
-            authService: this.authService as AuthenticationService,
-            dataContext: this.dataContext,
+            authService: this.authService,
         };
     }
 }
 
-// first way: utilize authService to verify the user
 const authenticatedPolicy: AuthHandler = async ({ authService }) => {
     const user = await authService.getUserSafe();
 
+    // auth service already checks user.email === decodedToken.email
     return user !== null;
 };
 
-// second way: we extract user from data context using decoded token
 const isMilesDavisPolicy: AuthHandler = async ({ authService }) => {
     const user = await authService.getUserSafe();
 
+    // auth service already checks user.email === decodedToken.email
     return user !== null && user.name.toLowerCase() === 'miles davis';
 };
 

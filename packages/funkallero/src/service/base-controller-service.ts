@@ -17,36 +17,47 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
     protected readonly logger: ILoggerService;
 
     // just a default implementation, meant to be overridden..
-    public async handleResult(result: MediatorResult): Promise<void> {
+    public async handleResult(result: MediatorResult): Promise<void | HttpException> {
+        if (
+            result.context === ACTION_RESULT.RESPONSE_HANDLED ||
+            (result.success && result.value === ACTION_RESULT.RESPONSE_HANDLED)
+        ) {
+            return;
+        }
+
         if (!result.success) {
             return this.handleError(result.error);
         }
 
-        const hasPayload = !!result.value;
+        if (this.request._funkallero?.html || (result.context === ACTION_RESULT.CONTEXT_WRITE && result.value)) {
+            this.response.write(result.value);
+        } else {
+            const hasPayload = !!result.value;
 
-        let statusCode: number = 200;
+            let statusCode: number = 200;
 
-        if (result.context === ACTION_RESULT.SUCCESS_CREATE) {
-            statusCode = 201;
-        }
+            if (result.context === ACTION_RESULT.SUCCESS_CREATE) {
+                statusCode = 201;
+            }
 
-        if (
-            !hasPayload &&
-            (result.context === ACTION_RESULT.SUCCESS_UPDATE || result.context === ACTION_RESULT.SUCCESS_DELETE)
-        ) {
-            statusCode = 204;
-        }
+            if (
+                !hasPayload &&
+                (result.context === ACTION_RESULT.SUCCESS_UPDATE || result.context === ACTION_RESULT.SUCCESS_DELETE)
+            ) {
+                statusCode = 204;
+            }
 
-        this.logger.verbose({
-            msg: 'request handled successfully',
-            statusCode,
-            requestId: this.request.id,
-        });
+            this.logger.verbose({
+                msg: 'request handled successfully',
+                statusCode,
+                requestId: this.request.id,
+            });
 
-        this.response.status(statusCode);
+            this.response.status(statusCode);
 
-        if (hasPayload) {
-            this.response.json({ data: result.value });
+            if (hasPayload) {
+                this.response.json(result.value);
+            }
         }
 
         this.response.end();
@@ -55,17 +66,17 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
     private async handleError(err: string) {
         switch (err) {
             case ACTION_RESULT.ERROR_BAD_PAYLOAD:
-                throw HttpException.malformedBody();
+                return HttpException.malformedBody();
             case ACTION_RESULT.ERROR_UNAUTHORIZED:
-                throw HttpException.unauthorized();
+                return HttpException.unauthorized();
             case ACTION_RESULT.ERROR_UNAUTHENTICATED:
-                throw HttpException.forbidden();
+                return HttpException.forbidden();
             case ACTION_RESULT.ERROR_NOT_FOUND:
-                throw HttpException.notFound();
+                return HttpException.notFound();
             case ACTION_RESULT.ERROR_UNPROCESSABLE:
-                throw HttpException.unprocessable();
+                return HttpException.unprocessable();
             default:
-                throw HttpException.internal();
+                return HttpException.internal();
         }
     }
 }

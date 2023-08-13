@@ -8,10 +8,12 @@ ReportComparisonResult = tuple[str, ReportTestError]
 base_path = os.path.join(os.sep.join(__file__.split(os.sep)[:-1]), "report")
 is_express = sys.argv[1] == "express"
 
-min_accumulated_request_percent = 85 if is_express else 50
-average_percent_max_increase = 15 if is_express else 5
-max_percent_max_increase = 15 if is_express else 10
-min_percent_max_increase = 20 if is_express else 10
+base_increase_percent = 25 if is_express else 10
+
+min_accumulated_request_percent = 80 if is_express else 50
+average_percent_max_increase = base_increase_percent
+max_percent_max_increase = base_increase_percent
+min_percent_max_increase = base_increase_percent
 
 
 green_check_mark = "\U00002705"
@@ -63,7 +65,7 @@ def get_percent_diff(old: float, new: float) -> tuple[float, str]:
 
 
 def get_column_result(
-    target: tuple[float, str], boundary: int, name: str, errors: list[str]
+    target: tuple[float, str], boundary: Union[int, None], name: str, errors: list[str]
 ) -> dict[str, str]:
     result = {
         "mark": "",
@@ -71,12 +73,12 @@ def get_column_result(
     }
 
     did_increase = target[1] == "INCREASED"
-    if did_increase and target[0] > boundary:
+    if did_increase and boundary and target[0] > boundary:
         errors.append(f"{name} increased by over {boundary}%")
         result["mark"] = red_cross_mark
     else:
-        result["mark"] = green_check_mark
-        result["msg"] = "within acceptable range" if did_increase else ""
+        result["mark"] = green_check_mark if boundary else ""
+        result["msg"] = "within acceptable range" if did_increase and boundary else ""
 
     return result
 

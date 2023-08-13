@@ -7,17 +7,20 @@ on:
                 description: 'The name of the branch to benchmark'
                 type: string
                 required: true
-            report_1:
-                description: 'The name of first report'
+            start:
+                description: 'Start command'
                 type: string
                 required: true
-            report_2:
-                description: 'Optional Report name of second report'
+            report:
+                description: 'Report name'
                 type: string
-                required: false
-                default: ''
-            compare:
-                description: 'Optional comparison'
+                required: true
+            dependencies:
+                description: 'Dependencies'
+                type: string
+                required: true
+            optionalCommands:
+                description: 'Optional Commands'
                 type: string
                 required: false
                 default: ''
@@ -29,7 +32,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
               with:
-                  ref: ${{ github.event.inputs.ref_name }}
+                  ref: ${{ inputs.ref_name }}
 
             - name: Use Node.js
               uses: actions/setup-node@v3
@@ -43,15 +46,16 @@ jobs:
               run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
 
             - name: Build
-              run: yarn build core funkallero auth-service example && yarn build e2e express
+              run: yarn build ${{ inputs.dependencies }}
 
-            - name: Report ${{ github.event.inputs.report_1 }}
-              run: yarn bench:${{ github.event.inputs.report_1 }}
+            - name: Optional Commands
+              if: ${{ inputs.optionalCommands != '' }}
+              run: ${{ inputs.optionalCommands }}
 
-            - name: Report ${{ github.event.inputs.report_2 }}
-              if: ${{ github.event.inputs.report_2 != '' }}
-              run: yarn bench:${{ github.event.inputs.report_2 }}
+            - name: Report ${{ inputs.report }}
+              run: yarn bench test ${{ inputs.start }} ${{ inputs.report }}
 
-            - name: Result
-              if: ${{ github.event.inputs.compare != '' }}
-              run: yarn bench compare ${{ github.event.inputs.compare }}
+            - uses: actions/upload-artifact@master
+              with:
+                  name: ${{ inputs.report }}
+                  path: ./locust/report/${{ inputs.report }}.json

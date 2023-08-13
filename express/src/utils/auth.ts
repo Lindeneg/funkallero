@@ -32,11 +32,7 @@ export const comparePassword = async (password: string, hash: string): Promise<b
 };
 
 const createCookieString = (token: string) => {
-    const cookieExpire = new Date(Date.now() + expiresIn);
-
-    return `${cookieName}=${token}; Max-Age=${
-        expiresIn / 1000
-    }; Path=/; Expires=${cookieExpire}; SameSite=Strict; HttpOnly=true;`;
+    return `${cookieName}=${token}; Max-Age=${expiresIn}; Path=/; SameSite=Strict; HttpOnly=true;`;
 };
 
 export const getAuthCookieFromRequest = (req: Request) => {

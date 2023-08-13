@@ -30,7 +30,7 @@ curl http://localhost:3000/api/example -X GET
 ###### 200 OK
 
 ```json
-{ "data": ["data-1", "data-2", "data-3"] }
+{ ["data-1", "data-2", "data-3"] }
 ```
 
 ## Next Steps

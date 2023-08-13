@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 const updateAuthorDtoSchema = z
     .object({
-        name: z.string().min(2).max(20),
-        email: z.string().email(),
+        name: z.string().trim().min(2).max(20),
+        email: z.string().trim().email(),
     })
     .partial()
     .superRefine((data, ctx) => {

@@ -1,4 +1,3 @@
-import type { RouterOptions } from 'express';
 import {
     META_DATA,
     HTTP_METHOD,
@@ -10,16 +9,20 @@ import {
 } from '@lindeneg/funkallero-core';
 import controllerContainer from '../container/controller-container';
 
-const createRoute = (
-    method: HttpMethodUnion,
-    path: string,
-    handlerKey: string,
-    routerOptions?: RouterOptions
-): IRoute => ({
+const getRouteBasePath = (basePathOpt: ControllerSettings['basePath']) => {
+    if (basePathOpt === false) return '/';
+    if (typeof basePathOpt === 'string') return basePathOpt;
+    return null;
+};
+
+const createRoute = (method: HttpMethodUnion, path: string, handlerKey: string, opts?: ControllerSettings): IRoute => ({
     method,
     path,
     handlerKey,
-    routerOptions,
+    version: opts?.version || null,
+    basePath: getRouteBasePath(opts?.basePath),
+    html: opts?.html || false,
+    routerOptions: opts?.options,
 });
 
 const routeDecoratorFactory = (route: string, method: HttpMethodUnion, opts?: ControllerSettings) => {
@@ -37,10 +40,13 @@ const routeDecoratorFactory = (route: string, method: HttpMethodUnion, opts?: Co
     };
 };
 
-export function controller<T extends Constructor<IControllerService>>(basePath = '') {
+export function controller<T extends Constructor<IControllerService>>(basePath = '', version: string | null = null) {
     return function (target: T) {
         Reflect.defineProperty(target, META_DATA.CONTROLLER_PATH, {
             get: () => basePath,
+        });
+        Reflect.defineProperty(target, META_DATA.CONTROLLER_VERSION, {
+            get: () => version,
         });
         controllerContainer.register(target);
     };
@@ -64,4 +70,14 @@ export function httpPatch(route = '', opts?: ControllerSettings) {
 
 export function httpDelete(route = '', opts?: ControllerSettings) {
     return routeDecoratorFactory(route, HTTP_METHOD.DELETE, opts);
+}
+
+export function view(
+    route = '',
+    opts: ControllerSettings = {
+        basePath: false,
+        html: true,
+    }
+) {
+    return routeDecoratorFactory(route, HTTP_METHOD.GET, opts);
 }

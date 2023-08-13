@@ -11,19 +11,6 @@ Start by building project again and starting server.
 
 ## Build Project
 
-:::info
-It is recommended to mark consumed libraries as `external` in `rollup.config.js`:
-
-```js
-{
-    ...,
-    external: ["@lindeneg/funkallero", "@lindeneg/funkallero-auth-service", "zod"],
-    ...
-}
-```
-
-:::
-
 ```bash
 yarn build
 ```
@@ -68,7 +55,7 @@ curl http://localhost:3000/api/auth/guard \
 ###### 200 OK
 
 ```json
-{ "data": "you are authenticated" }
+"you are authenticated"
 ```
 
 Nice! It worked.
@@ -88,7 +75,7 @@ curl http://localhost:3000/api/auth/miles \
 }
 ```
 
-Ok, lets create a new user, Miles Davis and use that token with the miles endpoint. We should see 200 OK response.
+Ok, lets create a new user, Miles Davis and use that token with the miles endpoint. We should see 201 OK response.
 
 ```bash
 curl http://localhost:3000/api/user \
@@ -106,7 +93,7 @@ curl http://localhost:3000/api/auth/miles \
 ###### 200 OK
 
 ```json
-{ "data": "you are miles davis" }
+"you are miles davis"
 ```
 
 Great, it worked! Lets test the login endpoint as well for good measure.
@@ -152,5 +139,5 @@ curl http://localhost:3000/api/auth/login \
 ###### 200 OK
 
 ```json
-{ "data": { "token": "GENERATED_TOKEN" } }
+{ "token": "GENERATED_TOKEN" }
 ```

@@ -7,30 +7,42 @@ on:
 
 jobs:
     benchmark_express:
-        runs-on: ubuntu-latest
+        uses: ./.github/workflows/gh-actions-benchmark.yml
+        with:
+            ref_name: ${{ github.ref }}
+            start: express
+            report: express
+            dependencies: express
 
+    benchmark_example:
+        uses: ./.github/workflows/gh-actions-benchmark.yml
+        with:
+            ref_name: ${{ github.ref }}
+            start: example
+            report: current
+            dependencies: core funkallero auth-service
+            optionalCommands: yarn cli build:mock example
+
+    compare:
+        needs: [benchmark_express, benchmark_example]
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-
-            - name: Use Node.js
-              uses: actions/setup-node@v3
-              with:
-                  cache: 'yarn'
 
             - name: Setup Python
               uses: actions/setup-python@v4.7.0
 
-            - name: Bootstrap
-              run: yarn bootstrap:ci && pip3 install -r ./locust/requirements.txt
+            - name: Get Express report
+              uses: actions/download-artifact@master
+              with:
+                  name: express
+                  path: ./locust/report
 
-            - name: Build
-              run: yarn build core funkallero auth-service example && yarn build e2e express
-
-            - name: Report Express
-              run: yarn bench test express express
-
-            - name: Report Current
-              run: yarn bench test e2e current
+            - name: Get Current report
+              uses: actions/download-artifact@master
+              with:
+                  name: current
+                  path: ./locust/report
 
             - name: Express <- Current
               run: yarn bench compare express

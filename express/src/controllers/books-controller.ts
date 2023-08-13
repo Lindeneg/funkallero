@@ -23,9 +23,7 @@ const getBooks: RequestHandler = async (req, res, next) => {
             })
         );
 
-        res.status(200).json({
-            data: booksResponse,
-        });
+        res.status(200).json(booksResponse);
     } catch (err) {
         next(HttpException.internal(null, err));
     }
@@ -57,7 +55,7 @@ const createBook: RequestHandler = async (req, res, next) => {
             id: createdBook.id,
         };
 
-        res.status(201).json({ data: createBookResponse });
+        res.status(201).json(createBookResponse);
     } catch (err) {
         next(HttpException.internal(null, err));
     }

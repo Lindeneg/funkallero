@@ -4,3 +4,6 @@ coverage
 test-report.xml
 .idea
 https/*.pem
+public/js/*.js
+funkallero.db
+mock

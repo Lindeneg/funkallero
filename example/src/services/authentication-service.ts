@@ -14,7 +14,9 @@ class AuthenticationService extends BaseAuthenticationService<Author, IAuthModel
     }
 
     protected async getUserFromDecodedToken(decodedToken: IAuthModel): Promise<Author | null> {
-        return this.dataContext.exec((p) => p.author.findUnique({ where: { id: decodedToken.id } }));
+        return this.dataContext.exec((p) =>
+            p.author.findFirst({ where: { id: decodedToken.id, name: decodedToken.name } })
+        );
     }
 }
 

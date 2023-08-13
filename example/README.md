@@ -1,4 +1,6 @@
-This example uses prisma, postgres and http-only cookie with jwt for authentication.
+This example uses prisma, sqlite and http-only cookie with jwt for authentication.
+
+It also includes some UI, using Handlebars as template engine. However, it is also possible to serve SPA, such as React, Vue etc.
 
 ---
 
@@ -6,13 +8,11 @@ To run the example:
 
 1. Make sure you first run the commands specified in the main [README](https://github.com/Lindeneg/funkallero/tree/master).
 
-2. Ensure you have set the correct environmental variables, see `.env-example`.
+2. Run a DB migration, i.e `yarn migrate` from here or `yarn cli migrate example` from root.
 
-3. Run a DB migration, i.e `yarn migrate` from here or `yarn cli migrate example` from root.
+3. Run `yarn start` (or `yarn start example` from root).
 
-4. Run `yarn start` (or `yarn start example` from root).
-
-Optionally, open a new shell and either run `yarn studio` from here or `yarn cli studio example` from root, to utilize prisma studio.
+To run the example in watch mode, simply run `yarn dev` from here or `yarn cli dev example` from root.
 
 ---
 

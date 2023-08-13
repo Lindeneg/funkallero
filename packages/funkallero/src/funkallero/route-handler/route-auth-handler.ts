@@ -24,10 +24,12 @@ class RouteAuthHandler {
         customController: IControllerService,
         authInjection: IAuthPoliciesInjection,
         services: Map<string, unknown>
-    ) {
+    ): Promise<void | HttpException> {
         const authorizationService = this.getAuthorizationService(services);
 
-        await this.authorizePolicies(authInjection.policies, authorizationService);
+        const result = await this.authorizePolicies(authInjection.policies, authorizationService);
+
+        if (!result) return HttpException.unauthorized();
 
         if (authInjection.injectUser) {
             const [key, value] = await this.getInjectContext(authInjection.injectUser, services);
@@ -89,10 +91,10 @@ class RouteAuthHandler {
         for (const policy of authorizationPolicies) {
             const isAuthorized = await authService.isAuthorized(policy);
 
-            if (!isAuthorized) {
-                throw HttpException.unauthorized();
-            }
+            if (!isAuthorized) return false;
         }
+
+        return true;
     }
 
     public static getAuthorizationPolicyInjection(

@@ -7,6 +7,7 @@ const SINGLETON_SERVICE = Object.freeze({
     ERROR_HANDLER: 'ERROR_HANDLER',
     SCHEMA_PARSER: 'SCHEMA_PARSER',
     TOKEN: 'TOKEN',
+    VERSIONING: 'VERSIONING',
 });
 
 export type SingletonServiceUnion = typeof SINGLETON_SERVICE[keyof typeof SINGLETON_SERVICE];

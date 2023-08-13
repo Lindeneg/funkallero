@@ -11,14 +11,20 @@
     "module": "./dist/index.mjs",
     "scripts": {
         "start": "node ./dist/index.mjs",
-        "build": "yarn run build:prisma && yarn run build:rollup",
-        "build:prisma": "npx -y prisma generate",
-        "build:rollup": "rollup -c",
+        "start:mock": "node ./mock/index.mjs",
+        "start:test": "yarn start --test",
+        "dev": "npx -y concurrently \"yarn build:main --watch\" \"yarn build:lib --watch\" \"npx -y nodemon ./dist/index.mjs --dev\"",
+        "build": "yarn build:all",
+        "build:mock": "rollup -c rollup.config.mock.mjs",
+        "build:all": "yarn build:main && yarn build:lib",
+        "build:main": "rollup -c",
+        "build:lib": "tsc -p tsconfig.browser.json",
         "lint": "prettier \"src/**\" --ignore-unknown --write",
-        "test": "start-server-and-test start http://localhost:3000/api/authors test:postman",
-        "test:postman": "npx -y newman run ../e2e/tests/funkallero-test-suite.postman_collection.json",
+        "test": "npx -y start-server-and-test start:test http://localhost:3000/api/authors test:postman",
+        "test:postman": "npx -y newman run postman/funkallero-test-suite.postman_collection.json",
         "studio": "npx -y prisma studio",
-        "migrate": "npx -y prisma migrate dev",
+        "migrate": "npx -y prisma@4.16.2 migrate dev",
+        "generate": "npx -y prisma@4.16.2 generate",
         "setup-https": "yarn run generate:https-creds && yarn run generate:decrypt-https-key",
         "generate:https-creds": "openssl req -x509 -newkey rsa:2048 -keyout https/keytmp.pem -out https/cert.pem -days 365",
         "generate:decrypt-https-key": "openssl rsa -in https/keytmp.pem -out https/key.pem && rm https/keytmp.pem"
@@ -28,10 +34,11 @@
         "@lindeneg/funkallero-auth-service": "0.0.4",
         "@prisma/client": "4.16.2",
         "cookie-parser": "1.4.6",
+        "handlebars": "4.7.8",
         "zod": "3.21.4"
     },
     "devDependencies": {
         "@types/cookie-parser": "1.4.3",
-        "start-server-and-test": "^2.0.0"
+        "@types/handlebars": "4.1.0"
     }
 }

@@ -1,0 +1,46 @@
+body {
+    overflow-x: hidden;
+}
+
+.pure-menu-item {
+    height: auto;
+}
+
+.pure-menu-selected {
+    text-decoration: underline;
+}
+
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.book-section,
+.login-section,
+.create-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.update,
+.delete {
+    cursor: pointer;
+}
+
+.update:hover,
+.delete:hover {
+    text-decoration: underline;
+}
+
+.delete:hover {
+    color: red;
+}
+
+hr {
+    width: 100%;
+}

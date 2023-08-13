@@ -2,7 +2,6 @@ import {
     SERVICE,
     injectService,
     ScopedService,
-    HttpException,
     type ILoggerService,
     type IAuthenticationService,
     type ITokenService,
@@ -34,11 +33,39 @@ abstract class BaseAuthenticationService<
     protected abstract getEncodedToken(): Promisify<string | null>;
     protected abstract getUserFromDecodedToken(decodedToken: TDecodedToken): Promise<TUserModel | null>;
 
+    public async getUser() {
+        if (!this.user) {
+            return this.setUser();
+        }
+
+        return this.user;
+    }
+
+    public async getUserId() {
+        const user = await this.getUser();
+
+        if (!user) return null;
+
+        return user.id;
+    }
+
+    public async getDecodedToken() {
+        if (!this.decodedToken) {
+            return this.setDecodedToken();
+        }
+
+        return this.decodedToken;
+    }
+
     private async setUser() {
-        if (!this.decodedToken) await this.setDecodedToken();
+        if (!this.decodedToken) {
+            const result = await this.setDecodedToken();
+            if (!result) return null;
+        }
 
         const user = await this.getUserFromDecodedToken(this.decodedToken as TDecodedToken);
-        if (!user) throw HttpException.unauthorized();
+
+        if (!user) return null;
 
         this.user = user;
 
@@ -47,6 +74,8 @@ abstract class BaseAuthenticationService<
             requestId: this.request.id,
             userId: this.user.id,
         });
+
+        return user;
     }
 
     private async setDecodedToken() {
@@ -58,10 +87,11 @@ abstract class BaseAuthenticationService<
             this.logger.error({ msg: 'getEncodedToken threw an error', err, requestId: this.request.id });
         }
 
-        if (!token) throw HttpException.unauthorized();
+        if (!token) return null;
 
         const decodedToken = await this.tokenService.verifyToken(token);
-        if (!decodedToken) throw HttpException.unauthorized();
+
+        if (!decodedToken) return null;
 
         this.decodedToken = decodedToken;
 
@@ -70,60 +100,8 @@ abstract class BaseAuthenticationService<
             requestId: this.request.id,
             decodedToken,
         });
-    }
 
-    public async getUser() {
-        if (!this.user) {
-            await this.setUser();
-        }
-
-        if (!this.user) throw HttpException.unauthorized();
-
-        return this.user;
-    }
-
-    public async getUserSafe() {
-        try {
-            const user = await this.getUser();
-            return user;
-        } catch (_) {
-            // silent catch
-        }
-
-        return null;
-    }
-
-    public async getUserId() {
-        const user = await this.getUser();
-
-        return user.id;
-    }
-
-    public async getUserIdSafe() {
-        const user = await this.getUserSafe();
-
-        return user ? user.id : null;
-    }
-
-    public async getDecodedToken() {
-        if (!this.decodedToken) {
-            await this.setDecodedToken();
-        }
-
-        if (!this.decodedToken) throw HttpException.unauthorized();
-
-        return this.decodedToken;
-    }
-
-    public async getDecodedTokenSafe() {
-        try {
-            const decodedToken = await this.getDecodedToken();
-            return decodedToken;
-        } catch (_) {
-            // silent catch
-        }
-
-        return null;
+        return decodedToken;
     }
 }
 
