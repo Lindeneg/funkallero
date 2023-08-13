@@ -4,10 +4,11 @@ import SERVICE from '@/enums/service';
 import { AUTH_POLICY } from '@/enums/auth';
 import type IAuthModel from '@/domain/auth-model';
 import type DataContextService from './data-context-service';
+import type AuthenticationService from './authentication-service';
 
 type AuthHandler = AuthorizationPolicyHandlerFn<{ dataContext: DataContextService }, IAuthModel>;
 
-class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
+class AuthorizationService extends BaseAuthorizationService<AuthHandler, AuthenticationService> {
     @injectService(SERVICE.DATA_CONTEXT)
     private readonly dataContext: DataContextService;
 
