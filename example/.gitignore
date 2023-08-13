@@ -6,5 +6,4 @@ test-report.xml
 https/*.pem
 public/js/*.js
 funkallero.db
-__mock__
-!src/__mock__
+mock

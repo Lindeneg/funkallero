@@ -11,7 +11,7 @@
     "module": "./dist/index.mjs",
     "scripts": {
         "start": "node ./dist/index.mjs",
-        "start:mock": "node ./__mock__/index.mjs",
+        "start:mock": "node ./mock/index.mjs",
         "start:test": "yarn start --test",
         "dev": "npx -y concurrently \"yarn build:main --watch\" \"yarn build:lib --watch\" \"npx -y nodemon ./dist/index.mjs --dev\"",
         "build": "yarn build:all",
@@ -21,7 +21,7 @@
         "build:lib": "tsc -p tsconfig.browser.json",
         "lint": "prettier \"src/**\" --ignore-unknown --write",
         "test": "npx -y start-server-and-test start:test http://localhost:3000/api/authors test:postman",
-        "test:postman": "npx -y newman run tests/funkallero-test-suite.postman_collection.json",
+        "test:postman": "npx -y newman run postman/funkallero-test-suite.postman_collection.json",
         "studio": "npx -y prisma studio",
         "migrate": "npx -y prisma@4.16.2 migrate dev",
         "generate": "npx -y prisma@4.16.2 generate",

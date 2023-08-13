@@ -1,6 +1,6 @@
 import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
 import Action from '../action';
-import type IGetBookResponse from '../../../dtos/get-book-response';
+import type IGetBookResponse from '@/dtos/get-book-response';
 
 export class GetBooksQuery extends Action {
     public async execute() {

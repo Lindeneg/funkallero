@@ -11,5 +11,5 @@
         "experimentalDecorators": true,
         "strictPropertyInitialization": false
     },
-    "include": ["./src/browser"]
+    "include": ["./browser"]
 }

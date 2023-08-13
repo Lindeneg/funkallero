@@ -1,8 +1,8 @@
 import { ACTION_RESULT, MediatorResultSuccess, MediatorResultFailure } from '@lindeneg/funkallero';
 import Action from '../action';
-import type { ICreateBookDto } from '../../../dtos/create-book-dto';
-import type { IUpdateBookDto } from '../../../dtos/update-book-dto';
-import type ICreateBookResponse from '../../../dtos/create-book-response';
+import type { ICreateBookDto } from '@/dtos/create-book-dto';
+import type { IUpdateBookDto } from '@/dtos/update-book-dto';
+import type ICreateBookResponse from '@/dtos/create-book-response';
 
 export class CreateBookCommand extends Action {
     public async execute({ name, description, authorId }: ICreateBookDto) {
