@@ -1,5 +1,6 @@
 import type { RouterOptions } from 'express';
 import type { HttpMethodUnion } from '../enums/http-method';
+import type HttpException from '../http-exception';
 import type IBaseService from './base-service';
 import type { MediatorResult } from './mediator-service';
 import type { Response } from '../types';
@@ -25,13 +26,13 @@ export interface IRoute {
 }
 
 export interface IControllerService extends IBaseService {
-    handleResult(result: MediatorResult<any>): Promise<void>;
+    handleResult(result: MediatorResult<any>): Promise<void | HttpException>;
 }
 
 abstract class ControllerService extends ScopedService implements IControllerService {
     protected readonly response: Response;
 
-    public abstract handleResult(result: MediatorResult<any>): Promise<void>;
+    public abstract handleResult(result: MediatorResult<any>): Promise<void | HttpException>;
 }
 
 export default ControllerService;

@@ -101,7 +101,7 @@ abstract class BaseHandlebarTemplateService<TEntries extends TemplateEntries> ex
         ...args: RenderArgs<TEntries, TKey>
     ): Promise<string | null> {
         if (!this.templates) {
-            this.logger.warning('templates has not been initialized, yet getTemplate has been called');
+            this.logger.warning('templates has not been initialized, yet render has been called');
             return null;
         }
 

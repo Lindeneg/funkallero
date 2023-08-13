@@ -2,7 +2,6 @@ import {
     SERVICE,
     injectService,
     ScopedService,
-    HttpException,
     type ILoggerService,
     type IAuthenticationService,
     type ITokenService,
@@ -34,11 +33,36 @@ abstract class BaseAuthenticationService<
     protected abstract getEncodedToken(): Promisify<string | null>;
     protected abstract getUserFromDecodedToken(decodedToken: TDecodedToken): Promise<TUserModel | null>;
 
+    public async getUser() {
+        if (!this.user) {
+            await this.setUser();
+        }
+
+        return this.user;
+    }
+
+    public async getUserId() {
+        const user = await this.getUser();
+
+        if (!user) return null;
+
+        return user.id;
+    }
+
+    public async getDecodedToken() {
+        if (!this.decodedToken) {
+            await this.setDecodedToken();
+        }
+
+        return this.decodedToken;
+    }
+
     private async setUser() {
         if (!this.decodedToken) await this.setDecodedToken();
 
         const user = await this.getUserFromDecodedToken(this.decodedToken as TDecodedToken);
-        if (!user) throw HttpException.unauthorized();
+
+        if (!user) return;
 
         this.user = user;
 
@@ -58,10 +82,11 @@ abstract class BaseAuthenticationService<
             this.logger.error({ msg: 'getEncodedToken threw an error', err, requestId: this.request.id });
         }
 
-        if (!token) throw HttpException.unauthorized();
+        if (!token) return;
 
         const decodedToken = await this.tokenService.verifyToken(token);
-        if (!decodedToken) throw HttpException.unauthorized();
+
+        if (!decodedToken) return;
 
         this.decodedToken = decodedToken;
 
@@ -70,60 +95,6 @@ abstract class BaseAuthenticationService<
             requestId: this.request.id,
             decodedToken,
         });
-    }
-
-    public async getUser() {
-        if (!this.user) {
-            await this.setUser();
-        }
-
-        if (!this.user) throw HttpException.unauthorized();
-
-        return this.user;
-    }
-
-    public async getUserSafe() {
-        try {
-            const user = await this.getUser();
-            return user;
-        } catch (_) {
-            // silent catch
-        }
-
-        return null;
-    }
-
-    public async getUserId() {
-        const user = await this.getUser();
-
-        return user.id;
-    }
-
-    public async getUserIdSafe() {
-        const user = await this.getUserSafe();
-
-        return user ? user.id : null;
-    }
-
-    public async getDecodedToken() {
-        if (!this.decodedToken) {
-            await this.setDecodedToken();
-        }
-
-        if (!this.decodedToken) throw HttpException.unauthorized();
-
-        return this.decodedToken;
-    }
-
-    public async getDecodedTokenSafe() {
-        try {
-            const decodedToken = await this.getDecodedToken();
-            return decodedToken;
-        } catch (_) {
-            // silent catch
-        }
-
-        return null;
     }
 }
 

@@ -24,14 +24,17 @@ export type AuthorizationPolicyHandlerFn<TCustomArgs, TAuthModel = any> = (
     context: PolicyHandlerPayload<TCustomArgs, TAuthModel>
 ) => Promisify<boolean>;
 
-abstract class BaseAuthorizationService<TAuthHandlerFn extends AuthorizationPolicyHandlerFn<any, any>>
+abstract class BaseAuthorizationService<
+        TAuthHandlerFn extends AuthorizationPolicyHandlerFn<any, any>,
+        TAuthService extends IAuthenticationService<any>
+    >
     extends ScopedService
     implements IAuthorizationService
 {
     private static policies: IAuthorizationPolicy<any>[] = [];
 
     @injectService(SERVICE.AUTHENTICATION)
-    protected readonly authService: IAuthenticationService<any>;
+    protected readonly authService: TAuthService;
 
     @injectService(SERVICE.TOKEN)
     protected readonly tokenService: ITokenService<any>;
@@ -59,7 +62,7 @@ abstract class BaseAuthorizationService<TAuthHandlerFn extends AuthorizationPoli
             return false;
         }
 
-        const decodedToken = await this.authService.getDecodedTokenSafe();
+        const decodedToken = await this.authService.getDecodedToken();
 
         if (!decodedToken) return false;
 

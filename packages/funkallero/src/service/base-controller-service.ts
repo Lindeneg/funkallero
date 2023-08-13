@@ -5,7 +5,6 @@ import {
     HttpException,
     ControllerService,
     type MediatorResult,
-    type MediatorResultSuccess,
     type ILoggerService,
 } from '@lindeneg/funkallero-core';
 import type BaseMediatorService from './base-mediator-service';
@@ -18,13 +17,13 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
     protected readonly logger: ILoggerService;
 
     // just a default implementation, meant to be overridden..
-    public async handleResult(result: MediatorResult): Promise<void> {
+    public async handleResult(result: MediatorResult): Promise<void | HttpException> {
         if (!result.success) {
             return this.handleError(result.error);
         }
 
-        if (this.request._funkallero?.html || result.context === ACTION_RESULT.CONTEXT_WRITE) {
-            this.handleWrite(result);
+        if (this.request._funkallero?.html || (result.context === ACTION_RESULT.CONTEXT_WRITE && result.value)) {
+            this.response.write(result.value);
         } else {
             const hasPayload = !!result.value;
 
@@ -57,26 +56,20 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
         this.response.end();
     }
 
-    public handleWrite<TResult>(result: MediatorResultSuccess<TResult>): void {
-        if (result.value) {
-            this.response.write(result.value);
-        }
-    }
-
     private async handleError(err: string) {
         switch (err) {
             case ACTION_RESULT.ERROR_BAD_PAYLOAD:
-                throw HttpException.malformedBody();
+                return HttpException.malformedBody();
             case ACTION_RESULT.ERROR_UNAUTHORIZED:
-                throw HttpException.unauthorized();
+                return HttpException.unauthorized();
             case ACTION_RESULT.ERROR_UNAUTHENTICATED:
-                throw HttpException.forbidden();
+                return HttpException.forbidden();
             case ACTION_RESULT.ERROR_NOT_FOUND:
-                throw HttpException.notFound();
+                return HttpException.notFound();
             case ACTION_RESULT.ERROR_UNPROCESSABLE:
-                throw HttpException.unprocessable();
+                return HttpException.unprocessable();
             default:
-                throw HttpException.internal();
+                return HttpException.internal();
         }
     }
 }

@@ -83,7 +83,13 @@ class RouteHandler {
 
         try {
             if (hasAuthPolicies) {
-                await new RouteAuthHandler(this.routePath).handle(customController, authInjection, scopedServices);
+                const result = await new RouteAuthHandler(this.routePath).handle(
+                    customController,
+                    authInjection,
+                    scopedServices
+                );
+
+                if (result instanceof HttpException) return this.next(result);
             }
 
             let middlewareHandler: RouteMiddlewareHandler | null = null;
@@ -103,15 +109,19 @@ class RouteHandler {
 
             const handlerArgs = await this.getHandlerArgs();
 
-            let result = await (
+            if (handlerArgs instanceof HttpException) return this.next(handlerArgs);
+
+            let mediatorResult = await (
                 customController[<keyof typeof customController>this.route.handlerKey] as unknown as ControllerFn
             )(...handlerArgs);
 
             if (middlewareHandler && middlewareContext.hasAfterMiddleware) {
-                result = await middlewareHandler.runAfterMiddleware(result);
+                mediatorResult = await middlewareHandler.runAfterMiddleware(mediatorResult);
             }
 
-            await customController.handleResult(result);
+            const handlerResult = await customController.handleResult(mediatorResult);
+
+            if (handlerResult instanceof HttpException) return this.next(handlerResult);
         } catch (err) {
             this.next(err);
         }
@@ -199,7 +209,7 @@ class RouteHandler {
 
     private async getHandlerArgs() {
         const argumentInjections = this.getArgumentInjections();
-        let handlerArgs: unknown[] = [];
+        let handlerArgs: unknown[] | HttpException = [];
 
         if (argumentInjections.length > 0) {
             handlerArgs = await this.getValidatedHandlerArgs(argumentInjections);
@@ -208,7 +218,9 @@ class RouteHandler {
         return handlerArgs;
     }
 
-    private async getValidatedHandlerArgs(argumentInjections: [InjectableArgUnion, IArgumentInjection<any>][]) {
+    private async getValidatedHandlerArgs(
+        argumentInjections: [InjectableArgUnion, IArgumentInjection<any>][]
+    ): Promise<unknown[] | HttpException> {
         const validationService = serviceContainer.getService(SERVICE.SCHEMA_PARSER);
         const handlerArgs: unknown[] = [];
         const errors: Record<string, string>[] = [];
@@ -247,7 +259,8 @@ class RouteHandler {
                 requestId: this.request.id,
                 errors,
             });
-            throw HttpException.malformedBody(null, errors);
+
+            return HttpException.malformedBody(null, errors);
         }
 
         this.logger.verbose({
