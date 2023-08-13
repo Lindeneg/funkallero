@@ -8,9 +8,9 @@ ReportComparisonResult = tuple[str, ReportTestError]
 base_path = os.path.join(os.sep.join(__file__.split(os.sep)[:-1]), "report")
 is_express = sys.argv[1] == "express"
 
-min_accumulated_request_percent = 70 if is_express else 50
+min_accumulated_request_percent = 80 if is_express else 50
 average_percent_max_increase = 15 if is_express else 5
-max_percent_max_increase = 15 if is_express else 10
+max_percent_max_increase = 20 if is_express else 10
 min_percent_max_increase = 20 if is_express else 10
 
 
@@ -75,7 +75,7 @@ def get_column_result(
         errors.append(f"{name} increased by over {boundary}%")
         result["mark"] = red_cross_mark
     else:
-        result["mark"] = green_check_mark if boundary else "  "
+        result["mark"] = green_check_mark if boundary else ""
         result["msg"] = "within acceptable range" if did_increase and boundary else ""
 
     return result
@@ -90,10 +90,10 @@ def process_comparison_result(
         avg, average_percent_max_increase, "Average response time", errors
     )
     max_result = get_column_result(
-        max, None, "Max response time", errors  # None -> max_percent_max_increase
+        max, max_percent_max_increase, "Max response time", errors
     )
     min_result = get_column_result(
-        min, None, "Min response time", errors  # None -> min_percent_max_increase
+        min, min_percent_max_increase, "Min response time", errors
     )
 
     return [

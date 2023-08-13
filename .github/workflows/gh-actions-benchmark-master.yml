@@ -33,9 +33,6 @@ jobs:
             - name: Setup Python
               uses: actions/setup-python@v4.7.0
 
-            - name: Install Locust
-              run: pip3 install -r ./locust/requirements.txt
-
             - name: Get Current report
               uses: actions/download-artifact@master
               with:
