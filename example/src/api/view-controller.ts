@@ -1,4 +1,12 @@
-import { injectService, controller, view, query, auth } from '@lindeneg/funkallero';
+import {
+    ACTION_RESULT,
+    MediatorResultSuccess,
+    injectService,
+    controller,
+    view,
+    query,
+    auth,
+} from '@lindeneg/funkallero';
 import SERVICE from '@/enums/service';
 import { AUTH_POLICY } from '@/enums/auth';
 import Controller from '@/api/controller';
@@ -26,21 +34,33 @@ class ViewController extends Controller {
     @view('/login')
     public async login() {
         const userId = await this.authenticationService.getUserId();
-        if (userId) return this.response.redirect('/');
+
+        if (userId) return this.redirectToHomePage();
+
         return this.mediator.send('GetLoginPage');
     }
 
     @view('/signup')
     public async signup() {
         const userId = await this.authenticationService.getUserId();
-        if (userId) return this.response.redirect('/');
+
+        if (userId) return this.redirectToHomePage();
+
         return this.mediator.send('GetSignupPage');
     }
 
     @view('/logout')
     public async logout() {
         const userId = await this.authenticationService.getUserId();
-        if (!userId) return this.response.redirect('/');
+
+        if (!userId) return this.redirectToHomePage();
+
         return this.mediator.send('GetLogoutPage');
+    }
+
+    private async redirectToHomePage() {
+        this.response.redirect('/');
+
+        return new MediatorResultSuccess(ACTION_RESULT.RESPONSE_HANDLED);
     }
 }

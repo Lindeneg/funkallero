@@ -18,6 +18,13 @@ class BaseControllerService<TMediator extends BaseMediatorService<any>> extends 
 
     // just a default implementation, meant to be overridden..
     public async handleResult(result: MediatorResult): Promise<void | HttpException> {
+        if (
+            result.context === ACTION_RESULT.RESPONSE_HANDLED ||
+            (result.success && result.value === ACTION_RESULT.RESPONSE_HANDLED)
+        ) {
+            return;
+        }
+
         if (!result.success) {
             return this.handleError(result.error);
         }

@@ -35,7 +35,7 @@ abstract class BaseAuthenticationService<
 
     public async getUser() {
         if (!this.user) {
-            await this.setUser();
+            return this.setUser();
         }
 
         return this.user;
@@ -51,18 +51,21 @@ abstract class BaseAuthenticationService<
 
     public async getDecodedToken() {
         if (!this.decodedToken) {
-            await this.setDecodedToken();
+            return this.setDecodedToken();
         }
 
         return this.decodedToken;
     }
 
     private async setUser() {
-        if (!this.decodedToken) await this.setDecodedToken();
+        if (!this.decodedToken) {
+            const result = await this.setDecodedToken();
+            if (!result) return null;
+        }
 
         const user = await this.getUserFromDecodedToken(this.decodedToken as TDecodedToken);
 
-        if (!user) return;
+        if (!user) return null;
 
         this.user = user;
 
@@ -71,6 +74,8 @@ abstract class BaseAuthenticationService<
             requestId: this.request.id,
             userId: this.user.id,
         });
+
+        return user;
     }
 
     private async setDecodedToken() {
@@ -82,11 +87,11 @@ abstract class BaseAuthenticationService<
             this.logger.error({ msg: 'getEncodedToken threw an error', err, requestId: this.request.id });
         }
 
-        if (!token) return;
+        if (!token) return null;
 
         const decodedToken = await this.tokenService.verifyToken(token);
 
-        if (!decodedToken) return;
+        if (!decodedToken) return null;
 
         this.decodedToken = decodedToken;
 
@@ -95,6 +100,8 @@ abstract class BaseAuthenticationService<
             requestId: this.request.id,
             decodedToken,
         });
+
+        return decodedToken;
     }
 }
 
