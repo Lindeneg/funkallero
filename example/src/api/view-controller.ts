@@ -13,7 +13,7 @@ class ViewController extends Controller {
     public async index(@query() query: Record<string, string>) {
         return this.mediator.send('GetIndexPage', {
             query,
-            userId: await this.authenticationService.getUserIdSafe(), // will be null if user is not authenticated
+            userId: await this.authenticationService.getUserId(), // will be null if user is not authenticated
         });
     }
 
@@ -25,21 +25,21 @@ class ViewController extends Controller {
 
     @view('/login')
     public async login() {
-        const userId = await this.authenticationService.getUserIdSafe();
+        const userId = await this.authenticationService.getUserId();
         if (userId) return this.response.redirect('/');
         return this.mediator.send('GetLoginPage');
     }
 
     @view('/signup')
     public async signup() {
-        const userId = await this.authenticationService.getUserIdSafe();
+        const userId = await this.authenticationService.getUserId();
         if (userId) return this.response.redirect('/');
         return this.mediator.send('GetSignupPage');
     }
 
     @view('/logout')
     public async logout() {
-        const userId = await this.authenticationService.getUserIdSafe();
+        const userId = await this.authenticationService.getUserId();
         if (!userId) return this.response.redirect('/');
         return this.mediator.send('GetLogoutPage');
     }

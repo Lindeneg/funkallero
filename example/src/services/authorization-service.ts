@@ -4,25 +4,29 @@ import SERVICE from '@/enums/service';
 import { AUTH_POLICY } from '@/enums/auth';
 import type IAuthModel from '@/domain/auth-model';
 import type DataContextService from './data-context-service';
+import type AuthenticationService from './authentication-service';
 
-type AuthHandler = AuthorizationPolicyHandlerFn<{ dataContext: DataContextService }, IAuthModel>;
+type AuthHandler = AuthorizationPolicyHandlerFn<
+    { dataContext: DataContextService; authService: AuthenticationService },
+    IAuthModel
+>;
 
-class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
+class AuthorizationService extends BaseAuthorizationService<AuthHandler, AuthenticationService> {
     @injectService(SERVICE.DATA_CONTEXT)
     private readonly dataContext: DataContextService;
 
     protected async getCustomPolicyArgs() {
         return {
             dataContext: this.dataContext,
+            authService: this.authService,
         };
     }
 }
 
-const authenticatedPolicy: AuthHandler = async ({ decodedToken, dataContext }) => {
-    const user = await dataContext.exec((p) =>
-        p.author.findFirst({ where: { id: decodedToken.id, name: decodedToken.name } })
-    );
-    return user !== null;
+const authenticatedPolicy: AuthHandler = async ({ authService, decodedToken }) => {
+    const user = await authService.getUser();
+
+    return user !== null && user.name === decodedToken.name;
 };
 
 const authorIsBookOwnerPolicy: AuthHandler = async ({ request, decodedToken, dataContext }) => {
