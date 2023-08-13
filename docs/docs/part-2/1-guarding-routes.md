@@ -173,14 +173,14 @@ class AuthorizationService extends BaseAuthorizationService<AuthHandler, Authent
 }
 
 const authenticatedPolicy: AuthHandler = async ({ authService }) => {
-    const user = await authService.getUserSafe();
+    const user = await authService.getUser();
 
     // auth service already checks user.email === decodedToken.email
     return user !== null;
 };
 
 const isMilesDavisPolicy: AuthHandler = async ({ authService }) => {
-    const user = await authService.getUserSafe();
+    const user = await authService.getUser();
 
     // auth service already checks user.email === decodedToken.email
     return user !== null && user.name.toLowerCase() === 'miles davis';

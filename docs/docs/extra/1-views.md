@@ -24,11 +24,11 @@ The example app uses the handlebar template service, it can be broken down as su
 -   Template Service
     -   register templates (and use them with excellent type-safety)
     -   [Code](https://github.com/Lindeneg/funkallero/blob/master/example/src/services/template-service.ts#L6-L39)
--   Controller Layer
-    -   connect routes to actions
-    -   [Code](https://github.com/Lindeneg/funkallero/blob/master/example/src/api/view-controller.ts#L15-L66)
 -   Application Layer
     -   connect actions to templates
     -   [Code](https://github.com/Lindeneg/funkallero/blob/master/example/src/application/views/index.ts#L17-L86)
+-   Controller Layer
+    -   connect routes to actions
+    -   [Code](https://github.com/Lindeneg/funkallero/blob/master/example/src/api/view-controller.ts#L15-L66)
 
 Take a look at the `dev` script [here](https://github.com/Lindeneg/funkallero/blob/master/example/package.json#L16) to see how one could run it all with hot-reloading while developing.
