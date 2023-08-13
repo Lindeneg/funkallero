@@ -23,15 +23,19 @@ class AuthorizationService extends BaseAuthorizationService<AuthHandler, Authent
     }
 }
 
-const authenticatedPolicy: AuthHandler = async ({ authService, decodedToken }) => {
+const authenticatedPolicy: AuthHandler = async ({ authService }) => {
     const user = await authService.getUser();
 
-    return user !== null && user.name === decodedToken.name;
+    return user !== null;
 };
 
-const authorIsBookOwnerPolicy: AuthHandler = async ({ request, decodedToken, dataContext }) => {
+const authorIsBookOwnerPolicy: AuthHandler = async ({ request, authService, dataContext }) => {
+    const user = await authService.getUser();
+
+    if (!user) return false;
+
     const book = await dataContext.exec((p) =>
-        p.book.findFirst({ where: { id: request.params.id, authorId: decodedToken.id } })
+        p.book.findFirst({ where: { id: request.params.id, authorId: user.id } })
     );
 
     return book !== null;

@@ -32,7 +32,7 @@ export type Templates<TEntries extends TemplateEntries> = {
     [TKey in keyof TEntries]: ReturnType<typeof Handlebars.compile<TEntries[TKey]>>;
 };
 
-export const createHandlebarTemplate = <TData>(opts: Omit<TemplateEntry<TData>, 'data'>) => {
+export const createHandlebarTemplate = <TData = never>(opts: Omit<TemplateEntry<TData>, 'data'>) => {
     return {
         ...opts,
         data: {} as TData,
@@ -40,7 +40,7 @@ export const createHandlebarTemplate = <TData>(opts: Omit<TemplateEntry<TData>, 
 };
 
 const STANDARD_HELPERS = {
-    funkCsvArray: function (str: string): string[] {
+    csvArray: function (str: string): string[] {
         return str.split(',');
     },
     isStrEqual: function (s1: string, s2: string, ignoreCaps = false): boolean {
