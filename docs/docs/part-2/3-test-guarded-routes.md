@@ -55,7 +55,7 @@ curl http://localhost:3000/api/auth/guard \
 ###### 200 OK
 
 ```json
-{ "data": "you are authenticated" }
+"you are authenticated"
 ```
 
 Nice! It worked.
@@ -93,7 +93,7 @@ curl http://localhost:3000/api/auth/miles \
 ###### 200 OK
 
 ```json
-{ "data": "you are miles davis" }
+"you are miles davis"
 ```
 
 Great, it worked! Lets test the login endpoint as well for good measure.
@@ -139,5 +139,5 @@ curl http://localhost:3000/api/auth/login \
 ###### 200 OK
 
 ```json
-{ "data": { "token": "GENERATED_TOKEN" } }
+{ "token": "GENERATED_TOKEN" }
 ```

@@ -164,10 +164,10 @@ type CustomHandlerArgs = {
 type AuthHandler = AuthorizationPolicyHandlerFn<CustomHandlerArgs, AuthModel>;
 
 // BaseAuthorizationService is a scoped service
-class AuthorizationService extends BaseAuthorizationService<AuthHandler> {
+class AuthorizationService extends BaseAuthorizationService<AuthHandler, AuthenticationService> {
     protected async getCustomPolicyArgs() {
         return {
-            authService: this.authService as AuthenticationService,
+            authService: this.authService,
         };
     }
 }
