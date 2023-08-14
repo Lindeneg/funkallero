@@ -114,7 +114,9 @@ curl http://localhost:3000/api/user \
 -H "Content-Type: application/json" -X POST
 ```
 
-Use the token to send a request to guard endpoint. Watch the terminal where the server is running.
+Use the token to send a request to guard endpoint. 
+
+**Watch the terminal where the server is running.**
 
 On this endpoint, we'd expect `userId` to be defined but `user` to be undefined.
 

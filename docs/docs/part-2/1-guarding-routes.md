@@ -13,6 +13,10 @@ Add that package to the project.
 
 `yarn add @lindeneg/funkallero-auth-service`
 
+:::info
+Add `@lindeneg/funkallero-auth-service` to `external` property in `rollup.config.mjs`
+:::
+
 ## Update Entities & DTOs
 
 #### Update User Entity
@@ -109,15 +113,10 @@ import type AuthModel from '@/domain/auth-model';
 import type DataContextService from '@/services/data-context-service';
 
 // BaseAuthenticationService is a scoped service
-class AuthenticationService extends BaseAuthenticationService<
-    User,
-    AuthModel,
-    DataContextService
-> {
+class AuthenticationService extends BaseAuthenticationService<User, AuthModel, DataContextService> {
     protected getEncodedToken(): string | null {
         // bearer strategy is taken here, could also be cookies etc..
-        const authHeader: string[] =
-            this.request.headers.authorization?.split(' ') || [];
+        const authHeader: string[] = this.request.headers.authorization?.split(' ') || [];
         if (authHeader.length === 2) {
             const token: string = authHeader[1];
             return token;
@@ -125,9 +124,7 @@ class AuthenticationService extends BaseAuthenticationService<
         return null;
     }
 
-    protected async getUserFromDecodedToken(
-        decodedToken: AuthModel
-    ): Promise<User | null> {
+    protected async getUserFromDecodedToken(decodedToken: AuthModel): Promise<User | null> {
         const user = this.dataContext.userRepository.get(decodedToken.id);
 
         if (user && user.email === decodedToken.email) return user;
@@ -150,10 +147,7 @@ However, it is possible to provide custom arguments via the method `getCustomPol
 ###### src/services/authorization-service.ts
 
 ```ts
-import {
-    BaseAuthorizationService,
-    type AuthorizationPolicyHandlerFn,
-} from '@lindeneg/funkallero-auth-service';
+import { BaseAuthorizationService, type AuthorizationPolicyHandlerFn } from '@lindeneg/funkallero-auth-service';
 import type AuthModel from '@/domain/auth-model';
 import type AuthenticationService from './authentication-service';
 
@@ -186,10 +180,7 @@ const isMilesDavisPolicy: AuthHandler = async ({ authService }) => {
     return user !== null && user.name.toLowerCase() === 'miles davis';
 };
 
-AuthorizationService.addPolicy(
-    ['authenticated', authenticatedPolicy],
-    ['name-is-miles-davis', isMilesDavisPolicy]
-);
+AuthorizationService.addPolicy(['authenticated', authenticatedPolicy], ['name-is-miles-davis', isMilesDavisPolicy]);
 
 export default AuthorizationService;
 ```
