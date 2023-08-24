@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Funkallero - What is it?
 
-I quite like developing web APIs using mediator pattern, dependency injection and command-query segregation. Funkallero is effectively a wrapper on top of [Express](https://expressjs.com) that enforces those patterns with strong type safety.
+I quite like developing web APIs using mediator pattern and dependency injection. Funkallero is effectively a wrapper on top of [Express](https://expressjs.com) that enforces those patterns with strong type safety.
 
 The structure of consuming projects are then encouraged to follow the principles of clean architecture and command-query-segregation but neither of those are actually enforced.
 
