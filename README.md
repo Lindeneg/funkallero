@@ -1,3 +1,5 @@
+**Project is not maintained, it was simply made for fun / learning, please use express or nest**
+
 ## [Documentation](https://lindeneg.github.io/funkallero/)
 
 ---
